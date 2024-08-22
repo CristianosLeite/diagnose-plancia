@@ -60,4 +60,9 @@ export class ActivityTableComponent {
       minutes < 10 ? `0${minutes}` : minutes
     }:${seconds < 10 ? `0${seconds}` : seconds}`;
   }
+
+  showSop(event: any, row: Activity) {
+    event.stopPropagation();
+    alert(row.sop);
+  }
 }
