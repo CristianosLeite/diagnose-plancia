@@ -1,0 +1,16 @@
+.field {
+  width: 200px;
+  margin: 20px;
+  align-items: center;
+}
+
+.modal-content {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.buttons {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}

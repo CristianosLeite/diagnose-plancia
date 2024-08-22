@@ -1,0 +1,156 @@
+.header {
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.title-container {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 500;
+  color: #fff;
+  text-wrap: wrap;
+}
+
+.mdc-icon-button {
+  left: 0;
+  margin-right: 20px;
+}
+
+.mdc-icon-button:hover {
+  cursor: pointer;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 800px;
+}
+
+.container {
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  height: 87%;
+}
+
+.child-container {
+  width: 100%;
+  height: 100%;
+}
+
+.sidenav-content {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidenav {
+  padding: 20px;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  margin-bottom: 20px;
+  width: 150px;
+}
+
+.option:hover {
+  cursor: pointer;
+}
+
+.option-icon {
+  margin-right: 10px;
+}
+
+.option-text {
+  font-size: 16px;
+  font-weight: 500;
+  color: #fff;
+}
+
+.option-text:hover {
+  text-decoration: underline;
+}
+
+.option-text-active {
+  font-size: 16px;
+  font-weight: 500;
+  color: #fff;
+  text-decoration: underline;
+}
+
+.option-text-active:hover {
+  text-decoration: none;
+}
+
+.option-text-disabled {
+  font-size: 16px;
+  font-weight: 500;
+  color: #fff;
+  opacity: 0.5;
+}
+
+.option-text-disabled:hover {
+  text-decoration: none;
+}
+
+.sub-option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  margin-left: 20px;
+  color: #fff;
+}
+
+.sub-option:hover {
+  cursor: pointer;
+}
+
+.sub-option-icon {
+  margin-right: 10px;
+}
+
+.sub-option-text {
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+}
+
+.sub-option-text:hover {
+  text-decoration: underline;
+}
+
+.sub-option-text-active {
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+  text-decoration: underline;
+}
+
+.sub-option-text-active:hover {
+  text-decoration: none;
+}
+
+.sub-option-text-disabled {
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+  opacity: 0.5;
+}
+
+.sub-option-text-disabled:hover {
+  text-decoration: none;
+}

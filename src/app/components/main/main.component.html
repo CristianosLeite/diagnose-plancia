@@ -1,0 +1,75 @@
+<mat-toolbar class="header">
+  <button class="mdc-icon-button material-icons" (click)="drawer.toggle()">
+    <div class="mdc-icon-button__ripple"></div>
+    <i class="material-icons">menu</i>
+  </button>
+  <div class="title-container">
+    <span class="title">
+      Atividades MACHINE CARE MA – CILR - Ciclo de Limpeza, Inspeção, Lubrificação e Reaperto - DIÁGNOSE (PLÂNCIA)
+    </span>
+  </div>
+</mat-toolbar>
+
+<mat-drawer-container class="container" autosize>
+  <mat-drawer #drawer class="sidenav" mode="side">
+    <p>Opções</p>
+
+    <!--Atividades-->
+    <a class="option" (click)="expandedActivity = !expandedActivity" mat-raised-button>
+      <i class="material-icons option-icon">assignment</i>
+      Atividades
+    </a>
+
+    <!--Cadastro de atividades-->
+    <a class="sub-option" *ngIf="expandedActivity">
+      <i class="material-icons option-icon">add</i>
+      Cadastrar atividade
+    </a>
+
+    <!--Checklist-->
+    <a class="sub-option" *ngIf="expandedActivity" routerLink="checklist">
+      <i class="material-icons option-icon">assignment</i>
+      Checklist
+    </a>
+
+    <!--Usuários-->
+    <a class="option" (click)="expandedUser = !expandedUser" mat-raised-button>
+      <i class="material-icons option-icon">people</i>
+      Usuários
+    </a>
+
+    <!--Cadastro de usuários-->
+    <a class="sub-option" *ngIf="expandedUser">
+      <i class="material-icons option-icon">person_add</i>
+      Cadastrar usuário
+    </a>
+
+    <!--Listar usuários-->
+    <a class="sub-option" *ngIf="expandedUser">
+      <i class="material-icons option-icon">people</i>
+      Listar usuários
+    </a>
+
+    <!--Histórico de verificações-->
+    <a class="option" (click)="expandedHistory = !expandedHistory" mat-raised-button>
+      <i class="material-icons option-icon">history</i>
+      Histórico de verificações
+    </a>
+
+    <!--Listar histórico de verificações-->
+    <a class="sub-option" *ngIf="expandedHistory">
+      <i class="material-icons option-icon">assignment</i>
+      Listar histórico de verificações
+    </a>
+
+    <!--Relatórios-->
+    <a class="option" mat-raised-button>
+      <i class="material-icons option-icon">description</i>
+      Relatórios
+    </a>
+  </mat-drawer>
+
+  <div class="child-container">
+    <router-outlet></router-outlet>
+  </div>
+</mat-drawer-container>
