@@ -5,20 +5,22 @@ import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Activity } from '../../interfaces/activity.interface';
 import { ActivityService } from '../../services/activity.service';
+import { MatIconButton } from '@angular/material/button';
 
 @Component({
   selector: 'app-activity-table',
   standalone: true,
   imports: [
     MatTableModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatIconButton,
   ],
   templateUrl: './activity-table.component.html',
   styleUrl: './activity-table.component.scss'
 })
 export class ActivityTableComponent {
   ELEMENT_DATA = this.activityService.ELEMENT_DATA;
-  displayedColumns: string[] = ['id', 'point', 'description', 'estimatedTime', 'frequency', 'select'];
+  displayedColumns: string[] = ['id', 'point', 'description', 'sop', 'estimatedTime', 'frequency', 'select'];
   dataSource = new MatTableDataSource<Partial<Activity>>(this.ELEMENT_DATA);
   selection = new SelectionModel<Partial<Activity>>(true, []);
 
