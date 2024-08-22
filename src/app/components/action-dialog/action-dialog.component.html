@@ -1,0 +1,11 @@
+<h1 mat-dialog-title>Informar plano de ação</h1>
+
+    <mat-form-field style="min-height: 200px;">
+      <mat-label>Ação tomada</mat-label>
+      <input matInput [(ngModel)]="data.origin">
+    </mat-form-field>
+
+<div class="buttons" mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancelar</button>
+  <button mat-button [mat-dialog-close]="data.origin" cdkFocusInitial>Confirmar</button>
+</div>
