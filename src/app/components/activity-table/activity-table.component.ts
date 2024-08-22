@@ -18,7 +18,7 @@ import { ActivityService } from '../../services/activity.service';
 })
 export class ActivityTableComponent {
   ELEMENT_DATA = this.activityService.ELEMENT_DATA;
-  displayedColumns: string[] = ['id', 'point', 'description', 'frequency', 'select'];
+  displayedColumns: string[] = ['id', 'point', 'description', 'estimatedTime', 'frequency', 'select'];
   dataSource = new MatTableDataSource<Partial<Activity>>(this.ELEMENT_DATA);
   selection = new SelectionModel<Partial<Activity>>(true, []);
 
@@ -51,5 +51,11 @@ export class ActivityTableComponent {
       this.activityService.selectionChanged.emit(row);
     }
     this.selection.toggle(row);
+  }
+
+  formatTime(hours: number, minutes: number, seconds: number): string {
+    return `${hours < 10 ? `0${hours}` : hours}:${
+      minutes < 10 ? `0${minutes}` : minutes
+    }:${seconds < 10 ? `0${seconds}` : seconds}`;
   }
 }
