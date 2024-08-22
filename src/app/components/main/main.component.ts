@@ -7,7 +7,7 @@ import { NgIf } from '@angular/common';
 import { MatFormField } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivityDialogComponent } from '../activity-dialog/activity-dialog.component';
+import { ActivityDialogComponent } from '../modal/activity-dialog/activity-dialog.component';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { ActivityService } from '../../services/activity.service';
 

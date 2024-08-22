@@ -4,7 +4,7 @@ import { MatLabel, MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
-import { Activity } from '../../interfaces/activity.interface';
+import { Activity } from '../../../interfaces/activity.interface';
 import { ActivityDialogComponent } from '../activity-dialog/activity-dialog.component';
 
 @Component({

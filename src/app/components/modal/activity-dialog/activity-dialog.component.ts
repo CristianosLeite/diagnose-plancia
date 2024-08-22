@@ -6,9 +6,9 @@ import { MatSlideToggleChange, MatSlideToggleModule } from '@angular/material/sl
 import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { FormsModule } from '@angular/forms';
-import { Activity } from '../../interfaces/activity.interface';
+import { Activity } from '../../../interfaces/activity.interface';
 import { MatSelectModule } from '@angular/material/select';
-import { MainComponent } from '../main/main.component';
+import { MainComponent } from '../../main/main.component';
 import { MatDialog } from '@angular/material/dialog';
 import { NgFor } from '@angular/common';
 import { ActionDialogComponent } from '../action-dialog/action-dialog.component';
