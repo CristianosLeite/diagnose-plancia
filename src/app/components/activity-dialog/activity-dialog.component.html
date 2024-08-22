@@ -18,20 +18,6 @@
 
   <div class="field">
     <mat-form-field>
-      <mat-label>SOP</mat-label>
-      <input matInput [(ngModel)]="data.sop">
-    </mat-form-field>
-  </div>
-
-  <div class="field">
-    <mat-form-field>
-      <mat-label>Responsável</mat-label>
-      <input matInput [(ngModel)]="data.responsible">
-    </mat-form-field>
-  </div>
-
-  <div class="field">
-    <mat-form-field>
       <mat-label>Turno</mat-label>
       <mat-select [(ngModel)]="data.period">
         <mat-option *ngFor="let period of ['1º', '2º', '3º']" [value]="period">
