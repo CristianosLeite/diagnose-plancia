@@ -26,3 +26,12 @@ table {
   background-color: red;
   color: rgb(53, 53, 53);
 }
+
+button {
+  background-color: transparent;
+  box-shadow: none;
+  color: white;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+}

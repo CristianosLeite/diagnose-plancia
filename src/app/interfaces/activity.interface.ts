@@ -11,6 +11,8 @@ export type Period = '1º' | '2º' | '3º';
 
 export type Frequency = 'Diária' | 'Semanal' | 'Mensal' | 'Anual' | 'Outro';
 
+export type ActivityStatus = 'OK' | 'KO';
+
 export interface Interval {
   hours: number;
   minutes: number;
@@ -34,5 +36,5 @@ export interface Activity {
   period: Period;
   responsible: string;
   isFinished: boolean;
-  isBooked: boolean;
+  status: ActivityStatus;
 }

@@ -5,20 +5,22 @@ import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Activity } from '../../interfaces/activity.interface';
 import { ActivityService } from '../../services/activity.service';
+import { MatIconButton } from '@angular/material/button';
 
 @Component({
   selector: 'app-activity-table',
   standalone: true,
   imports: [
     MatTableModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatIconButton,
   ],
   templateUrl: './activity-table.component.html',
   styleUrl: './activity-table.component.scss'
 })
 export class ActivityTableComponent {
   ELEMENT_DATA = this.activityService.ELEMENT_DATA;
-  displayedColumns: string[] = ['id', 'point', 'description', 'frequency', 'select'];
+  displayedColumns: string[] = ['id', 'point', 'description', 'sop', 'estimatedTime', 'frequency', 'select'];
   dataSource = new MatTableDataSource<Partial<Activity>>(this.ELEMENT_DATA);
   selection = new SelectionModel<Partial<Activity>>(true, []);
 
@@ -51,5 +53,16 @@ export class ActivityTableComponent {
       this.activityService.selectionChanged.emit(row);
     }
     this.selection.toggle(row);
+  }
+
+  formatTime(hours: number, minutes: number, seconds: number): string {
+    return `${hours < 10 ? `0${hours}` : hours}:${
+      minutes < 10 ? `0${minutes}` : minutes
+    }:${seconds < 10 ? `0${seconds}` : seconds}`;
+  }
+
+  showSop(event: any, row: Activity) {
+    event.stopPropagation();
+    alert(row.sop);
   }
 }
