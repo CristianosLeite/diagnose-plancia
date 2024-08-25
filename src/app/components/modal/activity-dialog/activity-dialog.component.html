@@ -12,7 +12,11 @@
   <div class="field">
     <mat-form-field>
       <mat-label>Origem da atividade</mat-label>
-      <input matInput [(ngModel)]="data.origin">
+      <mat-select [(ngModel)]="data.origin">
+          <mat-option *ngFor="let origin of ['PM', 'QB', 'QX', 'EX']" [value]="origin">
+            {{origin}}
+          </mat-option>
+      </mat-select>
     </mat-form-field>
   </div>
 
