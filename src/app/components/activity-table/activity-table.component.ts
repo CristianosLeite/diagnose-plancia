@@ -20,7 +20,7 @@ import { MatIconButton } from '@angular/material/button';
 })
 export class ActivityTableComponent {
   ELEMENT_DATA = this.activityService.ELEMENT_DATA;
-  displayedColumns: string[] = ['id', 'point', 'description', 'sop', 'estimatedTime', 'frequency', 'select'];
+  displayedColumns: string[] = ['id', 'point', 'description', 'sop', 'estimatedTime', 'frequency', 'select', 'options'];
   dataSource = new MatTableDataSource<Partial<Activity>>(this.ELEMENT_DATA);
   selection = new SelectionModel<Partial<Activity>>(true, []);
 
@@ -64,5 +64,10 @@ export class ActivityTableComponent {
   showSop(event: any, row: Activity) {
     event.stopPropagation();
     alert(row.sop);
+  }
+
+  showOptions(event: any, row: Activity) {
+    event.stopPropagation();
+    alert('Options');
   }
 }
