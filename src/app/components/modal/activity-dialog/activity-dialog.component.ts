@@ -12,6 +12,7 @@ import { MainComponent } from '../../main/main.component';
 import { MatDialog } from '@angular/material/dialog';
 import { NgFor } from '@angular/common';
 import { ActionDialogComponent } from '../action-dialog/action-dialog.component';
+import { ActivityService } from '../../../services/activity.service';
 
 @Component({
   selector: 'app-activity-dialog',
@@ -37,11 +38,15 @@ export class ActivityDialogComponent {
   constructor(
     public dialog: MatDialog,
     public dialogRef: MatDialogRef<MainComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: Activity
-  ) {}
+    @Inject(MAT_DIALOG_DATA) public data: Activity,
+    private activityService: ActivityService
+  ) {
+    this.activity = data;
+  }
 
   onNoClick(): void {
     this.dialogRef.close();
+    this.activityService.activityCanceled.emit(this.activity);
   }
 
   openDialog(event: MatSlideToggleChange, activity: Activity): boolean {

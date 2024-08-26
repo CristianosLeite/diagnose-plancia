@@ -19,6 +19,6 @@ export class ActivityService {
   ];
 
   @Output() selectionChanged = new EventEmitter<Activity>();
-
+  @Output() activityCanceled = new EventEmitter<Activity>();
   constructor() { }
 }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTableDataSource } from '@angular/material/table';
@@ -25,9 +25,13 @@ export class ActivityTableComponent {
   ELEMENT_DATA = this.activityService.ELEMENT_DATA;
   displayedColumns: string[] = ['id', 'point', 'description', 'sop', 'estimatedTime', 'frequency', 'select', 'options'];
   dataSource = new MatTableDataSource<Partial<Activity>>(this.ELEMENT_DATA);
-  selection = new SelectionModel<Partial<Activity>>(true, []);
+  @Input() selection = new SelectionModel<Partial<Activity>>(true, []);
 
-  constructor(private activityService: ActivityService) {}
+  constructor(private activityService: ActivityService) {
+    this.activityService.activityCanceled.subscribe((activity: Partial<Activity>) => {
+      this.selection.deselect(activity);
+    });
+  }
 
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
