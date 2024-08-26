@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, Inject } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTableDataSource } from '@angular/material/table';
@@ -6,6 +6,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { Activity } from '../../interfaces/activity.interface';
 import { ActivityService } from '../../services/activity.service';
 import { MatIconButton } from '@angular/material/button';
+import { MatMenuModule, MatMenuPanel, MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
   selector: 'app-activity-table',
@@ -14,7 +15,9 @@ import { MatIconButton } from '@angular/material/button';
     MatTableModule,
     MatCheckboxModule,
     MatIconButton,
+    MatMenuModule,
   ],
+  providers: [MatMenuTrigger],
   templateUrl: './activity-table.component.html',
   styleUrl: './activity-table.component.scss'
 })
@@ -68,6 +71,15 @@ export class ActivityTableComponent {
 
   showOptions(event: any, row: Activity) {
     event.stopPropagation();
-    alert('Options');
+  }
+
+  editActivity(event: any, row: Activity) {
+    event.stopPropagation();
+    alert('Edit');
+  }
+
+  deleteActivity(event: any, row: Activity) {
+    event.stopPropagation();
+    alert('Delete');
   }
 }
