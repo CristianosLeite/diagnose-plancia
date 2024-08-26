@@ -1,4 +1,4 @@
-import { Component, ViewChild, Inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTableDataSource } from '@angular/material/table';
@@ -6,7 +6,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { Activity } from '../../interfaces/activity.interface';
 import { ActivityService } from '../../services/activity.service';
 import { MatIconButton } from '@angular/material/button';
-import { MatMenuModule, MatMenuPanel, MatMenuTrigger } from '@angular/material/menu';
+import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
   selector: 'app-activity-table',
