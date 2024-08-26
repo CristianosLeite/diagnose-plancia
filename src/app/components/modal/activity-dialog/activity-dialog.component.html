@@ -57,5 +57,5 @@
 
 <div class="buttons" mat-dialog-actions>
   <button mat-button (click)="onNoClick()">Cancelar</button>
-  <button mat-button [mat-dialog-close]="data.origin" cdkFocusInitial>Confirmar</button>
+  <button mat-button [mat-dialog-close]="data.origin" cdkFocusInitial (click)="onConfirm(data)">Confirmar</button>
 </div>

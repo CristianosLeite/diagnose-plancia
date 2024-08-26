@@ -20,6 +20,7 @@ export class ActivityService {
 
   @Output() selectionChanged = new EventEmitter<Activity>();
   @Output() activityCanceled = new EventEmitter<Activity>();
+  @Output() activityConfirmed = new EventEmitter<Activity>();
   @Output() activitySaved = new EventEmitter<Activity>();
   @Output() sopSolicitation = new EventEmitter<Activity>();
   constructor() { }
