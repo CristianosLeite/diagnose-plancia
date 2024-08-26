@@ -68,10 +68,15 @@ export class MainComponent {
   }
 
   openPopupConfirmation(activity: Activity): boolean {
-    this.dialog.open(PopupConfirmationComponent, {
+    const dialogRef = this.dialog.open(PopupConfirmationComponent, {
       width: '400px',
       data: activity
     });
+
+    dialogRef.componentInstance.onCancel.subscribe(() => {
+      this.openDialog(activity);
+    });
+
     return false;
   }
 }

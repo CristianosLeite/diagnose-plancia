@@ -20,7 +20,7 @@ export class PopupConfirmationComponent {
   @Input() title = 'Confirmar atividade';
   @Input() message = 'Deseja confirmar a atividade?';
   @Output() onConfirm = new EventEmitter<Activity>();
-  @Output() onCancel = new EventEmitter<Activity>();
+  @Output() onCancel = new EventEmitter<void>();
 
   constructor(
     public dialogRef: MatDialogRef<ActivityDialogComponent>,
@@ -36,6 +36,6 @@ export class PopupConfirmationComponent {
 
   onCancelClick(): void {
     this.dialogRef.close();
-    this.onCancel.emit(this.activity);
+    this.onCancel.emit();
   }
 }
