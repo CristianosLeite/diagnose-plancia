@@ -44,3 +44,23 @@ button {
   border-radius: 10px;
   margin: 10px 0;
 }
+
+.option-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.delete:hover {
+  color: red;
+  i {
+    color: red;
+  }
+}
+
+.edit:hover {
+  color: blue;
+  i {
+    color: blue;
+  }
+}
