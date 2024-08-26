@@ -69,10 +69,6 @@ export class ActivityTableComponent {
     alert(row.sop);
   }
 
-  showOptions(event: any, row: Activity) {
-    event.stopPropagation();
-  }
-
   editActivity(event: any, row: Activity) {
     event.stopPropagation();
     alert('Edit');
