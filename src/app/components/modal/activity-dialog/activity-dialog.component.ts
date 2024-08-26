@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatLabel, MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
@@ -32,8 +32,9 @@ import { ActivityService } from '../../../services/activity.service';
   templateUrl: './activity-dialog.component.html',
   styleUrl: './activity-dialog.component.scss'
 })
-export class ActivityDialogComponent implements OnDestroy {
+export class ActivityDialogComponent implements OnInit, OnDestroy {
   activity = {} as Activity;
+  activityTimer: NodeJS.Timeout | undefined;
 
   constructor(
     public dialog: MatDialog,
@@ -42,6 +43,16 @@ export class ActivityDialogComponent implements OnDestroy {
     private activityService: ActivityService
   ) {
     this.activity = data;
+  }
+
+  ngOnInit(): void {
+    this.activity.timeSpent = { hours: 0, minutes: 0, seconds: 0 };
+    this.timerStartCounting();
+  }
+
+  ngOnDestroy(): void {
+    this.activityService.activityCanceled.emit(this.activity);
+    clearInterval(this.activityTimer);
   }
 
   onNoClick(): void {
@@ -67,12 +78,28 @@ export class ActivityDialogComponent implements OnDestroy {
     return false;
   }
 
-  showSop(event: any, row: Activity) {
+  showSop(event: Event, row: Activity) {
     event.stopPropagation();
     this.activityService.sopSolicitation.emit(row);
   }
 
-  ngOnDestroy(): void {
-    this.activityService.activityCanceled.emit(this.activity);
+  timerStartCounting() {
+    this.activityTimer = setInterval(() => {
+      this.activity.timeSpent.seconds++;
+      if (this.activity.timeSpent.seconds === 60) {
+        this.activity.timeSpent.seconds = 0;
+        this.activity.timeSpent.minutes++;
+      }
+      if (this.activity.timeSpent.minutes === 60) {
+        this.activity.timeSpent.minutes = 0;
+        this.activity.timeSpent.hours++;
+      }
+    }, 1000);
+  }
+
+  formatTime(hours: number, minutes: number, seconds: number): string {
+    return `${hours < 10 ? `0${hours}` : hours}:${
+      minutes < 10 ? `0${minutes}` : minutes
+    }:${seconds < 10 ? `0${seconds}` : seconds}`;
   }
 }

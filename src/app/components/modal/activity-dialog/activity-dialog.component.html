@@ -1,5 +1,10 @@
 <h1 mat-dialog-title>{{data.description}}</h1>
 
+<div mat-dialog-content class="timer">
+  <h2>Tempo em atividade</h2>
+  <h2>{{ formatTime(activity.timeSpent.hours, activity.timeSpent.minutes, activity.timeSpent.seconds) }}</h2>
+</div>
+
 <div mat-dialog-content class="modal-content">
 
   <div class="field">
