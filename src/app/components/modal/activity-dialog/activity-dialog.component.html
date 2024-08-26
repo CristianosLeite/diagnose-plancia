@@ -41,6 +41,13 @@
     <mat-slide-toggle [checked]="true" (change)="openDialog($event, data)">OK</mat-slide-toggle>
   </div>
 
+  <div class="field">
+    <mat-label>SOP</mat-label>
+    <button mat-button (click)="showSop($event, data)">
+      <i class="material-icons">help</i>
+    </button>
+  </div>
+
 </div>
 
 <div class="buttons" mat-dialog-actions>

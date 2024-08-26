@@ -67,6 +67,11 @@ export class ActivityDialogComponent implements OnDestroy {
     return false;
   }
 
+  showSop(event: any, row: Activity) {
+    event.stopPropagation();
+    this.activityService.sopSolicitation.emit(row);
+  }
+
   ngOnDestroy(): void {
     this.activityService.activityCanceled.emit(this.activity);
   }
