@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnDestroy } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatLabel, MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
@@ -32,7 +32,7 @@ import { ActivityService } from '../../../services/activity.service';
   templateUrl: './activity-dialog.component.html',
   styleUrl: './activity-dialog.component.scss'
 })
-export class ActivityDialogComponent {
+export class ActivityDialogComponent implements OnDestroy {
   activity = {} as Activity;
 
   constructor(
@@ -65,5 +65,9 @@ export class ActivityDialogComponent {
 
     activity.status = 'KO';
     return false;
+  }
+
+  ngOnDestroy(): void {
+    this.activityService.activityCanceled.emit(this.activity);
   }
 }
