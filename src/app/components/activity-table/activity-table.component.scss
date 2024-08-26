@@ -36,6 +36,10 @@ button {
   cursor: pointer;
 }
 
+button:focus {
+  outline: none;
+}
+
 .option {
   display: flex;
   justify-content: center;

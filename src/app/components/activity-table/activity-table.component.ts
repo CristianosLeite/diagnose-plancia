@@ -70,7 +70,7 @@ export class ActivityTableComponent {
 
   showSop(event: any, row: Activity) {
     event.stopPropagation();
-    alert(row.sop);
+    this.activityService.sopSolicitation.emit(row);
   }
 
   editActivity(event: any, row: Activity) {

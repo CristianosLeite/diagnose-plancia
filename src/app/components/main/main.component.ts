@@ -10,6 +10,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivityDialogComponent } from '../modal/activity-dialog/activity-dialog.component';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { ActivityService } from '../../services/activity.service';
+import { SopModalComponent } from '../modal/sop-modal/sop-modal.component';
 
 @Component({
   selector: 'app-main',
@@ -29,6 +30,7 @@ import { ActivityService } from '../../services/activity.service';
 })
 export class MainComponent implements OnChanges {
   @Input() activity = {} as Activity;
+  @Input() sopSolicitation = false;
 
   expandedUser = false;
   expandedActivity = false;
@@ -41,6 +43,9 @@ export class MainComponent implements OnChanges {
     this.activityService.selectionChanged.subscribe(activity => {
       this.openDialog(activity);
     });
+    this.activityService.sopSolicitation.subscribe(activity => {
+      this.openSopModal(activity);
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -48,11 +53,28 @@ export class MainComponent implements OnChanges {
       this.activity = changes['activity'].currentValue;
       this.openDialog(this.activity);
     }
+
+    if (changes['sopSolicitation'].currentValue) {
+      this.openSopModal(this.activity);
+    }
   }
 
   openDialog(activity: Activity): boolean {
     const dialogRef = this.dialog.open(ActivityDialogComponent, {
       width: '800px',
+      data: activity
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.activity.origin = result;
+    });
+
+    return false;
+  }
+
+  openSopModal(activity: Activity): boolean {
+    const dialogRef = this.dialog.open(SopModalComponent, {
+      width: '1200px',
       data: activity
     });
 
