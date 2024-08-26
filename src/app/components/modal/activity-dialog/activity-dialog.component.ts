@@ -46,7 +46,8 @@ export class ActivityDialogComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.activity.timeSpent = { hours: 0, minutes: 0, seconds: 0 };
+    if (!this.activity.timeSpent)
+      this.activity.timeSpent = { hours: 0, minutes: 0, seconds: 0 };
     this.timerStartCounting();
   }
 
@@ -61,7 +62,6 @@ export class ActivityDialogComponent implements OnInit, OnDestroy {
   }
 
   onConfirm(activity: Activity): void {
-    this.dialogRef.close();
     this.activityService.activityConfirmed.emit(activity);
   }
 

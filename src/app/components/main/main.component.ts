@@ -69,7 +69,7 @@ export class MainComponent {
 
   openPopupConfirmation(activity: Activity): boolean {
     this.dialog.open(PopupConfirmationComponent, {
-      width: '200px',
+      width: '400px',
       data: activity
     });
     return false;
