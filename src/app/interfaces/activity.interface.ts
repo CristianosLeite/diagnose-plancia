@@ -11,6 +11,8 @@ export type Period = '1º' | '2º' | '3º';
 
 export type Frequency = 'Diária' | 'Semanal' | 'Mensal' | 'Anual' | 'Outro';
 
+export type Day = 'Segunda' | 'Terça' | 'Quarta' | 'Quinta' | 'Sexta' | 'Sábado' | 'Domingo';
+
 export interface Interval {
   hours: number;
   minutes: number;
@@ -28,6 +30,8 @@ export interface Activity {
   sop: string;
   origin: Origin;
   frequency: Frequency;
+  day: Day;
+  date: Date;
   estimatedTime: Interval;
   timeSpent: Interval;
   activeMachine: boolean;
