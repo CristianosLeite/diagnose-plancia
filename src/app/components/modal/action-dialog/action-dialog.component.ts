@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, Output, EventEmitter } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatLabel, MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
@@ -23,12 +23,20 @@ import { ActivityDialogComponent } from '../activity-dialog/activity-dialog.comp
 })
 export class ActionDialogComponent {
   activity = {} as Activity;
+  @Output() onConfirm = new EventEmitter<void>();
+  @Output() onCancel = new EventEmitter<void>();
 
   constructor(
     public dialogRef: MatDialogRef<ActivityDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Activity) {}
 
-  onNoClick(): void {
+  onCancelClick(): void {
     this.dialogRef.close();
+    this.onCancel.emit();
+  }
+
+  onConfirmClick(): void {
+    this.dialogRef.close();
+    this.onConfirm.emit();
   }
 }
