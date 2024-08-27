@@ -27,7 +27,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 })
 export class SopModalComponent implements OnInit{
   @Input() activity = {} as Activity;
-  pdfData: SafeResourceUrl | null = null;
+  pdfData: SafeResourceUrl | undefined;
 
   constructor(
     public dialogRef: MatDialogRef<MainComponent>,

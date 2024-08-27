@@ -1,21 +1,22 @@
-.container .row {
-  margin-top: 40px;
+.content-container {
   display: flex;
-  gap: 100px;
-  margin-bottom: 40px;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  margin-bottom: 20px;
 }
+
 .title {
   display: flex;
   justify-content: center;
-  margin-top: 20px;
 }
+
 .form-group {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   margin-top: auto;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
 }
 
 .form-group label {
@@ -37,19 +38,11 @@
 }
 
 .upload-button {
-  display: inline-block;
-  padding: 8px 16px;
-  background-color: #6200ea;
-  color: white;
-  font-size: 14px;
-  border: none;
-  border-radius: 4px;
   cursor: pointer;
-  text-align: center;
 }
 
 .upload-button:hover {
-  background-color: #3700b3;
+  color: #007bff;
 }
 
 .file-name {
@@ -57,10 +50,37 @@
   font-style: italic;
   color: #555;
 }
-.content-container {
+
+.container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  align-items: flex-start;
+  min-height: 80%;
+  padding: 40px;
+}
+
+.point-create {
+  min-width: 400px;
+}
+
+.description-create {
+  min-width: 600px;
+}
+
+.sop-create {
+  display: flex;
+  flex-flow: row;
+  min-width: 100%;
+  min-height: 20vh;
+  border: 1px solid #ccc;
+  justify-content: space-around;
   align-items: center;
-  min-height: 70vh;
+}
+
+.sop-content {
+  padding: 20px;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
 }

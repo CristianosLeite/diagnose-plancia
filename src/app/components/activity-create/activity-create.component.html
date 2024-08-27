@@ -1,12 +1,12 @@
-<div class="content-container">
-  <h1 class="title">Criar Nova Atividade</h1>
-  <div class="container">
-    <div class="row">
-      <mat-form-field>
+<div class="container">
+  <h1 class="title">Cadastro de atividade</h1>
+  <h3>Cadastrar uma atividade a ser realizada durante um checklist.</h3>
+  <div class="content-container">
+      <mat-form-field class="point-create">
         <mat-label>Ponto</mat-label>
-        <input matInput [(ngModel)]="element.point" name="point" placeholder="Digite o nome do posto">
+        <input matInput [(ngModel)]="element.point" name="point" placeholder="Informar ponto de instalação do equipamento">
       </mat-form-field>
-      <mat-form-field>
+      <mat-form-field class="description-create">
         <mat-label>Descrição</mat-label>
         <input matInput [(ngModel)]="element.description" name="description">
       </mat-form-field>
@@ -18,28 +18,29 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
-    </div>
     <mat-form-field *ngIf="element.frequency === 'Semanal'">
       <mat-label>Dia da semana</mat-label>
       <mat-select [(ngModel)]="element.dayToCheck" name="day">
-        <mat-option *ngFor="let day of ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']" [value]="handleDayOfWeek(day)">
-          {{day}}
+        <mat-option *ngFor="let day of ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']" [value]="day">
+          {{handleDayOfWeek(day)}}
         </mat-option>
       </mat-select>
     </mat-form-field>
     <mat-form-field *ngIf="element.frequency === 'Anual' || element.frequency === 'Mensal'">
       <mat-label>Escolha uma data</mat-label>
       <input matInput [(ngModel)]="element.date" [matDatepicker]="picker" name="date">
-      <mat-hint>MM/DD/YYYY</mat-hint>
       <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
     </div>
-    <div class="form-group">
-      <label>Carregar uma Imagem</label>
-      <label class="upload-button" for="fileUpload">Selecionar Arquivo</label>
-      <input type="file" id="fileUpload" (change)="onFileSelected($event)" accept=".png,.jpeg,.webp,.pdf">
-      <span class="file-name">{{fileName || 'Nenhum arquivo selecionado'}}</span>
+    <div class="form-group sop-create">
+      <div class="sop-content">
+        <label>Carregar SOP</label>
+        <label class="upload-button" for="fileUpload">Selecionar Arquivo</label>
+        <input type="file" id="fileUpload" (change)="onFileSelected($event)" accept=".png,.jpeg,.webp,.pdf">
+        <span class="file-name">{{fileName || 'Nenhum arquivo selecionado'}}</span>
+      </div>
+      <object *ngIf="filePath" [data]="filePath" type="application/pdf" style="width: 40%;"></object>
     </div>
-    <button mat-raised-button (click)="onSubmit()">Enviar</button>
+    <button mat-raised-button (click)="onSubmit()">Cadastrar</button>
 </div>

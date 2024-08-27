@@ -9,6 +9,8 @@ import { Activity } from '../../interfaces/activity.interface';
 import { NgFor, NgIf } from '@angular/common';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { UploadService } from '../../services/upload.service';
 
 @Component({
   selector: 'app-activity-create',
@@ -32,15 +34,21 @@ import { MatNativeDateModule } from '@angular/material/core';
 })
 export class ActivityCreateComponent {
   element = {} as Activity;
-
   fileName: string = '';
+  filePath: SafeResourceUrl | undefined;
+
+  constructor(private sanitizer: DomSanitizer, private uploadService: UploadService) { }
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
       const file = input.files[0];
       this.fileName = file.name;
-      this.element.sop = this.fileName; // Armazena o nome do arquivo no objeto
+
+      this.uploadService.uploadFile(file).subscribe(() => {
+        console.log('Upload bem-sucedido:', this.fileName);
+        this.filePath = this.sanitizer.bypassSecurityTrustResourceUrl('uploads/' + this.fileName);
+      });
     }
   }
 
