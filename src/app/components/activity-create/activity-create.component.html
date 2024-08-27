@@ -1,0 +1,45 @@
+<div class="content-container">
+  <h1 class="title">Criar Nova Atividade</h1>
+  <div class="container">
+    <div class="row">
+      <mat-form-field>
+        <mat-label>Ponto</mat-label>
+        <input matInput [(ngModel)]="element.point" name="point" placeholder="Digite o nome do posto">
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Descrição</mat-label>
+        <input matInput [(ngModel)]="element.description" name="description">
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Frequência</mat-label>
+        <mat-select [(ngModel)]="element.frequency" name="frequency">
+          <mat-option *ngFor="let frequency of ['Diária', 'Semanal', 'Mensal', 'Anual', 'Outro']" [value]="frequency">
+            {{frequency}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <mat-form-field *ngIf="element.frequency === 'Semanal'">
+      <mat-label>Dia da semana</mat-label>
+      <mat-select [(ngModel)]="element.dayToCheck" name="day">
+        <mat-option *ngFor="let day of ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']" [value]="handleDayOfWeek(day)">
+          {{day}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field *ngIf="element.frequency === 'Anual' || element.frequency === 'Mensal'">
+      <mat-label>Escolha uma data</mat-label>
+      <input matInput [(ngModel)]="element.date" [matDatepicker]="picker" name="date">
+      <mat-hint>MM/DD/YYYY</mat-hint>
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+    </div>
+    <div class="form-group">
+      <label>Carregar uma Imagem</label>
+      <label class="upload-button" for="fileUpload">Selecionar Arquivo</label>
+      <input type="file" id="fileUpload" (change)="onFileSelected($event)" accept=".png,.jpeg,.webp,.pdf">
+      <span class="file-name">{{fileName || 'Nenhum arquivo selecionado'}}</span>
+    </div>
+    <button mat-raised-button (click)="onSubmit()">Enviar</button>
+</div>
