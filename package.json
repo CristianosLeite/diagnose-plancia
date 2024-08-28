@@ -1,13 +1,18 @@
 {
   "name": "diagnose-plancia",
   "version": "0.0.0",
+  "main": "src/main.js",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:diagnose-plancia": "node dist/diagnose-plancia/server/server.mjs"
+    "serve:ssr:diagnose-plancia": "node dist/diagnose-plancia/server/server.mjs",
+    "electron": "concurrently \"electron .\" \"npm run serve:ssr:diagnose-plancia --configuration production\"",
+    "pack": "ng build --base-href ./ && electron-builder --dir",
+    "dist": "ng build --base-href ./ && electron-builder",
+    "postinstall": "electron-builder install-app-deps"
   },
   "private": true,
   "dependencies": {
@@ -40,6 +45,8 @@
     "@types/express": "^4.17.17",
     "@types/jasmine": "~5.1.0",
     "@types/node": "^18.18.0",
+    "concurrently": "^8.2.2",
+    "electron": "^32.0.1",
     "jasmine-core": "~5.1.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
