@@ -11,7 +11,7 @@ export const routes: Routes = [
         path: 'checklist', component: ActivityTableComponent
       },
       {
-        path: 'create-activity', component: ActivityCreateComponent
+        path: 'activity', component: ActivityCreateComponent
       },
     ]
   }

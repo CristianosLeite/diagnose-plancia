@@ -1,6 +1,12 @@
 <div class="container">
-  <h1 class="title">Cadastro de atividade</h1>
-  <h3>Cadastrar uma atividade a ser realizada durante um checklist.</h3>
+  <div *ngIf="element.context === 'create'">
+    <h1 class="title">Cadastro de atividade</h1>
+    <h3>Cadastrar uma atividade a ser realizada durante um checklist.</h3>
+  </div>
+  <div *ngIf="element.context === 'edit'">
+    <h1 class="title">Editar atividade</h1>
+    <h3>Edite uma atividade já cadastrada.</h3>
+  </div>
   <div class="content-container">
       <mat-form-field class="point-create">
         <mat-label>Ponto</mat-label>
