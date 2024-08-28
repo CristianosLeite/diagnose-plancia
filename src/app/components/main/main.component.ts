@@ -8,7 +8,7 @@ import { MatFormField } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivityDialogComponent } from '../modal/activity-dialog/activity-dialog.component';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { ActivityService } from '../../services/activity.service';
 import { SopModalComponent } from '../modal/sop-modal/sop-modal.component';
 import { PopupConfirmationComponent } from '../modal/popup-confirmation/popup-confirmation.component';
@@ -19,6 +19,7 @@ import { PopupConfirmationComponent } from '../modal/popup-confirmation/popup-co
   imports: [
     RouterOutlet,
     RouterLink,
+    RouterLinkActive,
     MatToolbarModule,
     MatIconButton,
     MatSidenavModule,
@@ -33,6 +34,7 @@ export class MainComponent {
   expandedUser = false;
   expandedActivity = false;
   expandedHistory = false;
+  isReportActive = false;
 
   constructor(
     public dialog: MatDialog,
@@ -78,5 +80,46 @@ export class MainComponent {
     });
 
     return false;
+  }
+
+  private resetStates() {
+    this.expandedActivity = false;
+    this.expandedUser = false;
+    this.expandedHistory = false;
+    this.isReportActive = false;
+  }
+
+  toggleActivity() {
+    this.expandedActivity = !this.expandedActivity;
+    if (this.expandedActivity) {
+      this.resetStates();
+      this.expandedActivity = true;
+    }
+  }
+
+  toggleUser() {
+    this.expandedUser = !this.expandedUser;
+    if (this.expandedUser) {
+      this.resetStates();
+      this.expandedUser = true;
+    }
+  }
+
+  toggleHistory() {
+    this.expandedHistory = !this.expandedHistory;
+    if (this.expandedHistory) {
+      this.resetStates();
+      this.expandedHistory = true;
+    }
+  }
+
+  activeReport() {
+    this.resetStates();
+    this.isReportActive = true;
+    this.notImplemented();
+  }
+
+  notImplemented() {
+    alert('função não implementada');
   }
 }

@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormField, MatLabel, MatFormFieldModule } from '@angular/material/form-field';
-import {MatButtonModule} from '@angular/material/button';
+import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
@@ -11,6 +11,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { UploadService } from '../../services/upload.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-activity-create',
@@ -27,17 +28,38 @@ import { UploadService } from '../../services/upload.service';
     NgFor,
     NgIf,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
   ],
   templateUrl: './activity-create.component.html',
-  styleUrl: './activity-create.component.scss'
+  styleUrl: './activity-create.component.scss',
 })
 export class ActivityCreateComponent {
-  element = {} as Activity;
+  activity: Activity = {
+    ...({} as Activity),
+    context: 'create',
+  };
   fileName: string = '';
   filePath: SafeResourceUrl | undefined;
 
-  constructor(private sanitizer: DomSanitizer, private uploadService: UploadService) { }
+  constructor(
+    private sanitizer: DomSanitizer,
+    private uploadService: UploadService,
+    private cdr: ChangeDetectorRef,
+    private route: ActivatedRoute
+  ) {
+    this.route.paramMap.subscribe(params => {
+      const activityData = params.get('element');
+      const context = params.get('context');
+
+      if (activityData) {
+        this.activity = JSON.parse(activityData);
+      }
+
+      if (context) {
+        this.activity.context = context as 'create' | 'edit';
+      }
+    });
+  }
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -48,36 +70,39 @@ export class ActivityCreateComponent {
       this.uploadService.uploadFile(file).subscribe(() => {
         console.log('Upload bem-sucedido:', this.fileName);
         this.filePath = this.sanitizer.bypassSecurityTrustResourceUrl('uploads/' + this.fileName);
+        this.cdr.detectChanges();
       });
+
+      this.activity.sop = 'uploads/' + this.fileName;
     }
   }
 
   onSubmit(): void {
     // Verifique se todos os campos obrigatórios estão preenchidos
-    if (!this.element.point || !this.element.description || !this.element.frequency) {
+    if (!this.activity.point || !this.activity.description || !this.activity.frequency) {
       alert('Por favor, preencha todos os campos obrigatórios.');
       return;
     }
 
     // Exemplo de validação adicional para data
-    if ((this.element.frequency === 'Anual' || this.element.frequency === 'Mensal') && !this.element.date) {
+    if ((this.activity.frequency === 'Anual' || this.activity.frequency === 'Mensal') && !this.activity.date) {
       alert('Por favor, escolha uma data.');
       return;
     }
 
     // Adicione aqui o código para processar ou enviar os dados
-    console.log('Dados enviados:', this.element);
+    console.log('Dados enviados:', this.activity);
     console.log('Arquivo selecionado:', this.fileName);
   }
 
   handleDayOfWeek(day: string): string {
-    if(day === 'Sunday') return 'Domingo';
-    if(day === 'Monday') return 'Segunda-feira';
-    if(day === 'Tuesday') return 'Terça-feira';
-    if(day === 'Wednesday') return 'Quarta-feira';
-    if(day === 'Thursday') return 'Quinta-feira';
-    if(day === 'Friday') return 'Sexta-feira';
-    if(day === 'Saturday') return 'Sábado';
+    if (day === 'Sunday') return 'Domingo';
+    if (day === 'Monday') return 'Segunda-feira';
+    if (day === 'Tuesday') return 'Terça-feira';
+    if (day === 'Wednesday') return 'Quarta-feira';
+    if (day === 'Thursday') return 'Quinta-feira';
+    if (day === 'Friday') return 'Sexta-feira';
+    if (day === 'Saturday') return 'Sábado';
     return '';
   }
 }

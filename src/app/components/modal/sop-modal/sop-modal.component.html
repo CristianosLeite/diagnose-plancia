@@ -1,6 +1,6 @@
-<div class="pdf-viewer" style="height: 800px;">
+<div class="pdf-viewer">
   @if(pdfData) {
-    <object [data]="pdfData" type="application/pdf" style="width: 100%; height: 98%;"></object>
+    <object class="pdf-object" [data]="pdfData" type="application/pdf"></object>
   } @else {
     <div class="no-pdf">
       <i class="material-icons">insert_drive_file</i>

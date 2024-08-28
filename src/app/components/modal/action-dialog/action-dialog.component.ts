@@ -31,12 +31,13 @@ export class ActionDialogComponent {
     @Inject(MAT_DIALOG_DATA) public data: Activity) {}
 
   onCancelClick(): void {
+    this.data.actionPlan = '';
     this.dialogRef.close();
     this.onCancel.emit();
   }
 
   onConfirmClick(): void {
-    this.dialogRef.close();
+    this.dialogRef.close({ confirmed: false, actionPlan: this.data.actionPlan });
     this.onConfirm.emit();
   }
 }

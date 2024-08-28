@@ -15,6 +15,8 @@ export type ActivityStatus = 'OK' | 'KO';
 
 export type dayOfWeek = 'Sunday' | 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday' | 'Saturday';
 
+export type context = 'create' | 'edit';
+
 export interface Interval {
   hours: number;
   minutes: number;
@@ -31,6 +33,7 @@ export interface Activity {
   activityType: string;
   sop: string;
   origin: Origin;
+  actionPlan: string;
   frequency: Frequency;
   dayToCheck: dayOfWeek;
   date: Date;
@@ -41,4 +44,5 @@ export interface Activity {
   responsible: string;
   isFinished: boolean;
   status: ActivityStatus;
+  context: context;
 }
