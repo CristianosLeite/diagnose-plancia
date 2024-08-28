@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormField, MatLabel, MatFormFieldModule } from '@angular/material/form-field';
 import {MatButtonModule} from '@angular/material/button';
@@ -37,7 +37,11 @@ export class ActivityCreateComponent {
   fileName: string = '';
   filePath: SafeResourceUrl | undefined;
 
-  constructor(private sanitizer: DomSanitizer, private uploadService: UploadService) { }
+  constructor(
+    private sanitizer: DomSanitizer,
+    private uploadService: UploadService,
+    private cdr: ChangeDetectorRef
+  ) { }
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -48,6 +52,7 @@ export class ActivityCreateComponent {
       this.uploadService.uploadFile(file).subscribe(() => {
         console.log('Upload bem-sucedido:', this.fileName);
         this.filePath = this.sanitizer.bypassSecurityTrustResourceUrl('uploads/' + this.fileName);
+        this.cdr.detectChanges();
       });
 
       this.activity.sop = 'uploads/' + this.fileName;
