@@ -72,7 +72,12 @@ export function app(): express.Express {
       if (err) {
         return res.status(500).json({ error: err.message });
       }
-      res.json({ message: 'File uploaded!', fileName: file.originalname });
+      res.json({
+        message: 'File uploaded!',
+        fileName: file.originalname,
+        filePath: browserDistFolder + '/uploads/' + file.originalname
+      });
+
       return;
     });
 

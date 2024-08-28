@@ -7,8 +7,18 @@
   "publisher": "Conecsa Automação e Ti",
   "icon": "src/favicon.ico",
   "build": {
+    "asar": true,
+    "asarUnpack": [
+      "dist/diagnose-plancia/**/*"
+    ],
+    "files": [
+      "dist/diagnose-plancia/**/*",
+      "src/main.js",
+      "src/preload.js",
+      "package.json"
+    ],
     "win": {
-    "icon": "src/favicon.ico"
+      "icon": "src/favicon.ico"
     }
   },
   "scripts": {
@@ -42,6 +52,7 @@
     "@types/multer": "^1.4.12",
     "express": "^4.18.2",
     "multer": "^1.4.5-lts.1",
+    "ngx-electron": "^2.2.0",
     "rollup": "^4.21.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",

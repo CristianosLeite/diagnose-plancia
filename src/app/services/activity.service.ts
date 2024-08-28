@@ -7,7 +7,7 @@ import { Activity } from '../interfaces/activity.interface';
 export class ActivityService {
   ELEMENT_DATA: Partial<Activity>[] = [
     {id: 1, point: 'SWAY', description: 'CONFERIR ESTADO DE CONSERVAÇÃO DOS PINOS E FUNCIONAMENTO DAS LÂMPADAS DOS SENSORES', estimatedTime: { hours: 0, minutes: 0, seconds: 0 }, activityType: 'Conectores da mesa', frequency: 'Diária'},
-    {id: 2, point: 'NOVO TECTOR', description: 'CONFERIR FUNCIONAMENTO DO BOTÃO DE TRAVA', activityType: 'Conectores da mesa', frequency: 'Semanal', sop: './uploads/SOP - COLAGEM DO PARABRISA - VOZ AM 017.pdf'},
+    {id: 2, point: 'NOVO TECTOR', description: 'CONFERIR FUNCIONAMENTO DO BOTÃO DE TRAVA', activityType: 'Conectores da mesa', frequency: 'Semanal', sop: 'C:/Users/Cristiano/AppData/Local/Programs/diagnose-plancia/resources/app.asar.unpacked/dist/diagnose-plancia/browser/uploads/SOP - COLAGEM DO PARABRISA - VOZ AM 017.pdf'},
     {id: 3, point: 'USB-1', description: 'CONFERIR ESTADO DE CONSERVAÇÃO DOS PINOS E FUNCIONAMENTO DAS LÂMPADAS DOS SENSORES', activityType: 'Conectores da mesa', frequency: 'Diária'},
     {id: 4, point: 'ST46 86175', description: 'CONFERIR FUNCIONAMENTO DO BOTÃO DE TRAVA', activityType: 'Conectores da mesa', frequency: 'Semanal'},
     {id: 5, point: 'SWAY', description: 'CONFERIR ESTADO DE CONSERVAÇÃO DOS PINOS E FUNCIONAMENTO DAS LÂMPADAS DOS SENSORES', activityType: 'Conectores da mesa', frequency: 'Diária'},
@@ -23,5 +23,4 @@ export class ActivityService {
   @Output() activityConfirmed = new EventEmitter<Activity>();
   @Output() activitySaved = new EventEmitter<Activity>();
   @Output() sopSolicitation = new EventEmitter<Activity>();
-  constructor() { }
 }
