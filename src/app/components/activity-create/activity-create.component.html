@@ -1,9 +1,9 @@
 <div class="container">
-  <div *ngIf="element.context === 'create'">
+  <div *ngIf="activity.context === 'create'">
     <h1 class="title">Cadastro de atividade</h1>
     <h3>Cadastrar uma atividade a ser realizada durante um checklist.</h3>
   </div>
-  <div *ngIf="element.context === 'edit'">
+  <div *ngIf="activity.context === 'edit'">
     <h1 class="title">Editar atividade</h1>
     <h3>Edite uma atividade já cadastrada.</h3>
   </div>
