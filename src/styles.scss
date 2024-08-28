@@ -47,3 +47,11 @@ body {
 
 html, body { height: 93%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+button {
+  background-color: transparent;
+  box-shadow: none;
+  color: white;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+}
