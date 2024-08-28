@@ -2,10 +2,10 @@
 
     <mat-form-field style="min-height: 200px;">
       <mat-label>Ação tomada</mat-label>
-      <input matInput [(ngModel)]="data.origin">
+      <input matInput [(ngModel)]="data.actionPlan">
     </mat-form-field>
 
 <div class="buttons" mat-dialog-actions>
   <button mat-button (click)="onCancelClick()">Cancelar</button>
-  <button mat-button [mat-dialog-close]="data.origin" cdkFocusInitial>Confirmar</button>
+  <button mat-button (click)="onConfirmClick()" [mat-dialog-close]="data.actionPlan" cdkFocusInitial>Confirmar</button>
 </div>

@@ -64,10 +64,6 @@ export class ActivityCreateComponent {
       alert('Por favor, escolha uma data.');
       return;
     }
-
-    // Adicione aqui o código para processar ou enviar os dados
-    console.log('Dados enviados:', this.element);
-    console.log('Arquivo selecionado:', this.fileName);
   }
 
   handleDayOfWeek(day: string): string {

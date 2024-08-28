@@ -35,6 +35,7 @@ import { ActivityService } from '../../../services/activity.service';
 export class ActivityDialogComponent implements OnInit, OnDestroy {
   activity = {} as Activity;
   activityTimer: NodeJS.Timeout | undefined;
+  toggleChecked = true;
 
   constructor(
     public dialog: MatDialog,
@@ -76,7 +77,12 @@ export class ActivityDialogComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.activity.origin = result;
+      if (result) {
+        this.toggleChecked = result.confirmed;
+        this.activity.actionPlan = result.actionPlan;
+      } else {
+        this.toggleChecked = true;
+      }
     });
 
     activity.status = 'KO';

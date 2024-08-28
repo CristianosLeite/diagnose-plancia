@@ -31,6 +31,7 @@ export interface Activity {
   activityType: string;
   sop: string;
   origin: Origin;
+  actionPlan: string;
   frequency: Frequency;
   dayToCheck: dayOfWeek;
   date: Date;
