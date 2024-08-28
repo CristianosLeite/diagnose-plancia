@@ -15,55 +15,55 @@
     <p>Opções</p>
 
     <!--Atividades-->
-    <a class="option" (click)="expandedActivity = !expandedActivity" mat-raised-button>
+    <a class="option" [class.active]="expandedActivity" (click)="toggleActivity()" mat-raised-button>
       <i class="material-icons option-icon">assignment</i>
       Atividades
     </a>
 
     <!--Cadastro de atividades-->
-    <a class="sub-option" *ngIf="expandedActivity" routerLink="create-activity">
+    <a class="sub-option" *ngIf="expandedActivity" routerLink="create-activity" routerLinkActive="active">
       <i class="material-icons option-icon">add</i>
       Cadastrar atividade
     </a>
 
     <!--Checklist-->
-    <a class="sub-option" *ngIf="expandedActivity" routerLink="checklist">
+    <a class="sub-option" *ngIf="expandedActivity" routerLink="checklist" routerLinkActive="active">
       <i class="material-icons option-icon">assignment</i>
       Checklist
     </a>
 
     <!--Usuários-->
-    <a class="option" (click)="expandedUser = !expandedUser" mat-raised-button>
+    <a class="option" [class.active]="expandedUser" (click)="toggleUser()" mat-raised-button>
       <i class="material-icons option-icon">people</i>
       Usuários
     </a>
 
     <!--Cadastro de usuários-->
-    <a class="sub-option" *ngIf="expandedUser">
+    <a class="sub-option" *ngIf="expandedUser" (click)="notImplemented()">
       <i class="material-icons option-icon">person_add</i>
       Cadastrar usuário
     </a>
 
     <!--Listar usuários-->
-    <a class="sub-option" *ngIf="expandedUser">
+    <a class="sub-option" *ngIf="expandedUser" (click)="notImplemented()">
       <i class="material-icons option-icon">people</i>
       Listar usuários
     </a>
 
     <!--Histórico de verificações-->
-    <a class="option" (click)="expandedHistory = !expandedHistory" mat-raised-button>
+    <a class="option" [class.active]="expandedHistory" (click)="toggleHistory()" mat-raised-button>
       <i class="material-icons option-icon">history</i>
       Histórico de verificações
     </a>
 
     <!--Listar histórico de verificações-->
-    <a class="sub-option" *ngIf="expandedHistory">
+    <a class="sub-option" *ngIf="expandedHistory" (click)="notImplemented()">
       <i class="material-icons option-icon">assignment</i>
       Listar histórico de verificações
     </a>
 
     <!--Relatórios-->
-    <a class="option" mat-raised-button>
+    <a class="option" [class.active]="isReportActive" mat-raised-button (click)="activeReport()">
       <i class="material-icons option-icon">description</i>
       Relatórios
     </a>
