@@ -1,11 +1,20 @@
 {
   "name": "diagnose-plancia",
-  "version": "0.0.0",
+  "description": "Diagnose da Plancia",
+  "version": "1.0.0",
   "main": "src/main.js",
+  "author": "Conecsa Automação e Ti",
+  "publisher": "Conecsa Automação e Ti",
+  "icon": "src/favicon.ico",
+  "build": {
+    "win": {
+    "icon": "src/favicon.ico"
+    }
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --base-href ./ && electron-builder",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:diagnose-plancia": "node dist/diagnose-plancia/server/server.mjs",
@@ -47,6 +56,7 @@
     "@types/node": "^18.18.0",
     "concurrently": "^8.2.2",
     "electron": "^32.0.1",
+    "electron-builder": "^24.13.3",
     "jasmine-core": "~5.1.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
