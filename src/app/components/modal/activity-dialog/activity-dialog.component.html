@@ -43,7 +43,7 @@
 
   <div class="field">
     <mat-label>KO</mat-label>
-    <mat-slide-toggle [checked]="true" (change)="openDialog($event, data)">OK</mat-slide-toggle>
+    <mat-slide-toggle [(ngModel)]="toggleChecked" [checked]="true" (change)="openDialog($event, data)">OK</mat-slide-toggle>
   </div>
 
   <div class="field">

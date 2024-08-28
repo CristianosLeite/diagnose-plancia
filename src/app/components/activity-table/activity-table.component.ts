@@ -7,6 +7,7 @@ import { Activity } from '../../interfaces/activity.interface';
 import { ActivityService } from '../../services/activity.service';
 import { MatIconButton } from '@angular/material/button';
 import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-activity-table',
@@ -26,8 +27,9 @@ export class ActivityTableComponent {
   displayedColumns: string[] = ['id', 'point', 'description', 'sop', 'estimatedTime', 'frequency', 'select', 'options'];
   dataSource = new MatTableDataSource<Partial<Activity>>(this.ELEMENT_DATA);
   @Input() selection = new SelectionModel<Partial<Activity>>(true, []);
+  @Input() activity = {} as Activity;
 
-  constructor(private activityService: ActivityService) {
+  constructor(private activityService: ActivityService, private router: Router) {
     this.activityService.activityCanceled.subscribe((activity: Partial<Activity>) => {
       this.selection.deselect(activity);
     });
@@ -73,9 +75,11 @@ export class ActivityTableComponent {
     this.activityService.sopSolicitation.emit(row);
   }
 
-  editActivity(event: any, row: Activity) {
+  activityEdit(event: Event, row: Activity) {
     event.stopPropagation();
-    alert('Edit');
+    this.router.navigate(['/activity',
+      { element: JSON.stringify(row), context: 'edit' }
+    ]);
   }
 
   deleteActivity(event: any, row: Activity) {
