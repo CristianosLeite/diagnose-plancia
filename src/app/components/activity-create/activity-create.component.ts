@@ -33,7 +33,7 @@ import { UploadService } from '../../services/upload.service';
   styleUrl: './activity-create.component.scss'
 })
 export class ActivityCreateComponent {
-  element = {} as Activity;
+  activity = {} as Activity;
   fileName: string = '';
   filePath: SafeResourceUrl | undefined;
 
@@ -49,24 +49,26 @@ export class ActivityCreateComponent {
         console.log('Upload bem-sucedido:', this.fileName);
         this.filePath = this.sanitizer.bypassSecurityTrustResourceUrl('uploads/' + this.fileName);
       });
+
+      this.activity.sop = 'uploads/' + this.fileName;
     }
   }
 
   onSubmit(): void {
     // Verifique se todos os campos obrigatórios estão preenchidos
-    if (!this.element.point || !this.element.description || !this.element.frequency) {
+    if (!this.activity.point || !this.activity.description || !this.activity.frequency) {
       alert('Por favor, preencha todos os campos obrigatórios.');
       return;
     }
 
     // Exemplo de validação adicional para data
-    if ((this.element.frequency === 'Anual' || this.element.frequency === 'Mensal') && !this.element.date) {
+    if ((this.activity.frequency === 'Anual' || this.activity.frequency === 'Mensal') && !this.activity.date) {
       alert('Por favor, escolha uma data.');
       return;
     }
 
     // Adicione aqui o código para processar ou enviar os dados
-    console.log('Dados enviados:', this.element);
+    console.log('Dados enviados:', this.activity);
     console.log('Arquivo selecionado:', this.fileName);
   }
 
