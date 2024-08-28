@@ -69,7 +69,7 @@
     <th mat-header-cell *matHeaderCellDef></th>
     <td mat-cell *matCellDef="let element">
       <mat-menu #menu="matMenu">
-        <button class="option" mat-menu-item (click)="editActivity($event, element)">
+        <button class="option" mat-menu-item (click)="activityEdit($event, element)">
           <div class="option-content edit">
             <span class="edit">Editar</span>
             <i class="material-icons">edit</i>
