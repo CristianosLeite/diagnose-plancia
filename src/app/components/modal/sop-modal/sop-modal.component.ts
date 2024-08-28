@@ -20,14 +20,14 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    FormsModule,
+    FormsModule
   ],
   templateUrl: './sop-modal.component.html',
   styleUrl: './sop-modal.component.scss'
 })
 export class SopModalComponent implements OnInit{
   @Input() activity = {} as Activity;
-  pdfData: SafeResourceUrl | undefined;
+  @Input() pdfData: SafeResourceUrl | undefined;
 
   constructor(
     public dialogRef: MatDialogRef<MainComponent>,
