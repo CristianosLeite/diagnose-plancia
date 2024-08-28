@@ -1,40 +1,40 @@
 <div class="container">
-  <div *ngIf="element.context === 'create'">
+  <div *ngIf="activity.context === 'create'">
     <h1 class="title">Cadastro de atividade</h1>
     <h3>Cadastrar uma atividade a ser realizada durante um checklist.</h3>
   </div>
-  <div *ngIf="element.context === 'edit'">
+  <div *ngIf="activity.context === 'edit'">
     <h1 class="title">Editar atividade</h1>
     <h3>Edite uma atividade já cadastrada.</h3>
   </div>
   <div class="content-container">
       <mat-form-field class="point-create">
         <mat-label>Ponto</mat-label>
-        <input matInput [(ngModel)]="element.point" name="point" placeholder="Informar ponto de instalação do equipamento">
+        <input matInput [(ngModel)]="activity.point" name="point" placeholder="Informar ponto de instalação do equipamento">
       </mat-form-field>
       <mat-form-field class="description-create">
         <mat-label>Descrição</mat-label>
-        <input matInput [(ngModel)]="element.description" name="description">
+        <input matInput [(ngModel)]="activity.description" name="description">
       </mat-form-field>
       <mat-form-field>
         <mat-label>Frequência</mat-label>
-        <mat-select [(ngModel)]="element.frequency" name="frequency">
+        <mat-select [(ngModel)]="activity.frequency" name="frequency">
           <mat-option *ngFor="let frequency of ['Diária', 'Semanal', 'Mensal', 'Anual', 'Outro']" [value]="frequency">
             {{frequency}}
           </mat-option>
         </mat-select>
       </mat-form-field>
-    <mat-form-field *ngIf="element.frequency === 'Semanal'">
+    <mat-form-field *ngIf="activity.frequency === 'Semanal'">
       <mat-label>Dia da semana</mat-label>
-      <mat-select [(ngModel)]="element.dayToCheck" name="day">
+      <mat-select [(ngModel)]="activity.dayToCheck" name="day">
         <mat-option *ngFor="let day of ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']" [value]="day">
           {{handleDayOfWeek(day)}}
         </mat-option>
       </mat-select>
     </mat-form-field>
-    <mat-form-field *ngIf="element.frequency === 'Anual' || element.frequency === 'Mensal'">
+    <mat-form-field *ngIf="activity.frequency === 'Anual' || activity.frequency === 'Mensal'">
       <mat-label>Escolha uma data</mat-label>
-      <input matInput [(ngModel)]="element.date" [matDatepicker]="picker" name="date">
+      <input matInput [(ngModel)]="activity.date" [matDatepicker]="picker" name="date">
       <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
