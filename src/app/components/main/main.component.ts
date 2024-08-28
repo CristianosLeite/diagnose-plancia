@@ -1,4 +1,4 @@
-import { Component, OnChanges, SimpleChanges, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { Activity } from '../../interfaces/activity.interface';
 import { MatIconButton } from '@angular/material/button';
@@ -10,6 +10,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivityDialogComponent } from '../modal/activity-dialog/activity-dialog.component';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { ActivityService } from '../../services/activity.service';
+import { SopModalComponent } from '../modal/sop-modal/sop-modal.component';
+import { PopupConfirmationComponent } from '../modal/popup-confirmation/popup-confirmation.component';
 
 @Component({
   selector: 'app-main',
@@ -27,9 +29,7 @@ import { ActivityService } from '../../services/activity.service';
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss'
 })
-export class MainComponent implements OnChanges {
-  @Input() activity = {} as Activity;
-
+export class MainComponent {
   expandedUser = false;
   expandedActivity = false;
   expandedHistory = false;
@@ -41,23 +41,40 @@ export class MainComponent implements OnChanges {
     this.activityService.selectionChanged.subscribe(activity => {
       this.openDialog(activity);
     });
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['activity'].currentValue) {
-      this.activity = changes['activity'].currentValue;
-      this.openDialog(this.activity);
-    }
+    this.activityService.sopSolicitation.subscribe(activity => {
+      this.openSopModal(activity);
+    });
+    this.activityService.activityConfirmed.subscribe(activity => {
+      this.openPopupConfirmation(activity);
+    });
   }
 
   openDialog(activity: Activity): boolean {
-    const dialogRef = this.dialog.open(ActivityDialogComponent, {
+    this.dialog.open(ActivityDialogComponent, {
       width: '800px',
       data: activity
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      this.activity.origin = result;
+    return false;
+  }
+
+  openSopModal(activity: Activity): boolean {
+    this.dialog.open(SopModalComponent, {
+      width: '1200px',
+      data: activity
+    });
+
+    return false;
+  }
+
+  openPopupConfirmation(activity: Activity): boolean {
+    const dialogRef = this.dialog.open(PopupConfirmationComponent, {
+      width: '400px',
+      data: activity
+    });
+
+    dialogRef.componentInstance.onCancel.subscribe(() => {
+      this.openDialog(activity);
     });
 
     return false;

@@ -13,6 +13,8 @@ export type Frequency = 'Diária' | 'Semanal' | 'Mensal' | 'Anual' | 'Outro';
 
 export type ActivityStatus = 'OK' | 'KO';
 
+export type dayOfWeek = 'Sunday' | 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday' | 'Saturday';
+
 export interface Interval {
   hours: number;
   minutes: number;
@@ -30,6 +32,8 @@ export interface Activity {
   sop: string;
   origin: Origin;
   frequency: Frequency;
+  dayToCheck: dayOfWeek;
+  date: Date;
   estimatedTime: Interval;
   timeSpent: Interval;
   activeMachine: boolean;

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTableDataSource } from '@angular/material/table';
@@ -6,6 +6,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { Activity } from '../../interfaces/activity.interface';
 import { ActivityService } from '../../services/activity.service';
 import { MatIconButton } from '@angular/material/button';
+import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
   selector: 'app-activity-table',
@@ -14,17 +15,23 @@ import { MatIconButton } from '@angular/material/button';
     MatTableModule,
     MatCheckboxModule,
     MatIconButton,
+    MatMenuModule,
   ],
+  providers: [MatMenuTrigger],
   templateUrl: './activity-table.component.html',
   styleUrl: './activity-table.component.scss'
 })
 export class ActivityTableComponent {
   ELEMENT_DATA = this.activityService.ELEMENT_DATA;
-  displayedColumns: string[] = ['id', 'point', 'description', 'sop', 'estimatedTime', 'frequency', 'select'];
+  displayedColumns: string[] = ['id', 'point', 'description', 'sop', 'estimatedTime', 'frequency', 'select', 'options'];
   dataSource = new MatTableDataSource<Partial<Activity>>(this.ELEMENT_DATA);
-  selection = new SelectionModel<Partial<Activity>>(true, []);
+  @Input() selection = new SelectionModel<Partial<Activity>>(true, []);
 
-  constructor(private activityService: ActivityService) {}
+  constructor(private activityService: ActivityService) {
+    this.activityService.activityCanceled.subscribe((activity: Partial<Activity>) => {
+      this.selection.deselect(activity);
+    });
+  }
 
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
@@ -63,6 +70,16 @@ export class ActivityTableComponent {
 
   showSop(event: any, row: Activity) {
     event.stopPropagation();
-    alert(row.sop);
+    this.activityService.sopSolicitation.emit(row);
+  }
+
+  editActivity(event: any, row: Activity) {
+    event.stopPropagation();
+    alert('Edit');
+  }
+
+  deleteActivity(event: any, row: Activity) {
+    event.stopPropagation();
+    alert('Delete');
   }
 }
