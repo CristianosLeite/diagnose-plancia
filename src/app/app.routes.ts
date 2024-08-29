@@ -13,6 +13,21 @@ export const routes: Routes = [
       {
         path: 'activity', component: ActivityCreateComponent
       },
+      {
+        path: 'api/users/create'
+      },
+      {
+        path: 'api/users/one'
+      },
+      {
+        path: 'api/users/all'
+      },
+      {
+        path: 'api/users/update'
+      },
+      {
+        path: 'api/users/delete'
+      }
     ]
   }
 ];

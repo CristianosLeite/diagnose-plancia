@@ -1,23 +1,29 @@
-import { APP_BASE_HREF } from '@angular/common';
-import { CommonEngine } from '@angular/ssr';
 import express from 'express';
-import { fileURLToPath } from 'node:url';
+import cors from 'cors';
+import bodyParser from 'body-parser';
 import { dirname, join, resolve } from 'node:path';
+import { CommonEngine } from '@angular/ssr';
+import { APP_BASE_HREF } from '@angular/common';
+import { fileURLToPath } from 'node:url';
+import { json, urlencoded } from 'body-parser';
 import bootstrap from './src/main.server';
+import { Server as HttpServer } from 'http';
 import multer from 'multer';
-import { fileUpload } from './routes';
+import { fileUpload } from './controllers/uploads.controller';
+import { UsersController } from './controllers/users.controller';
+import { handleActivities } from './controllers/activities.controller';
+import { handleChecklists } from './controllers/checklist.controller';
+import * as db from './database/database';
 
 // The Express app is exported so that it can be used by serverless Functions.
-export function app(): express.Express {
+export function app(): {
+  app: express.Express;
+} {
   const server = express();
-
-  // CORS configuration
-  server.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-    res.header('Access-Control-Allow-Headers', 'Content-Type');
-    next();
-  });
+  server.use(cors());
+  server.use(express.json({ limit: '50mb' }));
+  server.use(express.urlencoded({ limit: '50mb', extended: true }));
+  server.use(bodyParser.json());
 
   server.use(express.urlencoded({ extended: true }));
 
@@ -37,6 +43,30 @@ export function app(): express.Express {
     maxAge: '1y'
   }));
 
+  // Enable parsing of application/json and application/x-www-form-urlencoded
+  server.use(json());
+  server.use(urlencoded({ extended: true }));
+
+  // Database connection
+  db.connect().then(() => {
+    // Create tables after successful connection
+    db.createTables();
+  });
+
+  // File upload
+  const upload = multer({ dest: 'uploads/' });
+  fileUpload(server, upload, browserDistFolder);
+
+  // Handle users
+  const usersController = new UsersController();
+  server.use('/api/users', usersController.getRouter());
+
+  // Handle activities
+  handleActivities(server);
+
+  // Handle checklists
+  handleChecklists(server);
+
   // All regular routes use the Angular engine
   server.get('*', (req, res, next) => {
     const { protocol, originalUrl, baseUrl, headers } = req;
@@ -53,19 +83,17 @@ export function app(): express.Express {
       .catch((err) => next(err));
   });
 
-  const upload = multer({ dest: 'uploads/' });
-
-  fileUpload(server, upload, browserDistFolder);
-
-  return server;
+  return { app: server };
 }
 
 function run(): void {
   const port = process.env['PORT'] || 4000;
 
-  // Start up the Node server
-  const server = app();
+  // Start up the Express server
+  const { app: expressApp } = app();
 
+  // Create a HTTP server instance with the Express app
+  const server = new HttpServer(expressApp);
   server.listen(port, () => {
     console.log(`Node Express server listening on http://localhost:${port}`);
   });
