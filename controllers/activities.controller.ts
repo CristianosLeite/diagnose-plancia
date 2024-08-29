@@ -1,23 +1,81 @@
-import { Express } from 'express';
+import { Router, Request, Response } from 'express';
+import Activity from '../models/activity.model';
 
-export function handleActivities(server: Express) {
-  server.post('/activities/create', (req, res) => {
-    res.json({ message: 'Activity created!' });
-  });
+export class ActivityController {
+  private router: Router;
 
-  server.get('/activities', (req, res) => {
-    res.json({ message: 'Activities retrieved!' });
-  });
+  constructor() {
+    this.router = Router();
+    this.router.post('/create', this.create).bind(this);
+    this.router.get('/all', this.all.bind(this));
+    this.router.get('/one', this.retrieve.bind(this));
+    this.router.put('/update', this.update.bind(this));
+    this.router.delete('/delete', this.delete.bind(this));
+  }
 
-  server.get('/activities/:id', (req, res) => {
-    res.json({ message: 'Activity retrieved!' });
-  });
+  public getRouter(): Router {
+    return this.router;
+  }
 
-  server.put('/activities/:id', (req, res) => {
-    res.json({ message: 'Activity updated!' });
-  });
+  public async create(req: Request, res: Response) {
+    const newActivity = req.body;
 
-  server.delete('/activities/:id', (req, res) => {
-    res.json({ message: 'Activity deleted!' });
-  });
+    if (!newActivity)
+      res.status(400).send('Missing activity');
+
+    const activity = new Activity(newActivity);
+
+    await activity.save().then(() => {
+      res.json(activity);
+    });
+  }
+
+  public async all(req: Request, res: Response) {
+    await Activity.findAll().then((activities) => {
+      res.json(activities);
+    });
+  }
+
+  public async retrieve(req: Request, res: Response) {
+    const id = req.query['activityId'];
+
+    if (!id)
+      res.status(400).send('Missing activityId');
+
+    await Activity.findOne({ where: { activityId: id } }).then((activity) => {
+      res.json(activity);
+    });
+  }
+
+  public async update(req: Request, res: Response) {
+    const id = req.body['activityId'];
+    const activityToUpdate = req.body;
+
+    if (!id)
+      res.status(400).send('Missing activityId');
+
+    if (!activityToUpdate)
+      res.status(400).send('Missing activity');
+
+    await Activity.findOne({ where: { activityId: id } }).then((activity) => {
+      if (!activity) {
+        res.status(404).send('Activity not found');
+      } else {
+        activity.update(activityToUpdate).then(() => {
+          res.json(activity);
+        });
+      }
+    });
+  }
+
+  public async delete(req: Request, res: Response) {
+    const id = req.query['activityId'];
+
+    if (!id)
+      res.status(400).send('Missing activityId');
+
+    await Activity.destroy({ where: { activityId: id } }).then(() => {
+      res.status(200).send('Activity deleted');
+    });
+  }
 }

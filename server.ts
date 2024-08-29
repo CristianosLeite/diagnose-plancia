@@ -11,7 +11,7 @@ import { Server as HttpServer } from 'http';
 import multer from 'multer';
 import { fileUpload } from './controllers/uploads.controller';
 import { UsersController } from './controllers/users.controller';
-import { handleActivities } from './controllers/activities.controller';
+import { ActivityController } from './controllers/activities.controller';
 import { handleChecklists } from './controllers/checklist.controller';
 import * as db from './database/database';
 
@@ -62,7 +62,8 @@ export function app(): {
   server.use('/api/users', usersController.getRouter());
 
   // Handle activities
-  handleActivities(server);
+  const activityController = new ActivityController();
+  server.use('/api/activities', activityController.getRouter());
 
   // Handle checklists
   handleChecklists(server);
