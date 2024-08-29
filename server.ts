@@ -12,7 +12,7 @@ import multer from 'multer';
 import { fileUpload } from './controllers/uploads.controller';
 import { UsersController } from './controllers/users.controller';
 import { ActivityController } from './controllers/activities.controller';
-import { handleChecklists } from './controllers/checklist.controller';
+import { ChecklistController } from './controllers/checklist.controller';
 import * as db from './database/database';
 
 // The Express app is exported so that it can be used by serverless Functions.
@@ -66,7 +66,8 @@ export function app(): {
   server.use('/api/activities', activityController.getRouter());
 
   // Handle checklists
-  handleChecklists(server);
+  const checklistController = new ChecklistController();
+  server.use('/api/checklists', checklistController.getRouter());
 
   // All regular routes use the Angular engine
   server.get('*', (req, res, next) => {
