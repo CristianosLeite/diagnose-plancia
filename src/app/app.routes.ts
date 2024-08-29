@@ -13,6 +13,7 @@ export const routes: Routes = [
       {
         path: 'activity', component: ActivityCreateComponent
       },
+      // Users api routes
       {
         path: 'api/users/create'
       },
@@ -27,6 +28,38 @@ export const routes: Routes = [
       },
       {
         path: 'api/users/delete'
+      },
+      // Activities api routes
+      {
+        path: 'api/activities/create'
+      },
+      {
+        path: 'api/activities/one'
+      },
+      {
+        path: 'api/activities/all'
+      },
+      {
+        path: 'api/activities/update'
+      },
+      {
+        path: 'api/activities/delete'
+      },
+      // Checklists api routes
+      {
+        path: 'api/cheklists/create'
+      },
+      {
+        path: 'api/cheklists/one'
+      },
+      {
+        path: 'api/cheklists/all'
+      },
+      {
+        path: 'api/cheklists/update'
+      },
+      {
+        path: 'api/cheklists/delete'
       }
     ]
   }
