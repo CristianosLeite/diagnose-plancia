@@ -1,0 +1,78 @@
+<div class="container">
+  <div *ngIf="user.context === 'create'">
+    <h1 class="title">Cadastro de Usuario</h1>
+    <h3>Cadastrar um novo usuario</h3>
+  </div>
+  <div *ngIf="user.context === 'edit'">
+    <h1 class="title">Editar Usuario</h1>
+    <h3>Edite um usuario ja cadastrado.</h3>
+  </div>
+
+  <div class="content-container">
+    <!-- RF001 - Campo para nome -->
+    <div class="form-row">
+      <mat-form-field class="form-field">
+        <mat-label>Nome</mat-label>
+        <input matInput [(ngModel)]="user.name" name="name">
+      </mat-form-field>
+
+      <!-- RF002 - Campo para origem -->
+      <mat-form-field class="form-field">
+        <mat-label>Origem</mat-label>
+        <mat-select [(ngModel)]="user.origin">
+            <mat-option *ngFor="let origin of ['Externo', 'Interno']" [value]="origin">
+              {{ origin }}
+            </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <!-- RF003 - Campo para empresa -->
+    <div class="form-row">
+      <mat-form-field class="form-field">
+        <mat-label>Empresa</mat-label>
+        <input matInput [(ngModel)]="user.company" name="company">
+      </mat-form-field>
+
+      <!-- RF004 - Campo para matrícula -->
+      <mat-form-field class="form-field">
+        <mat-label>Matrícula</mat-label>
+        <input matInput [(ngModel)]="user.id" name="id" placeholder="Ex.: Matrícula IVECO">
+      </mat-form-field>
+    </div>
+
+    <!-- RF005 - Campo para planta -->
+    <div class="form-row">
+      <mat-form-field class="form-field">
+        <mat-label>Planta</mat-label>
+        <input matInput [(ngModel)]="user.plant" name="plant" placeholder="Ex.: Sete Lagoas">
+      </mat-form-field>
+    </div>
+
+    <!-- RF006 - Campo para adicionar competências -->
+    <div class="form-row">
+      <mat-form-field class="form-field">
+        <mat-label>Adicionar Competência</mat-label>
+        <mat-select (selectionChange)="addSkill($event.value)">
+          <mat-option *ngFor="let skill of availableSkills" [value]="skill">
+            {{ skill }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <!-- Exibição das habilidades do usuário -->
+    <div class="form-row">
+      <ul class="skills-list">
+        <li *ngFor="let skill of user.userSkills; let i = index">
+          {{ skill }}
+          <button mat-icon-button color="warn" (click)="removeSkill(i)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <button mat-raised-button>Cadastrar</button>
+</div>
