@@ -1,13 +1,37 @@
 {
   "name": "diagnose-plancia",
-  "version": "0.0.0",
+  "description": "Diagnose da Plancia",
+  "version": "1.0.0",
+  "main": "src/main.js",
+  "author": "Conecsa Automação e Ti",
+  "publisher": "Conecsa Automação e Ti",
+  "icon": "src/favicon.ico",
+  "build": {
+    "asar": true,
+    "asarUnpack": [
+      "dist/diagnose-plancia/**/*"
+    ],
+    "files": [
+      "dist/diagnose-plancia/**/*",
+      "src/main.js",
+      "src/preload.js",
+      "package.json"
+    ],
+    "win": {
+      "icon": "src/favicon.ico"
+    }
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --base-href ./ && electron-builder",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:diagnose-plancia": "node dist/diagnose-plancia/server/server.mjs"
+    "serve:ssr:diagnose-plancia": "node dist/diagnose-plancia/server/server.mjs",
+    "electron": "concurrently \"electron .\" \"npm run serve:ssr:diagnose-plancia --configuration production\"",
+    "pack": "ng build --base-href ./ && electron-builder --dir",
+    "dist": "ng build --base-href ./ && electron-builder",
+    "postinstall": "electron-builder install-app-deps"
   },
   "private": true,
   "dependencies": {
@@ -26,10 +50,15 @@
     "@material/web": "^2.0.0",
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@types/multer": "^1.4.12",
-    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
     "multer": "^1.4.5-lts.1",
+    "ngx-electron": "^2.2.0",
+    "pg": "^8.12.0",
+    "pg-hstore": "^2.3.4",
     "rollup": "^4.21.0",
     "rxjs": "~7.8.0",
+    "sequelize": "^6.37.3",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.3"
   },
@@ -40,6 +69,9 @@
     "@types/express": "^4.17.17",
     "@types/jasmine": "~5.1.0",
     "@types/node": "^18.18.0",
+    "concurrently": "^8.2.2",
+    "electron": "^32.0.1",
+    "electron-builder": "^24.13.3",
     "jasmine-core": "~5.1.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
