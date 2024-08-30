@@ -1,12 +1,6 @@
 <div class="container">
-  <div *ngIf="activity.context === 'create'">
-    <h1 class="title">Cadastro de atividade</h1>
-    <h3>Cadastrar uma atividade a ser realizada durante um checklist.</h3>
-  </div>
-  <div *ngIf="activity.context === 'edit'">
-    <h1 class="title">Editar atividade</h1>
-    <h3>Edite uma atividade já cadastrada.</h3>
-  </div>
+  <h1 class="title">{{activity.context === 'edit' ? 'Editar atividade' : 'Cadastro de atividade'}}</h1>
+  <h3 *ngIf="activity.context === 'create'">Cadastrar uma atividade a ser realizada durante um checklist.</h3>
   <div class="content-container">
       <mat-form-field class="point-create">
         <mat-label>Ponto</mat-label>
@@ -48,5 +42,5 @@
       </div>
       <object *ngIf="filePath" [data]="filePath" type="application/pdf" style="width: 40%;"></object>
     </div>
-    <button mat-raised-button (click)="onSubmit()">Cadastrar</button>
+    <button mat-raised-button (click)="onSubmit()">{{activity.context === 'edit' ? 'Salvar' : 'Cadastrar'}}</button>
 </div>

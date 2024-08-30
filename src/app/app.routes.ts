@@ -15,12 +15,61 @@ export const routes: Routes = [
       {
         path: 'activity', component: ActivityCreateComponent
       },
+      // Users routes
       {
         path: 'users/create', component: UserCreateComponent
       },
       {
         path: 'users/edit', component: UserEditComponent
       },
+      // Users api routes
+      {
+        path: 'api/users/create'
+      },
+      {
+        path: 'api/users/one'
+      },
+      {
+        path: 'api/users/all'
+      },
+      {
+        path: 'api/users/update'
+      },
+      {
+        path: 'api/users/delete'
+      },
+      // Activities api routes
+      {
+        path: 'api/activities/create'
+      },
+      {
+        path: 'api/activities/one'
+      },
+      {
+        path: 'api/activities/all'
+      },
+      {
+        path: 'api/activities/update'
+      },
+      {
+        path: 'api/activities/delete'
+      },
+      // Checklists api routes
+      {
+        path: 'api/cheklists/create'
+      },
+      {
+        path: 'api/cheklists/one'
+      },
+      {
+        path: 'api/cheklists/all'
+      },
+      {
+        path: 'api/cheklists/update'
+      },
+      {
+        path: 'api/cheklists/delete'
+      }
     ]
   }
 ];

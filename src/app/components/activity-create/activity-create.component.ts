@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectorRef, Input, OnInit } from '@angular/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormField, MatLabel, MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
@@ -33,13 +33,13 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './activity-create.component.html',
   styleUrl: './activity-create.component.scss',
 })
-export class ActivityCreateComponent {
-  activity: Activity = {
+export class ActivityCreateComponent implements OnInit{
+  @Input() activity: Activity = {
     ...({} as Activity),
     context: 'create',
   };
-  fileName: string = '';
-  filePath: SafeResourceUrl | undefined;
+  @Input() filePath: SafeResourceUrl | undefined;
+  fileName = '';
 
   constructor(
     private sanitizer: DomSanitizer,
@@ -61,19 +61,24 @@ export class ActivityCreateComponent {
     });
   }
 
+  ngOnInit(): void {
+    if (this.activity.sop) {
+      this.filePath = this.sanitizer.bypassSecurityTrustResourceUrl(this.activity.sop);
+    }
+  }
+
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
       const file = input.files[0];
       this.fileName = file.name;
 
-      this.uploadService.uploadFile(file).subscribe(() => {
-        console.log('Upload bem-sucedido:', this.fileName);
-        this.filePath = this.sanitizer.bypassSecurityTrustResourceUrl('uploads/' + this.fileName);
+      this.uploadService.uploadFile(file).subscribe((response) => {
+        console.log('Upload bem-sucedido:', response.fileName);
         this.cdr.detectChanges();
+        this.activity.sop = response.filePath;
+        this.filePath = this.sanitizer.bypassSecurityTrustResourceUrl(response.filePath);
       });
-
-      this.activity.sop = 'uploads/' + this.fileName;
     }
   }
 
@@ -92,7 +97,6 @@ export class ActivityCreateComponent {
 
     // Adicione aqui o código para processar ou enviar os dados
     console.log('Dados enviados:', this.activity);
-    console.log('Arquivo selecionado:', this.fileName);
   }
 
   handleDayOfWeek(day: string): string {

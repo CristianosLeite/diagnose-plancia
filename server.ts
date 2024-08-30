@@ -1,24 +1,31 @@
-import { APP_BASE_HREF } from '@angular/common';
-import { CommonEngine } from '@angular/ssr';
 import express from 'express';
-import { fileURLToPath } from 'node:url';
+import cors from 'cors';
+import bodyParser from 'body-parser';
 import { dirname, join, resolve } from 'node:path';
+import { CommonEngine } from '@angular/ssr';
+import { APP_BASE_HREF } from '@angular/common';
+import { fileURLToPath } from 'node:url';
+import { json, urlencoded } from 'body-parser';
 import bootstrap from './src/main.server';
+import { Server as HttpServer } from 'http';
 import multer from 'multer';
-import { existsSync } from 'node:fs';
-import fs from 'fs';
+import { fileUpload } from './controllers/uploads.controller';
+import { UsersController } from './controllers/users.controller';
+import { ActivityController } from './controllers/activities.controller';
+import { ChecklistController } from './controllers/checklist.controller';
+import * as db from './database/database';
 
 // The Express app is exported so that it can be used by serverless Functions.
-export function app(): express.Express {
+export function app(): {
+  app: express.Express;
+} {
   const server = express();
+  server.use(cors());
+  server.use(express.json({ limit: '50mb' }));
+  server.use(express.urlencoded({ limit: '50mb', extended: true }));
+  server.use(bodyParser.json());
 
-  // CORS configuration
-  server.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-    res.header('Access-Control-Allow-Headers', 'Content-Type');
-    next();
-  });
+  server.use(express.urlencoded({ extended: true }));
 
   const serverDistFolder = dirname(fileURLToPath(import.meta.url));
   const browserDistFolder = resolve(serverDistFolder, '../browser');
@@ -36,6 +43,32 @@ export function app(): express.Express {
     maxAge: '1y'
   }));
 
+  // Enable parsing of application/json and application/x-www-form-urlencoded
+  server.use(json());
+  server.use(urlencoded({ extended: true }));
+
+  // Database connection
+  db.connect().then(() => {
+    // Create tables after successful connection
+    db.createTables();
+  });
+
+  // File upload
+  const upload = multer({ dest: 'uploads/' });
+  fileUpload(server, upload, browserDistFolder);
+
+  // Handle users
+  const usersController = new UsersController();
+  server.use('/api/users', usersController.getRouter());
+
+  // Handle activities
+  const activityController = new ActivityController();
+  server.use('/api/activities', activityController.getRouter());
+
+  // Handle checklists
+  const checklistController = new ChecklistController();
+  server.use('/api/checklists', checklistController.getRouter());
+
   // All regular routes use the Angular engine
   server.get('*', (req, res, next) => {
     const { protocol, originalUrl, baseUrl, headers } = req;
@@ -52,42 +85,17 @@ export function app(): express.Express {
       .catch((err) => next(err));
   });
 
-  const upload = multer({ dest: 'uploads/' });
-
-  server.post('/upload', upload.single('file'), (req, res) => {
-    if (!req.file) {
-      return res.status(400).json({ error: 'No files were uploaded.' });
-    }
-
-    const file = req.file;
-    const dir = join(browserDistFolder, 'uploads');
-
-    if (!existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
-    }
-
-    const targetPath = join(dir, file.originalname);
-
-    fs.rename(file.path, targetPath, (err) => {
-      if (err) {
-        return res.status(500).json({ error: err.message });
-      }
-      res.json({ message: 'File uploaded!', fileName: file.originalname });
-      return;
-    });
-
-    return;
-  });
-
-  return server;
+  return { app: server };
 }
 
 function run(): void {
   const port = process.env['PORT'] || 4000;
 
-  // Start up the Node server
-  const server = app();
+  // Start up the Express server
+  const { app: expressApp } = app();
 
+  // Create a HTTP server instance with the Express app
+  const server = new HttpServer(expressApp);
   server.listen(port, () => {
     console.log(`Node Express server listening on http://localhost:${port}`);
   });
