@@ -8,6 +8,7 @@ import { NgFor, NgIf } from '@angular/common';
 import { User, Skills } from '../../../interfaces/user.interface';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-user-create',
@@ -17,6 +18,7 @@ import { MatSelectModule } from '@angular/material/select';
     MatFormFieldModule,
     MatFormField,
     MatLabel,
+    MatButtonModule,
     MatInputModule,
     MatSelectModule,
     FormsModule,
@@ -47,5 +49,24 @@ export class UserCreateComponent {
     if (this.user.userSkills) {
       this.user.userSkills.splice(index, 1);
     }
+  }
+
+  validateNumberInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+
+    if (event instanceof KeyboardEvent) {
+      const allowedKeys = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'];
+
+      if (!allowedKeys.includes(event.key) && !/^\d$/.test(event.key)) {
+        event.preventDefault();
+      }
+    } else {
+      // Remove caracteres inválidos se o evento não for KeyboardEvent (por exemplo, input event)
+      input.value = input.value.replace(/[^0-9]/g, '');
+    }
+  }
+
+  onSubmit() {
+    console.log(this.user);
   }
 }
