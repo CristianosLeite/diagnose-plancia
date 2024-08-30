@@ -41,7 +41,6 @@ Activity.init(
     },
     dayToCheck: {
       type: DataTypes.STRING,
-      allowNull: false,
     },
     date: {
       type: DataTypes.DATE,

@@ -12,6 +12,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { UploadService } from '../../services/upload.service';
 import { ActivatedRoute } from '@angular/router';
+import { ActivityService } from '../../services/activity.service';
 
 @Component({
   selector: 'app-activity-create',
@@ -45,7 +46,8 @@ export class ActivityCreateComponent implements OnInit {
     private sanitizer: DomSanitizer,
     private uploadService: UploadService,
     private cdr: ChangeDetectorRef,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private activityService: ActivityService
   ) {
     this.route.paramMap.subscribe(params => {
       const activityData = params.get('element');
@@ -90,6 +92,13 @@ export class ActivityCreateComponent implements OnInit {
       });
       return;
     }
+
+    this.activity.createdBy = "532d1758-0fb2-46b4-90c7-fdfc62adcbca";
+    this.activityService.createActivity(this.activity).subscribe(() => {
+      this.activityService.retrieveAllActivities();
+    });
+
+    form.resetForm();
   }
 
   handleDayOfWeek(day: string): string {

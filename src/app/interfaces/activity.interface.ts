@@ -27,7 +27,7 @@ export interface Interval {
  * Interface de atividade
  */
 export interface Activity {
-  id: number;
+  activityId: number;
   point: string;
   description: string;
   activityType: string;
@@ -37,6 +37,7 @@ export interface Activity {
   frequency: Frequency;
   dayToCheck: dayOfWeek;
   date: Date;
+  createdBy: string;
   estimatedTime: Interval;
   timeSpent: Interval;
   activeMachine: boolean;

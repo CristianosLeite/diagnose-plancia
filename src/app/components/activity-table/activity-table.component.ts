@@ -7,7 +7,7 @@ import { Activity } from '../../interfaces/activity.interface';
 import { ActivityService } from '../../services/activity.service';
 import { MatIconButton } from '@angular/material/button';
 import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-activity-table',
@@ -17,6 +17,7 @@ import { Router } from '@angular/router';
     MatCheckboxModule,
     MatIconButton,
     MatMenuModule,
+    RouterLink
   ],
   providers: [MatMenuTrigger],
   templateUrl: './activity-table.component.html',
@@ -30,6 +31,7 @@ export class ActivityTableComponent {
   @Input() activity = {} as Activity;
 
   constructor(private activityService: ActivityService, private router: Router) {
+    this.activityService.retrieveAllActivities();
     this.activityService.activityCanceled.subscribe((activity: Partial<Activity>) => {
       this.selection.deselect(activity);
     });
@@ -54,7 +56,7 @@ export class ActivityTableComponent {
     if (!row) {
       return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
     }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id + 1}`;
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.activityId + 1}`;
   }
 
   onCheckboxChange(event: any, row: Activity) {
