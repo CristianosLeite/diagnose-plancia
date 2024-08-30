@@ -1,46 +1,50 @@
-<div class="container">
+<form class="container" #activityForm="ngForm" (ngSubmit)="onSubmit(activityForm)">
   <h1 class="title">{{activity.context === 'edit' ? 'Editar atividade' : 'Cadastro de atividade'}}</h1>
   <h3 *ngIf="activity.context === 'create'">Cadastrar uma atividade a ser realizada durante um checklist.</h3>
   <div class="content-container">
-      <mat-form-field class="point-create">
-        <mat-label>Ponto</mat-label>
-        <input matInput [(ngModel)]="activity.point" name="point" placeholder="Informar ponto de instalação do equipamento">
-      </mat-form-field>
-      <mat-form-field class="description-create">
-        <mat-label>Descrição</mat-label>
-        <input matInput [(ngModel)]="activity.description" name="description">
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Frequência</mat-label>
-        <mat-select [(ngModel)]="activity.frequency" name="frequency">
-          <mat-option *ngFor="let frequency of ['Diária', 'Semanal', 'Mensal', 'Anual', 'Outro']" [value]="frequency">
-            {{frequency}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+    <mat-form-field class="point-create">
+      <mat-label>Ponto</mat-label>
+      <input matInput [(ngModel)]="activity.point" name="point"
+        placeholder="Informar ponto de instalação do equipamento">
+    </mat-form-field>
+    <mat-form-field class="description-create">
+      <mat-label>Descrição</mat-label>
+      <input matInput [(ngModel)]="activity.description" name="description">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Frequência</mat-label>
+      <mat-select [(ngModel)]="activity.frequency" name="frequency">
+        <mat-option *ngFor="let frequency of ['Diária', 'Semanal', 'Mensal', 'Anual', 'Outro']" [value]="frequency">
+          {{frequency}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
     <mat-form-field *ngIf="activity.frequency === 'Semanal'">
       <mat-label>Dia da semana</mat-label>
       <mat-select [(ngModel)]="activity.dayToCheck" name="day">
-        <mat-option *ngFor="let day of ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']" [value]="day">
+        <mat-option *ngFor="let day of ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']"
+          [value]="day">
           {{handleDayOfWeek(day)}}
         </mat-option>
       </mat-select>
     </mat-form-field>
     <mat-form-field *ngIf="activity.frequency === 'Anual' || activity.frequency === 'Mensal'">
       <mat-label>Escolha uma data</mat-label>
-      <input (keydown)="validateNumberInput($event)" (input)="validateNumberInput($event)" matInput [(ngModel)]="activity.date" [matDatepicker]="picker" name="date">
+      <input (keydown)="validateNumberInput($event)" (input)="validateNumberInput($event)" matInput
+        [(ngModel)]="activity.date" [matDatepicker]="picker" name="date">
       <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
+  </div>
+  <div class="form-group sop-create">
+    <div class="sop-content">
+      <label>Carregar SOP</label>
+      <label class="upload-button" for="fileUpload">Selecionar Arquivo</label>
+      <input type="file" id="fileUpload" (change)="onFileSelected($event)" accept=".png,.jpeg,.webp,.pdf">
+      <span class="file-name">{{fileName || 'Nenhum arquivo selecionado'}}</span>
     </div>
-    <div class="form-group sop-create">
-      <div class="sop-content">
-        <label>Carregar SOP</label>
-        <label class="upload-button" for="fileUpload">Selecionar Arquivo</label>
-        <input type="file" id="fileUpload" (change)="onFileSelected($event)" accept=".png,.jpeg,.webp,.pdf">
-        <span class="file-name">{{fileName || 'Nenhum arquivo selecionado'}}</span>
-      </div>
-      <object *ngIf="filePath" [data]="filePath" type="application/pdf" style="width: 40%;"></object>
-    </div>
-    <button mat-raised-button (click)="onSubmit()">{{activity.context === 'edit' ? 'Salvar' : 'Cadastrar'}}</button>
-</div>
+    <object *ngIf="filePath" [data]="filePath" type="application/pdf" style="width: 40%;"></object>
+  </div>
+  <button class="btn-submit" mat-raised-button type="submit" [disabled]="activityForm.invalid">
+    {{activity.context === 'edit' ? 'Salvar' : 'Cadastrar'}}</button>
+</form>

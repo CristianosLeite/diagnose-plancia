@@ -8,10 +8,10 @@
 }
 
 .content-container {
+  width: 80%;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
-  width: 80%;
+  justify-content: flex-start;
 }
 
 .form-field {
@@ -69,10 +69,4 @@
 
 button.mat-icon-button {
   margin-left: 10px;
-}
-
-.btn-submit {
-  justify-self: baseline;
-  width: 200px;
-  height: 60px;
 }

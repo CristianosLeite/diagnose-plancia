@@ -4,7 +4,7 @@ import { MatFormField, MatLabel, MatFormFieldModule } from '@angular/material/fo
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { Activity } from '../../interfaces/activity.interface';
 import { NgFor, NgIf } from '@angular/common';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -33,7 +33,7 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './activity-create.component.html',
   styleUrl: './activity-create.component.scss',
 })
-export class ActivityCreateComponent implements OnInit{
+export class ActivityCreateComponent implements OnInit {
   @Input() activity: Activity = {
     ...({} as Activity),
     context: 'create',
@@ -82,21 +82,14 @@ export class ActivityCreateComponent implements OnInit{
     }
   }
 
-  onSubmit(): void {
-    // Verifique se todos os campos obrigatórios estão preenchidos
-    if (!this.activity.point || !this.activity.description || !this.activity.frequency) {
-      alert('Por favor, preencha todos os campos obrigatórios.');
+  onSubmit(form: NgForm): void {
+    if (form.invalid) {
+      Object.keys(form.controls).forEach(field => {
+        const control = form.control.get(field);
+        control?.markAsTouched({ onlySelf: true });
+      });
       return;
     }
-
-    // Exemplo de validação adicional para data
-    if ((this.activity.frequency === 'Anual' || this.activity.frequency === 'Mensal') && !this.activity.date) {
-      alert('Por favor, escolha uma data.');
-      return;
-    }
-
-    // Adicione aqui o código para processar ou enviar os dados
-    console.log('Dados enviados:', this.activity);
   }
 
   handleDayOfWeek(day: string): string {
