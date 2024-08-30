@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { MatOption } from '@angular/material/core';
 import { MatFormField, MatFormFieldModule, MatLabel } from '@angular/material/form-field';
 import { MatTableModule } from '@angular/material/table';
@@ -9,6 +9,7 @@ import { User, Skills } from '../../../interfaces/user.interface';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'app-user-create',
@@ -34,20 +35,22 @@ export class UserCreateComponent {
   user: User = {
     ...({} as User),
     context: 'create',
-    userSkills: []
+    skills: []
   };
 
   availableSkills: Skills[] = ['Talha', 'Paleteira', 'Empilhadeira', 'NR12', 'NR33', 'Rebocador', 'NR13', 'NR35', 'NR10', 'NR20'];
 
+  constructor(private userService: UserService) {}
+
   addSkill(skill: Skills) {
-    if (this.user.userSkills && !this.user.userSkills.includes(skill)) {
-      this.user.userSkills.push(skill);
+    if (this.user.skills && !this.user.skills.includes(skill)) {
+      this.user.skills.push(skill);
     }
   }
 
   removeSkill(index: number) {
-    if (this.user.userSkills) {
-      this.user.userSkills.splice(index, 1);
+    if (this.user.skills) {
+      this.user.skills.splice(index, 1);
     }
   }
 
@@ -66,7 +69,18 @@ export class UserCreateComponent {
     }
   }
 
-  onSubmit() {
-    console.log(this.user);
+  onSubmit(form: NgForm) {
+    if (form.invalid) {
+      // Marcar todos os controles como tocados para exibir mensagens de erro
+      Object.keys(form.controls).forEach(field => {
+        const control = form.control.get(field);
+        control?.markAsTouched({ onlySelf: true });
+      });
+      return;
+    }
+
+    this.userService.createUser(this.user).subscribe(() => {
+      console.log('User created');
+    });
   }
 }

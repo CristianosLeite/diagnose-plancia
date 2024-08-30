@@ -39,13 +39,13 @@
     </a>
 
     <!--Cadastro de usuários-->
-    <a class="sub-option" *ngIf="expandedUser" routerLink="users/create">
+    <a class="sub-option" *ngIf="expandedUser" routerLink="users/create" routerLinkActive="active">
       <i class="material-icons option-icon">person_add</i>
       Cadastrar usuário
     </a>
 
     <!--Listar usuários-->
-    <a class="sub-option" *ngIf="expandedUser" (click)="notImplemented()">
+    <a class="sub-option" *ngIf="expandedUser" (click)="notImplemented()" routerLinkActive="active">
       <i class="material-icons option-icon">people</i>
       Listar usuários
     </a>

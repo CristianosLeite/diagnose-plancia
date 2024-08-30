@@ -3,12 +3,14 @@ export type Skills = 'Talha' | 'Paleteira' | 'Empilhadeira' | 'NR12' | 'NR33'| '
 export type context = 'create' | 'edit';
 
 export interface User {
+  id: string;
   name: string;
   origin: string;
   company: string;
-  // Id = Matricula
-  id: number;
+  badgeNumber: number;
   plant: string;
-  userSkills: Skills[];
+  skills: Skills[];
+  createdAt: Date;
+  updatedAt: Date;
   context: context;
 }
