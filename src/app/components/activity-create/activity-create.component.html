@@ -28,7 +28,7 @@
     </mat-form-field>
     <mat-form-field *ngIf="activity.frequency === 'Anual' || activity.frequency === 'Mensal'">
       <mat-label>Escolha uma data</mat-label>
-      <input matInput [(ngModel)]="activity.date" [matDatepicker]="picker" name="date">
+      <input (keydown)="validateNumberInput($event)" (input)="validateNumberInput($event)" matInput [(ngModel)]="activity.date" [matDatepicker]="picker" name="date">
       <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>

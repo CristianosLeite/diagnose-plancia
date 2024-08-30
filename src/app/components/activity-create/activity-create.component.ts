@@ -109,4 +109,19 @@ export class ActivityCreateComponent implements OnInit{
     if (day === 'Saturday') return 'Sábado';
     return '';
   }
+
+  validateNumberInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+
+    if (event instanceof KeyboardEvent) {
+      const allowedKeys = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'];
+
+      if (!allowedKeys.includes(event.key) && !/^\d$/.test(event.key)) {
+        event.preventDefault();
+      }
+    } else {
+      // Remove caracteres inválidos se o evento não for KeyboardEvent (por exemplo, input event)
+      input.value = input.value.replace(/[^0-9]/g, '');
+    }
+  }
 }
