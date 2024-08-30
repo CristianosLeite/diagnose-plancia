@@ -41,7 +41,5 @@ testem.log
 .DS_Store
 Thumbs.db
 
-# Database config
-database-config.ts
-
 uploads/
+.env
