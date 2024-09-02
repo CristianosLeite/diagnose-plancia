@@ -12,6 +12,8 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { UploadService } from '../../services/upload.service';
 import { ActivatedRoute } from '@angular/router';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { SnackbarComponent } from '../modal/snackbar/snackbar.component';
 
 @Component({
   selector: 'app-activity-create',
@@ -29,15 +31,13 @@ import { ActivatedRoute } from '@angular/router';
     NgIf,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatSnackBarModule,
   ],
   templateUrl: './activity-create.component.html',
-  styleUrl: './activity-create.component.scss',
+  styleUrls: ['./activity-create.component.scss'],
 })
-export class ActivityCreateComponent implements OnInit{
-  @Input() activity: Activity = {
-    ...({} as Activity),
-    context: 'create',
-  };
+export class ActivityCreateComponent implements OnInit {
+  @Input() activity: Activity = { context: 'create' } as Activity;
   @Input() filePath: SafeResourceUrl | undefined;
   fileName = '';
 
@@ -45,83 +45,95 @@ export class ActivityCreateComponent implements OnInit{
     private sanitizer: DomSanitizer,
     private uploadService: UploadService,
     private cdr: ChangeDetectorRef,
-    private route: ActivatedRoute
-  ) {
+    private route: ActivatedRoute,
+    private snackBar: MatSnackBar
+  ) {}
+
+  ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
-      const activityData = params.get('element');
-      const context = params.get('context');
-
-      if (activityData) {
-        this.activity = JSON.parse(activityData);
-      }
-
-      if (context) {
-        this.activity.context = context as 'create' | 'edit';
+      this.activity = {
+        ...this.activity,
+        ...JSON.parse(params.get('element') || '{}'),
+        context: params.get('context') as 'create' | 'edit'
+      };
+      if (this.activity.sop) {
+        this.filePath = this.sanitizer.bypassSecurityTrustResourceUrl(this.activity.sop);
       }
     });
   }
 
-  ngOnInit(): void {
-    if (this.activity.sop) {
-      this.filePath = this.sanitizer.bypassSecurityTrustResourceUrl(this.activity.sop);
-    }
-  }
-
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
-    if (input.files && input.files[0]) {
+    if (input.files?.[0]) {
       const file = input.files[0];
       this.fileName = file.name;
 
-      this.uploadService.uploadFile(file).subscribe((response) => {
-        console.log('Upload bem-sucedido:', response.fileName);
-        this.cdr.detectChanges();
+      this.uploadService.uploadFile(file).subscribe(response => {
         this.activity.sop = response.filePath;
         this.filePath = this.sanitizer.bypassSecurityTrustResourceUrl(response.filePath);
+        this.cdr.detectChanges();
       });
     }
   }
 
-  onSubmit(): void {
-    // Verifique se todos os campos obrigatórios estão preenchidos
-    if (!this.activity.point || !this.activity.description || !this.activity.frequency) {
-      alert('Por favor, preencha todos os campos obrigatórios.');
-      return;
+  isFormValid(): boolean {
+    const { point, description, frequency, date } = this.activity;
+
+    if (!point || !description || !frequency) {
+      this.openSnackBar(false);
+      return false;
     }
 
-    // Exemplo de validação adicional para data
-    if ((this.activity.frequency === 'Anual' || this.activity.frequency === 'Mensal') && !this.activity.date) {
-      alert('Por favor, escolha uma data.');
-      return;
+    if (['Anual', 'Mensal'].includes(frequency) && !date) {
+      this.openSnackBar(false);
+      return false;
     }
 
-    // Adicione aqui o código para processar ou enviar os dados
-    console.log('Dados enviados:', this.activity);
+    return true;
   }
 
   handleDayOfWeek(day: string): string {
-    if (day === 'Sunday') return 'Domingo';
-    if (day === 'Monday') return 'Segunda-feira';
-    if (day === 'Tuesday') return 'Terça-feira';
-    if (day === 'Wednesday') return 'Quarta-feira';
-    if (day === 'Thursday') return 'Quinta-feira';
-    if (day === 'Friday') return 'Sexta-feira';
-    if (day === 'Saturday') return 'Sábado';
-    return '';
+    const days: { [key: string]: string } = {
+      'Sunday': 'Domingo',
+      'Monday': 'Segunda-feira',
+      'Tuesday': 'Terça-feira',
+      'Wednesday': 'Quarta-feira',
+      'Thursday': 'Quinta-feira',
+      'Friday': 'Sexta-feira',
+      'Saturday': 'Sábado',
+    };
+    return days[day] || '';
   }
 
   validateNumberInput(event: Event): void {
     const input = event.target as HTMLInputElement;
 
     if (event instanceof KeyboardEvent) {
-      const allowedKeys = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'];
-
-      if (!allowedKeys.includes(event.key) && !/^\d$/.test(event.key)) {
+      if (!['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(event.key) && !/^\d$/.test(event.key)) {
         event.preventDefault();
       }
     } else {
-      // Remove caracteres inválidos se o evento não for KeyboardEvent (por exemplo, input event)
       input.value = input.value.replace(/[^0-9]/g, '');
+    }
+  }
+
+  openSnackBar(isSuccess: boolean) {
+    this.snackBar.openFromComponent(SnackbarComponent, {
+      data: {
+        message: isSuccess ? 'Cadastro realizado com sucesso!' : 'Erro ao realizar o cadastro.',
+        actionText: 'Fechar',
+      },
+      duration: 5000,
+      panelClass: isSuccess ? 'success-snackbar' : 'error-snackbar',
+      horizontalPosition: 'right',
+      verticalPosition: 'bottom',
+    });
+  }
+
+  onSubmit() {
+    if (this.isFormValid()) {
+      console.log('Dados enviados:', this.activity);
+      this.openSnackBar(true);
     }
   }
 }
