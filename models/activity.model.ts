@@ -45,6 +45,9 @@ Activity.init(
     date: {
       type: DataTypes.DATE,
     },
+    lastChecked: {
+      type: DataTypes.DATE,
+    },
     estimatedTime: {
       type: 'INTERVAL',
     },

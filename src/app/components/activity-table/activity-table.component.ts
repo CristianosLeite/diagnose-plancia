@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit, ChangeDetectorRef } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTableDataSource } from '@angular/material/table';
@@ -8,6 +8,7 @@ import { ActivityService } from '../../services/activity.service';
 import { MatIconButton } from '@angular/material/button';
 import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
 import { Router, RouterLink } from '@angular/router';
+import { TimeDateService } from '../../services/time-date.service';
 
 @Component({
   selector: 'app-activity-table',
@@ -23,18 +24,31 @@ import { Router, RouterLink } from '@angular/router';
   templateUrl: './activity-table.component.html',
   styleUrl: './activity-table.component.scss'
 })
-export class ActivityTableComponent {
+export class ActivityTableComponent implements OnInit {
   ELEMENT_DATA = this.activityService.ELEMENT_DATA;
   displayedColumns: string[] = ['id', 'point', 'description', 'sop', 'estimatedTime', 'frequency', 'select', 'options'];
-  dataSource = new MatTableDataSource<Partial<Activity>>(this.ELEMENT_DATA);
+  @Input()dataSource = new MatTableDataSource<Partial<Activity>>(this.ELEMENT_DATA);
   @Input() selection = new SelectionModel<Partial<Activity>>(true, []);
   @Input() activity = {} as Activity;
 
-  constructor(private activityService: ActivityService, private router: Router) {
-    this.activityService.retrieveAllActivities();
+  constructor(
+    private activityService: ActivityService,
+    private router: Router,
+    public timeDateService: TimeDateService,
+    private cdr: ChangeDetectorRef
+  ) {
     this.activityService.activityCanceled.subscribe((activity: Partial<Activity>) => {
       this.selection.deselect(activity);
     });
+    this.activityService.activitiesChanged.subscribe((data: Activity[]) => {
+      this.dataSource = new MatTableDataSource<Partial<Activity>>(data);
+      this.ELEMENT_DATA = data.filter((activity: Activity) => new Date(activity.lastChecked).getDate() !== new Date().getDate());
+      this.cdr.detectChanges();
+    });
+  }
+
+  ngOnInit(): void {
+    this.activityService.retrieveAllActivities();
   }
 
   /** Whether the number of selected elements matches the total number of rows. */
@@ -64,12 +78,6 @@ export class ActivityTableComponent {
       this.activityService.selectionChanged.emit(row);
     }
     this.selection.toggle(row);
-  }
-
-  formatTime(hours: number, minutes: number, seconds: number): string {
-    return `${hours < 10 ? `0${hours}` : hours}:${
-      minutes < 10 ? `0${minutes}` : minutes
-    }:${seconds < 10 ? `0${seconds}` : seconds}`;
   }
 
   showSop(event: any, row: Activity) {

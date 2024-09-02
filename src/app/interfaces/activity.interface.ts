@@ -43,7 +43,7 @@ export interface Activity {
   activeMachine: boolean;
   period: Period;
   responsible: string;
-  isFinished: boolean;
+  lastChecked: string;
   status: ActivityStatus;
   context: context;
 }

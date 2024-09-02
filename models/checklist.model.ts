@@ -27,6 +27,11 @@ Checklist.init(
       type: DataTypes.UUID,
       allowNull: false,
     },
+    timeSpent: {
+      type: 'INTERVAL',
+      allowNull: false,
+      defaultValue: '00:00:00',
+    },
   },
   {
     sequelize,
