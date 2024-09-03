@@ -4,7 +4,7 @@ import { MatFormField, MatLabel, MatFormFieldModule } from '@angular/material/fo
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { Activity } from '../../interfaces/activity.interface';
 import { NgFor, NgIf } from '@angular/common';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -12,6 +12,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { UploadService } from '../../services/upload.service';
 import { ActivatedRoute } from '@angular/router';
+import { ActivityService } from '../../services/activity.service';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { SnackbarComponent } from '../modal/snackbar/snackbar.component';
 
@@ -37,7 +38,10 @@ import { SnackbarComponent } from '../modal/snackbar/snackbar.component';
   styleUrls: ['./activity-create.component.scss'],
 })
 export class ActivityCreateComponent implements OnInit {
-  @Input() activity: Activity = { context: 'create' } as Activity;
+  @Input() activity: Activity = {
+    ...({} as Activity),
+    context: 'create',
+  };
   @Input() filePath: SafeResourceUrl | undefined;
   fileName = '';
 
@@ -46,6 +50,7 @@ export class ActivityCreateComponent implements OnInit {
     private uploadService: UploadService,
     private cdr: ChangeDetectorRef,
     private route: ActivatedRoute,
+    private activityService: ActivityService,
     private snackBar: MatSnackBar
   ) {}
 
@@ -76,20 +81,21 @@ export class ActivityCreateComponent implements OnInit {
     }
   }
 
-  isFormValid(): boolean {
-    const { point, description, frequency, date } = this.activity;
-
-    if (!point || !description || !frequency) {
-      this.openSnackBar(false);
-      return false;
+  onSubmit(form: NgForm): void {
+    if (form.invalid) {
+      Object.keys(form.controls).forEach(field => {
+        const control = form.control.get(field);
+        control?.markAsTouched({ onlySelf: true });
+      });
+      return;
     }
 
-    if (['Anual', 'Mensal'].includes(frequency) && !date) {
-      this.openSnackBar(false);
-      return false;
-    }
+    this.activity.createdBy = "532d1758-0fb2-46b4-90c7-fdfc62adcbca";
+    this.activityService.createActivity(this.activity).subscribe(() => {
+      this.activityService.retrieveAllActivities();
+    });
 
-    return true;
+    form.resetForm();
   }
 
   handleDayOfWeek(day: string): string {
@@ -128,12 +134,5 @@ export class ActivityCreateComponent implements OnInit {
       horizontalPosition: 'right',
       verticalPosition: 'bottom',
     });
-  }
-
-  onSubmit() {
-    if (this.isFormValid()) {
-      console.log('Dados enviados:', this.activity);
-      this.openSnackBar(true);
-    }
   }
 }

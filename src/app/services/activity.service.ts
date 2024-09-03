@@ -1,26 +1,43 @@
 import { Injectable, Output, EventEmitter } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Activity } from '../interfaces/activity.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ActivityService {
-  ELEMENT_DATA: Partial<Activity>[] = [
-    {id: 1, point: 'SWAY', description: 'CONFERIR ESTADO DE CONSERVAÇÃO DOS PINOS E FUNCIONAMENTO DAS LÂMPADAS DOS SENSORES', estimatedTime: { hours: 0, minutes: 0, seconds: 0 }, activityType: 'Conectores da mesa', frequency: 'Diária'},
-    {id: 2, point: 'NOVO TECTOR', description: 'CONFERIR FUNCIONAMENTO DO BOTÃO DE TRAVA', activityType: 'Conectores da mesa', frequency: 'Semanal', sop: 'C:/Users/Cristiano/AppData/Local/Programs/diagnose-plancia/resources/app.asar.unpacked/dist/diagnose-plancia/browser/uploads/SOP - COLAGEM DO PARABRISA - VOZ AM 017.pdf'},
-    {id: 3, point: 'USB-1', description: 'CONFERIR ESTADO DE CONSERVAÇÃO DOS PINOS E FUNCIONAMENTO DAS LÂMPADAS DOS SENSORES', activityType: 'Conectores da mesa', frequency: 'Diária'},
-    {id: 4, point: 'ST46 86175', description: 'CONFERIR FUNCIONAMENTO DO BOTÃO DE TRAVA', activityType: 'Conectores da mesa', frequency: 'Semanal'},
-    {id: 5, point: 'SWAY', description: 'CONFERIR ESTADO DE CONSERVAÇÃO DOS PINOS E FUNCIONAMENTO DAS LÂMPADAS DOS SENSORES', activityType: 'Conectores da mesa', frequency: 'Diária'},
-    {id: 6, point: 'SWAY', description: 'CONFERIR FUNCIONAMENTO DO BOTÃO DE TRAVA', activityType: 'Conectores da mesa', frequency: 'Semanal'},
-    {id: 7, point: 'SWAY', description: 'CONFERIR ESTADO DE CONSERVAÇÃO DOS PINOS E FUNCIONAMENTO DAS LÂMPADAS DOS SENSORES', activityType: 'Conectores da mesa', frequency: 'Diária'},
-    {id: 8, point: 'SWAY', description: 'CONFERIR FUNCIONAMENTO DO BOTÃO DE TRAVA', activityType: 'Conectores da mesa', frequency: 'Semanal'},
-    {id: 9, point: 'SWAY', description: 'CONFERIR ESTADO DE CONSERVAÇÃO DOS PINOS E FUNCIONAMENTO DAS LÂMPADAS DOS SENSORES', activityType: 'Conectores da mesa', frequency: 'Diária'},
-    {id: 10, point: 'SWAY', description: 'CONFERIR FUNCIONAMENTO DO BOTÃO DE TRAVA', activityType: 'Conectores da mesa', frequency: 'Semanal'},
-  ];
+  baseUrl = 'http://localhost:4000/api/activities';
+  ELEMENT_DATA: Activity[] = [];
 
+  @Output() activitiesChanged = new EventEmitter<Activity[]>();
   @Output() selectionChanged = new EventEmitter<Activity>();
   @Output() activityCanceled = new EventEmitter<Activity>();
   @Output() activityConfirmed = new EventEmitter<Activity>();
   @Output() activitySaved = new EventEmitter<Activity>();
   @Output() sopSolicitation = new EventEmitter<Activity>();
+
+  constructor(private http: HttpClient) { }
+
+  createActivity(activity: Activity) {
+    return this.http.post(`${this.baseUrl}/create`, activity);
+  }
+
+  retrieveActivity(id: string) {
+    return this.http.get(`${this.baseUrl}/one?activityId=${id}`);
+  }
+
+  retrieveAllActivities() {
+    return this.http.get<Activity[]>(`${this.baseUrl}/all`).subscribe((data: Activity[]) => {
+      this.ELEMENT_DATA = data;
+      this.activitiesChanged.emit(this.ELEMENT_DATA);
+    });
+  }
+
+  updateActivity(activity: Activity) {
+    return this.http.put(`${this.baseUrl}/update`, activity);
+  }
+
+  deleteActivity(id: string) {
+    return this.http.delete(`${this.baseUrl}/delete?activityId=${id}`);
+  }
 }

@@ -1,5 +1,6 @@
-import { Component, Inject } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+
+import { Component } from '@angular/core';
+import { FormsModule, NgForm } from '@angular/forms';
 import { MatOption } from '@angular/material/core';
 import {
   MatFormField,
@@ -13,6 +14,7 @@ import { User, Skills } from '../../../interfaces/user.interface';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
+import { UserService } from '../../../services/user.service';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { SnackbarComponent } from '../../modal/snackbar/snackbar.component';
 
@@ -41,7 +43,7 @@ export class UserCreateComponent {
   user: User = {
     ...({} as User),
     context: 'create',
-    userSkills: [],
+    skills: []
   };
 
   availableSkills: Skills[] = [
@@ -57,17 +59,20 @@ export class UserCreateComponent {
     'NR20',
   ];
 
-  constructor(private snackBar: MatSnackBar) {}
+  constructor(
+    private userService: UserService,
+    private snackBar: MatSnackBar
+  ) {}
 
   addSkill(skill: Skills) {
-    if (this.user.userSkills && !this.user.userSkills.includes(skill)) {
-      this.user.userSkills.push(skill);
+    if (this.user.skills && !this.user.skills.includes(skill)) {
+      this.user.skills.push(skill);
     }
   }
 
   removeSkill(index: number) {
-    if (this.user.userSkills) {
-      this.user.userSkills.splice(index, 1);
+    if (this.user.skills) {
+      this.user.skills.splice(index, 1);
     }
   }
 
@@ -92,6 +97,21 @@ export class UserCreateComponent {
     }
   }
 
+  onSubmit(form: NgForm) {
+    if (form.invalid) {
+      // Marcar todos os controles como tocados para exibir mensagens de erro
+      Object.keys(form.controls).forEach(field => {
+        const control = form.control.get(field);
+        control?.markAsTouched({ onlySelf: true });
+      });
+      return;
+    }
+
+    this.userService.createUser(this.user).subscribe(() => {
+      console.log('User created');
+    });
+  }
+
   openSnackBar(isSuccess: boolean) {
     this.snackBar.openFromComponent(SnackbarComponent, {
       data: {
@@ -105,22 +125,5 @@ export class UserCreateComponent {
       horizontalPosition: 'right',
       verticalPosition: 'bottom',
     });
-  }
-
-  onSubmit() {
-    const isFormValid = this.isFormValid();
-
-    this.openSnackBar(isFormValid);
-  }
-
-  isFormValid(): boolean {
-    return !!(
-      this.user.name &&
-      this.user.origin &&
-      this.user.company &&
-      this.user.id &&
-      this.user.plant &&
-      this.user.userSkills.length > 0
-    );
   }
 }

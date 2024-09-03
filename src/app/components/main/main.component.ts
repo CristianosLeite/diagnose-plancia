@@ -12,6 +12,8 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { ActivityService } from '../../services/activity.service';
 import { SopModalComponent } from '../modal/sop-modal/sop-modal.component';
 import { PopupConfirmationComponent } from '../modal/popup-confirmation/popup-confirmation.component';
+import { ChecklistService } from '../../services/checklist.service';
+import { TimeDateService } from '../../services/time-date.service';
 
 @Component({
   selector: 'app-main',
@@ -38,7 +40,9 @@ export class MainComponent {
 
   constructor(
     public dialog: MatDialog,
-    private activityService: ActivityService
+    private activityService: ActivityService,
+    private checklistService: ChecklistService,
+    private timeDateService: TimeDateService
   ) {
     this.activityService.selectionChanged.subscribe(activity => {
       this.openDialog(activity);
@@ -79,6 +83,18 @@ export class MainComponent {
       this.openDialog(activity);
     });
 
+    dialogRef.componentInstance.onConfirm.subscribe(() => {
+      activity.lastChecked = new Date().toDateString();
+      this.checklistService.createChecklist({
+        activityId: activity.activityId,
+        timeSpent: this.timeDateService.formatTime(activity.timeSpent),
+        userId: "532d1758-0fb2-46b4-90c7-fdfc62adcbca"
+      }).subscribe(() => {
+        this.activityService.updateActivity(activity).subscribe(() => {
+          this.activityService.retrieveAllActivities();
+        });
+      });
+    });
     return false;
   }
 

@@ -41,9 +41,11 @@ Activity.init(
     },
     dayToCheck: {
       type: DataTypes.STRING,
-      allowNull: false,
     },
     date: {
+      type: DataTypes.DATE,
+    },
+    lastChecked: {
       type: DataTypes.DATE,
     },
     estimatedTime: {

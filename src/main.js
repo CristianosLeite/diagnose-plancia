@@ -1,4 +1,4 @@
-const { app, BrowserWindow, nativeImage } = require("electron");
+const { app, BrowserWindow, nativeImage, Menu, MenuItem } = require("electron");
 const path = require("path");
 const url = require("url");
 
@@ -26,6 +26,17 @@ function createWindow() {
       preload: path.join(__dirname, "preload.js"),
     },
   });
+
+  let menu = new Menu();
+  let submenu = new Menu();
+
+  menu.append(new MenuItem({ label: "Opções", submenu: submenu }));
+
+  submenu.append(new MenuItem({ label: "Sair tela cheia", role: "togglefullscreen" }));
+  submenu.append(new MenuItem({ type: "separator" }));
+  submenu.append(new MenuItem({ label: "Sair", role: "quit" }));
+
+  win.setMenu(menu);
 
   // Load the index.html of the app.
   win.loadURL(
