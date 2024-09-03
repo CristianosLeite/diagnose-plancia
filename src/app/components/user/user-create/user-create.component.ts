@@ -1,7 +1,12 @@
+
 import { Component } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { MatOption } from '@angular/material/core';
-import { MatFormField, MatFormFieldModule, MatLabel } from '@angular/material/form-field';
+import {
+  MatFormField,
+  MatFormFieldModule,
+  MatLabel,
+} from '@angular/material/form-field';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { NgFor, NgIf } from '@angular/common';
@@ -10,6 +15,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { UserService } from '../../../services/user.service';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { SnackbarComponent } from '../../modal/snackbar/snackbar.component';
 
 @Component({
   selector: 'app-user-create',
@@ -27,9 +34,10 @@ import { UserService } from '../../../services/user.service';
     NgFor,
     NgIf,
     MatOption,
+    MatSnackBarModule,
   ],
   templateUrl: './user-create.component.html',
-  styleUrl: './user-create.component.scss'
+  styleUrl: './user-create.component.scss',
 })
 export class UserCreateComponent {
   user: User = {
@@ -38,9 +46,23 @@ export class UserCreateComponent {
     skills: []
   };
 
-  availableSkills: Skills[] = ['Talha', 'Paleteira', 'Empilhadeira', 'NR12', 'NR33', 'Rebocador', 'NR13', 'NR35', 'NR10', 'NR20'];
+  availableSkills: Skills[] = [
+    'Talha',
+    'Paleteira',
+    'Empilhadeira',
+    'NR12',
+    'NR33',
+    'Rebocador',
+    'NR13',
+    'NR35',
+    'NR10',
+    'NR20',
+  ];
 
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private snackBar: MatSnackBar
+  ) {}
 
   addSkill(skill: Skills) {
     if (this.user.skills && !this.user.skills.includes(skill)) {
@@ -58,7 +80,13 @@ export class UserCreateComponent {
     const input = event.target as HTMLInputElement;
 
     if (event instanceof KeyboardEvent) {
-      const allowedKeys = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'];
+      const allowedKeys = [
+        'Backspace',
+        'Delete',
+        'ArrowLeft',
+        'ArrowRight',
+        'Tab',
+      ];
 
       if (!allowedKeys.includes(event.key) && !/^\d$/.test(event.key)) {
         event.preventDefault();
@@ -81,6 +109,21 @@ export class UserCreateComponent {
 
     this.userService.createUser(this.user).subscribe(() => {
       console.log('User created');
+    });
+  }
+
+  openSnackBar(isSuccess: boolean) {
+    this.snackBar.openFromComponent(SnackbarComponent, {
+      data: {
+        message: isSuccess
+          ? 'Cadastro realizado com sucesso!'
+          : 'Erro ao realizar o cadastro.',
+        actionText: 'Fechar',
+      },
+      duration: 5000,
+      panelClass: isSuccess ? 'success-snackbar' : 'error-snackbar',
+      horizontalPosition: 'right',
+      verticalPosition: 'bottom',
     });
   }
 }
