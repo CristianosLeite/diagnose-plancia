@@ -9,7 +9,7 @@ export type Origin = 'PM' | 'QB' | 'QX' | 'EX';
 
 export type Period = '1º' | '2º' | '3º';
 
-export type Frequency = 'Diária' | 'Semanal' | 'Mensal' | 'Anual' | 'Outro';
+export type Frequency = 'Daily' | 'Weekly' | 'Monthly' | 'Yearly' | 'Other';
 
 export type ActivityStatus = 'OK' | 'KO';
 

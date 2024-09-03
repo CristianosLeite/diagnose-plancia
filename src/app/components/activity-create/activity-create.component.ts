@@ -111,6 +111,17 @@ export class ActivityCreateComponent implements OnInit {
     return days[day] || '';
   }
 
+  handleFrequency(frequency: string): string {
+    const frequencies: { [key: string]: string } = {
+      'Daily': 'Diária',
+      'Weekly': 'Semanal',
+      'Monthly': 'Mensal',
+      'Yearly': 'Anual',
+      'Other': 'Outra'
+    };
+    return frequencies[frequency] || '';
+  }
+
   validateNumberInput(event: Event): void {
     const input = event.target as HTMLInputElement;
 

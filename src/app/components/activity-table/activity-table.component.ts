@@ -25,6 +25,7 @@ import { TimeDateService } from '../../services/time-date.service';
   styleUrl: './activity-table.component.scss'
 })
 export class ActivityTableComponent implements OnInit {
+  dataLength = 0;
   ELEMENT_DATA = this.activityService.ELEMENT_DATA;
   displayedColumns: string[] = ['id', 'point', 'description', 'sop', 'estimatedTime', 'frequency', 'select', 'options'];
   @Input()dataSource = new MatTableDataSource<Partial<Activity>>(this.ELEMENT_DATA);
@@ -41,8 +42,34 @@ export class ActivityTableComponent implements OnInit {
       this.selection.deselect(activity);
     });
     this.activityService.activitiesChanged.subscribe((data: Activity[]) => {
+      this.dataLength = data.length;
+      const today = new Date();
+      const todayDay = today.getDate();
+      const todayMonth = today.getMonth();
+      const todayWeekday = today.toLocaleString('en-US', { weekday: 'long' });
+
+      // Filter activities that have already been checked today
+      data = data.filter((activity: Activity) => new Date(activity.lastChecked).getDate() !== todayDay);
+
+      //Filter activities based on frequency
+      data = data.filter((activity: Activity) => {
+        switch (activity.frequency) {
+          case 'Daily':
+            return true;
+          case 'Weekly':
+            return activity.dayToCheck === todayWeekday;
+          case 'Monthly':
+            return new Date(activity.date).getDate() === todayDay;
+          case 'Yearly':
+            const activityDate = new Date(activity.dayToCheck);
+            return activityDate.getDate() === todayDay && activityDate.getMonth() === todayMonth;
+          default:
+            return false;
+        }
+      });
+
       this.dataSource = new MatTableDataSource<Partial<Activity>>(data);
-      this.ELEMENT_DATA = data.filter((activity: Activity) => new Date(activity.lastChecked).getDate() !== new Date().getDate());
+      this.ELEMENT_DATA = data;
       this.cdr.detectChanges();
     });
   }
@@ -95,5 +122,16 @@ export class ActivityTableComponent implements OnInit {
   deleteActivity(event: any, row: Activity) {
     event.stopPropagation();
     alert('Delete');
+  }
+
+  handleFrequency(frequency: string): string {
+    const frequencies: { [key: string]: string } = {
+      'Daily': 'Diária',
+      'Weekly': 'Semanal',
+      'Monthly': 'Mensal',
+      'Yearly': 'Anual',
+      'Other': 'Outra'
+    };
+    return frequencies[frequency] || '';
   }
 }
