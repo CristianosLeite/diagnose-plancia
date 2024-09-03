@@ -1,0 +1,43 @@
+.snackbar-container {
+  display: flex;
+  border-radius: 4px;
+  color: #ffffff00;
+  justify-content: space-between;
+}
+
+.success-snackbar {
+  max-width: fit-content;
+  width: fit-content;
+}
+
+.error-snackbar {
+  background-color: #f44336 !important; /* Vermelho para erro */
+}
+
+.snackbar-text {
+  color: rgb(26, 26, 26);
+  font-size: medium;
+  font-weight: 500;
+}
+
+.mat-snack-bar-label {
+  font-size: 16px;
+  flex-grow: 1;
+  margin-right: 16px;
+}
+
+.mat-snack-bar-actions {
+  display: flex;
+  align-items: center;
+}
+
+.snackbar-button {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ff0000;
+  font-size: medium;
+  font-weight: 500;
+  border-radius: 4px;
+  margin-left: 30px;
+  border: none;
+  cursor: pointer;
+}
