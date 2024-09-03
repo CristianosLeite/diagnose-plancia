@@ -5,16 +5,16 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule, NgForm } from '@angular/forms';
-import { Activity } from '../../interfaces/activity.interface';
+import { Activity } from '../../../interfaces/activity.interface';
 import { NgFor, NgIf } from '@angular/common';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { UploadService } from '../../services/upload.service';
+import { UploadService } from '../../../services/upload.service';
 import { ActivatedRoute } from '@angular/router';
-import { ActivityService } from '../../services/activity.service';
+import { ActivityService } from '../../../services/activity.service';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { SnackbarComponent } from '../modal/snackbar/snackbar.component';
+import { SnackbarComponent } from '../../modal/snackbar/snackbar.component';
 
 @Component({
   selector: 'app-activity-create',

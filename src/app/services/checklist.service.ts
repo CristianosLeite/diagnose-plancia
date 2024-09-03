@@ -11,22 +11,22 @@ export class ChecklistService {
   constructor(private http: HttpClient) { }
 
   createChecklist(checklist: Partial<Checklist>) {
-    return this.http.post(`${this.baseUrl}/create`, checklist);
+    return this.http.post<Checklist>(`${this.baseUrl}/create`, checklist);
   }
 
   retrieveChecklist(id: number) {
-    return this.http.get(`${this.baseUrl}/one?checklistId=${id}`);
+    return this.http.get<Checklist>(`${this.baseUrl}/one?checklistId=${id}`);
   }
 
   retrieveAllChecklists() {
-    return this.http.get(`${this.baseUrl}/all`);
+    return this.http.get<Checklist[]>(`${this.baseUrl}/all`);
   }
 
   updateChecklist(checklist: Checklist) {
-    return this.http.put(`${this.baseUrl}/update`, checklist);
+    return this.http.put<Checklist>(`${this.baseUrl}/update`, checklist);
   }
 
   deleteChecklist(id: number) {
-    return this.http.delete(`${this.baseUrl}/delete?checklistId=${id}`);
+    return this.http.delete<Checklist>(`${this.baseUrl}/delete?checklistId=${id}`);
   }
 }

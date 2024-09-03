@@ -1,14 +1,13 @@
 import { Component, Input, OnInit, ChangeDetectorRef } from '@angular/core';
-import { MatTableModule } from '@angular/material/table';
+import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
-import { Activity } from '../../interfaces/activity.interface';
-import { ActivityService } from '../../services/activity.service';
+import { Activity } from '../../../interfaces/activity.interface';
+import { ActivityService } from '../../../services/activity.service';
 import { MatIconButton } from '@angular/material/button';
 import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
 import { Router, RouterLink } from '@angular/router';
-import { TimeDateService } from '../../services/time-date.service';
+import { TimeDateService } from '../../../services/time-date.service';
 
 @Component({
   selector: 'app-activity-table',
@@ -28,7 +27,7 @@ export class ActivityTableComponent implements OnInit {
   dataLength = 0;
   ELEMENT_DATA = this.activityService.ELEMENT_DATA;
   displayedColumns: string[] = ['id', 'point', 'description', 'sop', 'estimatedTime', 'frequency', 'select', 'options'];
-  @Input()dataSource = new MatTableDataSource<Partial<Activity>>(this.ELEMENT_DATA);
+  @Input() dataSource = new MatTableDataSource<Partial<Activity>>(this.ELEMENT_DATA);
   @Input() selection = new SelectionModel<Partial<Activity>>(true, []);
   @Input() activity = {} as Activity;
 

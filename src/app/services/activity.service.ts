@@ -19,11 +19,11 @@ export class ActivityService {
   constructor(private http: HttpClient) { }
 
   createActivity(activity: Activity) {
-    return this.http.post(`${this.baseUrl}/create`, activity);
+    return this.http.post<Activity>(`${this.baseUrl}/create`, activity);
   }
 
   retrieveActivity(id: string) {
-    return this.http.get(`${this.baseUrl}/one?activityId=${id}`);
+    return this.http.get<Activity>(`${this.baseUrl}/one?activityId=${id}`);
   }
 
   retrieveAllActivities() {
@@ -34,10 +34,10 @@ export class ActivityService {
   }
 
   updateActivity(activity: Activity) {
-    return this.http.put(`${this.baseUrl}/update`, activity);
+    return this.http.put<Activity>(`${this.baseUrl}/update`, activity);
   }
 
   deleteActivity(id: string) {
-    return this.http.delete(`${this.baseUrl}/delete?activityId=${id}`);
+    return this.http.delete<Activity>(`${this.baseUrl}/delete?activityId=${id}`);
   }
 }

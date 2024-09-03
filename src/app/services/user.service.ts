@@ -11,22 +11,22 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   createUser(user: User) {
-    return this.http.post(`${this.baseUrl}/create`, user);
+    return this.http.post<User>(`${this.baseUrl}/create`, user);
   }
 
   retrieveUser(id: string) {
-    return this.http.get(`${this.baseUrl}/one?userId=${id}`);
+    return this.http.get<User>(`${this.baseUrl}/one?userId=${id}`);
   }
 
   retrieveAllUsers() {
-    return this.http.get(`${this.baseUrl}/all`);
+    return this.http.get<User[]>(`${this.baseUrl}/all`);
   }
 
   updateUser(user: User) {
-    return this.http.put(`${this.baseUrl}/update`, user);
+    return this.http.put<User>(`${this.baseUrl}/update`, user);
   }
 
   deleteUser(id: string) {
-    return this.http.delete(`${this.baseUrl}/delete?userId=${id}`);
+    return this.http.delete<User>(`${this.baseUrl}/delete?userId=${id}`);
   }
 }
