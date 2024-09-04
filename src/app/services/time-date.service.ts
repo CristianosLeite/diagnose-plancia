@@ -7,6 +7,8 @@ import { Interval } from '../interfaces/activity.interface';
 export class TimeDateService {
 
   public formatTime(interval: Interval): string {
+    if (!interval) return '00:00:00';
+
     const hours = interval.hours || 0;
     const minutes = interval.minutes || 0;
     const seconds = interval.seconds || 0;
@@ -16,6 +18,8 @@ export class TimeDateService {
   }
 
   public formatISO8601(interval: Interval): string {
+    if (!interval) return '00:00:00';
+
     const hours = interval.hours || 0;
     const minutes = interval.minutes || 0;
     const seconds = interval.seconds || 0;
