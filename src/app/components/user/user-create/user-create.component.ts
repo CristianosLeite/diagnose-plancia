@@ -1,3 +1,4 @@
+import { SnackbarService } from './../../../services/snack-bar.service';
 
 import { Component } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
@@ -16,7 +17,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { UserService } from '../../../services/user.service';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { SnackbarComponent } from '../../modal/snackbar/snackbar.component';
 
 @Component({
   selector: 'app-user-create',
@@ -61,7 +61,7 @@ export class UserCreateComponent {
 
   constructor(
     private userService: UserService,
-    private snackBar: MatSnackBar
+    private SnackbarService: SnackbarService
   ) {}
 
   addSkill(skill: Skills) {
@@ -104,26 +104,12 @@ export class UserCreateComponent {
         const control = form.control.get(field);
         control?.markAsTouched({ onlySelf: true });
       });
+      this.SnackbarService.openSnackBar('register_error');
       return;
     }
-
+    this.SnackbarService.openSnackBar('register_success');
     this.userService.createUser(this.user).subscribe(() => {
       console.log('User created');
-    });
-  }
-
-  openSnackBar(isSuccess: boolean) {
-    this.snackBar.openFromComponent(SnackbarComponent, {
-      data: {
-        message: isSuccess
-          ? 'Cadastro realizado com sucesso!'
-          : 'Erro ao realizar o cadastro.',
-        actionText: 'Fechar',
-      },
-      duration: 5000,
-      panelClass: isSuccess ? 'success-snackbar' : 'error-snackbar',
-      horizontalPosition: 'right',
-      verticalPosition: 'bottom',
     });
   }
 }
