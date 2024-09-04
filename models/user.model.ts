@@ -37,6 +37,7 @@ User.init(
     badgeNumber: {
       type: DataTypes.BIGINT,
       allowNull: false,
+      unique: true,
     },
     plant: {
       type: DataTypes.STRING,
