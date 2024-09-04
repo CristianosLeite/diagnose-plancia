@@ -1,6 +1,11 @@
+import { SnackbarService } from '../../../services/snack-bar.service';
 import { Component, ChangeDetectorRef, Input, OnInit } from '@angular/core';
 import { MatDialogModule } from '@angular/material/dialog';
-import { MatFormField, MatLabel, MatFormFieldModule } from '@angular/material/form-field';
+import {
+  MatFormField,
+  MatLabel,
+  MatFormFieldModule,
+} from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -13,8 +18,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { UploadService } from '../../../services/upload.service';
 import { ActivatedRoute } from '@angular/router';
 import { ActivityService } from '../../../services/activity.service';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { SnackbarComponent } from '../../modal/snackbar/snackbar.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { TimeDateService } from '../../../services/time-date.service';
 import { Interval } from '../../../interfaces/activity.interface';
 
@@ -53,19 +57,21 @@ export class ActivityCreateComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private route: ActivatedRoute,
     private activityService: ActivityService,
-    private snackBar: MatSnackBar,
-    private timeDateService: TimeDateService
+    private timeDateService: TimeDateService,
+    private snackbarService: SnackbarService
   ) { }
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {
+    this.route.paramMap.subscribe((params) => {
       this.activity = {
         ...this.activity,
         ...JSON.parse(params.get('element') || '{}'),
-        context: params.get('context') as 'create' | 'edit'
+        context: params.get('context') as 'create' | 'edit',
       };
       if (this.activity.sop) {
-        this.filePath = this.sanitizer.bypassSecurityTrustResourceUrl(this.activity.sop);
+        this.filePath = this.sanitizer.bypassSecurityTrustResourceUrl(
+          this.activity.sop
+        );
       }
     });
   }
@@ -76,9 +82,11 @@ export class ActivityCreateComponent implements OnInit {
       const file = input.files[0];
       this.fileName = file.name;
 
-      this.uploadService.uploadFile(file).subscribe(response => {
+      this.uploadService.uploadFile(file).subscribe((response) => {
         this.activity.sop = response.filePath;
-        this.filePath = this.sanitizer.bypassSecurityTrustResourceUrl(response.filePath);
+        this.filePath = this.sanitizer.bypassSecurityTrustResourceUrl(
+          response.filePath
+        );
         this.cdr.detectChanges();
       });
     }
@@ -86,10 +94,11 @@ export class ActivityCreateComponent implements OnInit {
 
   onSubmit(form: NgForm): void {
     if (form.invalid) {
-      Object.keys(form.controls).forEach(field => {
+      Object.keys(form.controls).forEach((field) => {
         const control = form.control.get(field);
         control?.markAsTouched({ onlySelf: true });
       });
+      this.snackbarService.openSnackBar('register_error');
       return;
     }
 
@@ -97,10 +106,12 @@ export class ActivityCreateComponent implements OnInit {
     this.activity.estimated_time = this.timeDateService
       .formatISO8601(this.activity.estimated_time) as unknown as Interval;
     if (this.activity.context === 'create') {
+      this.snackbarService.openSnackBar('activity_edit_success');
       this.activityService.createActivity(this.activity).subscribe(() => {
         this.activityService.retrieveAllActivities();
       });
     } else {
+      this.snackbarService.openSnackBar('register_success');
       this.activityService.updateActivity(this.activity).subscribe(() => {
         this.activityService.retrieveAllActivities();
       });
@@ -121,13 +132,13 @@ export class ActivityCreateComponent implements OnInit {
 
   handleDayOfWeek(day: string): string {
     const days: { [key: string]: string } = {
-      'Sunday': 'Domingo',
-      'Monday': 'Segunda-feira',
-      'Tuesday': 'Terça-feira',
-      'Wednesday': 'Quarta-feira',
-      'Thursday': 'Quinta-feira',
-      'Friday': 'Sexta-feira',
-      'Saturday': 'Sábado',
+      Sunday: 'Domingo',
+      Monday: 'Segunda-feira',
+      Tuesday: 'Terça-feira',
+      Wednesday: 'Quarta-feira',
+      Thursday: 'Quinta-feira',
+      Friday: 'Sexta-feira',
+      Saturday: 'Sábado',
     };
     return days[day] || '';
   }
@@ -147,24 +158,16 @@ export class ActivityCreateComponent implements OnInit {
     const input = event.target as HTMLInputElement;
 
     if (event instanceof KeyboardEvent) {
-      if (!['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(event.key) && !/^\d$/.test(event.key)) {
+      if (
+        !['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(
+          event.key
+        ) &&
+        !/^\d$/.test(event.key)
+      ) {
         event.preventDefault();
       }
     } else {
       input.value = input.value.replace(/[^0-9]/g, '');
     }
-  }
-
-  openSnackBar(isSuccess: boolean) {
-    this.snackBar.openFromComponent(SnackbarComponent, {
-      data: {
-        message: isSuccess ? 'Cadastro realizado com sucesso!' : 'Erro ao realizar o cadastro.',
-        actionText: 'Fechar',
-      },
-      duration: 5000,
-      panelClass: isSuccess ? 'success-snackbar' : 'error-snackbar',
-      horizontalPosition: 'right',
-      verticalPosition: 'bottom',
-    });
   }
 }
