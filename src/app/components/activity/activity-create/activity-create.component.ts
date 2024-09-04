@@ -94,30 +94,58 @@ export class ActivityCreateComponent implements OnInit {
 
   onSubmit(form: NgForm): void {
     if (form.invalid) {
-      Object.keys(form.controls).forEach((field) => {
-        const control = form.control.get(field);
-        control?.markAsTouched({ onlySelf: true });
-      });
+      this.markFormFieldsAsTouched(form);
       this.snackbarService.openSnackBar('register_error');
       return;
     }
 
-    this.activity.created_by = "532d1758-0fb2-46b4-90c7-fdfc62adcbca";
-    this.activity.estimated_time = this.timeDateService
-      .formatISO8601(this.activity.estimated_time) as unknown as Interval;
-    if (this.activity.context === 'create') {
-      this.snackbarService.openSnackBar('activity_edit_success');
-      this.activityService.createActivity(this.activity).subscribe(() => {
-        this.activityService.retrieveAllActivities();
-      });
+    this.prepareActivityForSubmission();
+
+    if (this.activity.context === 'edit') {
+      this.updateActivity();
     } else {
-      this.snackbarService.openSnackBar('register_success');
-      this.activityService.updateActivity(this.activity).subscribe(() => {
-        this.activityService.retrieveAllActivities();
-      });
+      this.createActivity();
     }
 
     form.resetForm();
+  }
+
+  private markFormFieldsAsTouched(form: NgForm): void {
+    Object.keys(form.controls).forEach((field) => {
+      const control = form.control.get(field);
+      control?.markAsTouched({ onlySelf: true });
+    });
+  }
+
+  private prepareActivityForSubmission(): void {
+    this.activity.created_by = "532d1758-0fb2-46b4-90c7-fdfc62adcbca";
+    this.activity.estimated_time = this.timeDateService
+      .formatISO8601(this.activity.estimated_time) as unknown as Interval;
+  }
+
+  private updateActivity(): void {
+    this.activityService.updateActivity(this.activity).subscribe({
+      next: () => {
+        this.snackbarService.openSnackBar('activity_edit_success');
+        this.activityService.retrieveAllActivities();
+      },
+      error: () => {
+        this.snackbarService.openSnackBar('activity_edit_error');
+      },
+    });
+  }
+
+  private createActivity(): void {
+    this.activityService.createActivity(this.activity).subscribe({
+      next: () => {
+        this.snackbarService.openSnackBar('register_success');
+        this.activityService.retrieveAllActivities();
+      },
+      error: () => {
+        console.log('error');
+        this.snackbarService.openSnackBar('register_error');
+      },
+    });
   }
 
   handleCILR(character: string): string {
