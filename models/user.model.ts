@@ -2,22 +2,11 @@ import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../database/database-config';
 import Activity from './activity.model';
 
-class User extends Model {
-  public id!: string;
-  public name!: string;
-  public origin!: string;
-  public company!: string;
-  public badgeNumber!: number;
-  public plant!: string;
-  public skills!: string[];
-
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
-}
+class User extends Model { }
 
 User.init(
   {
-    userId: {
+    user_id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
@@ -34,9 +23,10 @@ User.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    badgeNumber: {
+    badge_number: {
       type: DataTypes.BIGINT,
       allowNull: false,
+      unique: true,
     },
     plant: {
       type: DataTypes.STRING,
@@ -49,18 +39,19 @@ User.init(
   {
     sequelize,
     modelName: 'User',
+    tableName: 'users',
     createdAt: true,
     updatedAt: true,
   },
 );
 
 User.hasMany(Activity, {
-  foreignKey: 'userId',
+  foreignKey: 'user_id',
   as: 'activities',
 });
 
 Activity.belongsTo(User, {
-  foreignKey: 'userId',
+  foreignKey: 'user_id',
   as: 'user',
 });
 

@@ -1,6 +1,8 @@
 import { Injectable, Output, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Activity } from '../interfaces/activity.interface';
+import { TimeDateService } from './time-date.service';
+import { Interval } from '../interfaces/activity.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -16,14 +18,18 @@ export class ActivityService {
   @Output() activitySaved = new EventEmitter<Activity>();
   @Output() sopSolicitation = new EventEmitter<Activity>();
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private timeDateService: TimeDateService
+  ) { }
 
   createActivity(activity: Activity) {
-    return this.http.post(`${this.baseUrl}/create`, activity);
+    activity.estimated_time = this.timeDateService.formatISO8601(activity.estimated_time) as unknown as Interval;
+    return this.http.post<Activity>(`${this.baseUrl}/create`, activity);
   }
 
   retrieveActivity(id: string) {
-    return this.http.get(`${this.baseUrl}/one?activityId=${id}`);
+    return this.http.get<Activity>(`${this.baseUrl}/one?activity_id=${id}`);
   }
 
   retrieveAllActivities() {
@@ -34,10 +40,11 @@ export class ActivityService {
   }
 
   updateActivity(activity: Activity) {
-    return this.http.put(`${this.baseUrl}/update`, activity);
+    activity.estimated_time = this.timeDateService.formatISO8601(activity.estimated_time) as unknown as Interval;
+    return this.http.put<Activity>(`${this.baseUrl}/update`, activity);
   }
 
   deleteActivity(id: string) {
-    return this.http.delete(`${this.baseUrl}/delete?activityId=${id}`);
+    return this.http.delete<Activity>(`${this.baseUrl}/delete?activity_id=${id}`);
   }
 }

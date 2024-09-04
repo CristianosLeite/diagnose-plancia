@@ -37,27 +37,27 @@ export class UsersController {
   }
 
   public async retrieve(req: Request, res: Response) {
-    const id = req.query['userId'];
+    const id = req.query['user_id'];
 
     if (!id)
-      res.status(400).send('Missing userId');
+      res.status(400).send('Missing user_id');
 
-    await User.findOne({ where: { userId: id } }).then((user) => {
+    await User.findOne({ where: { user_id: id } }).then((user) => {
       res.json(user);
     });
   }
 
   public async update(req: Request, res: Response) {
-    const id = req.body['userId'];
+    const id = req.body['user_id'];
     const userToUpdate = req.body;
 
     if (!id)
-      res.status(400).send('Missing userId');
+      res.status(400).send('Missing user id');
 
     if (!userToUpdate)
       res.status(400).send('Missing user');
 
-    await User.findOne({ where: { userId: id } }).then((user) => {
+    await User.findOne({ where: { user_id: id } }).then((user) => {
       if (!user) {
         res.status(404).send('User not found');
       } else {
@@ -69,12 +69,12 @@ export class UsersController {
   }
 
   public async delete(req: Request, res: Response) {
-    const id = req.query['userId'];
+    const id = req.query['user_id'];
 
     if (!id)
-      res.status(400).send('Missing userId');
+      res.status(400).send('Missing user id');
 
-    await User.findOne({ where: { userId: id } }).then((user) => {
+    await User.findOne({ where: { user_id: id } }).then((user) => {
       if (!user) {
         res.status(404).send('User not found');
       } else {

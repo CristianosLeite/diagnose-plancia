@@ -1,6 +1,8 @@
 export interface Checklist {
-  checklistId: number;
-  activityId: number;
-  userId: string;
-  timeSpent: string;
+  checklist_id: number;
+  activity_id: number;
+  user_id: string;
+  time_spent: string;
+  createdAt: string;
+  updatedAt: string;
 }

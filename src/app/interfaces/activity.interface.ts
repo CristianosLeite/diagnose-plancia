@@ -9,7 +9,7 @@ export type Origin = 'PM' | 'QB' | 'QX' | 'EX';
 
 export type Period = '1º' | '2º' | '3º';
 
-export type Frequency = 'Diária' | 'Semanal' | 'Mensal' | 'Anual' | 'Outro';
+export type Frequency = 'Daily' | 'Weekly' | 'Monthly' | 'Yearly' | 'Other';
 
 export type ActivityStatus = 'OK' | 'KO';
 
@@ -21,29 +21,32 @@ export interface Interval {
   hours: number;
   minutes: number;
   seconds: number;
+  milliseconds?: number;
 }
 
 /**
  * Interface de atividade
  */
 export interface Activity {
-  activityId: number;
+  activity_id: number;
   point: string;
   description: string;
-  activityType: string;
+  activity_type: string;
   sop: string;
   origin: Origin;
-  actionPlan: string;
+  action_plan: string;
   frequency: Frequency;
-  dayToCheck: dayOfWeek;
+  day_to_check: dayOfWeek;
   date: Date;
-  createdBy: string;
-  estimatedTime: Interval;
-  timeSpent: Interval;
-  activeMachine: boolean;
+  created_by: string;
+  createdAt: string;
+  updatedAt: string;
+  estimated_time: Interval;
+  time_spent: Interval;
+  active_machine: boolean;
   period: Period;
   responsible: string;
-  lastChecked: string;
+  last_checked: string;
   status: ActivityStatus;
   context: context;
 }

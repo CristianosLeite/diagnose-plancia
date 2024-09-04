@@ -1,33 +1,28 @@
-import { DataTypes, Model } from 'sequelize';
+import { DataTypes, Model, QueryTypes } from 'sequelize';
 import { sequelize } from '../database/database-config';
 import User from './user.model';
 import Activity from './activity.model';
 
 class Checklist extends Model {
-  public id!: number;
-  public activityId!: number;
-  public userId!: string;
-
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  activity_id!: number;
 }
 
 Checklist.init(
   {
-    checklistId: {
+    checklist_id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
-    activityId: {
+    activity_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    userId: {
+    user_id: {
       type: DataTypes.UUID,
       allowNull: false,
     },
-    timeSpent: {
+    time_spent: {
       type: 'INTERVAL',
       allowNull: false,
       defaultValue: '00:00:00',
@@ -36,29 +31,57 @@ Checklist.init(
   {
     sequelize,
     modelName: 'Checklist',
+    tableName: 'checklists',
     createdAt: true,
     updatedAt: true,
   },
 );
 
 User.hasMany(Checklist, {
-  foreignKey: 'userId',
+  foreignKey: 'user_id',
   as: 'checklists',
 });
 
 Checklist.belongsTo(User, {
-  foreignKey: 'userId',
+  foreignKey: 'user_id',
   as: 'user',
 });
 
 Activity.hasMany(Checklist, {
-  foreignKey: 'activityId',
+  foreignKey: 'activity_id',
   as: 'checklists',
 });
 
 Checklist.belongsTo(Activity, {
-  foreignKey: 'activityId',
+  foreignKey: 'activity_id',
   as: 'activity',
+});
+
+Checklist.afterCreate(async (checklist, options) => {
+  console.log('AfterCreate hook called');
+  const activityId = checklist.activity_id;
+
+  try {
+    await sequelize.query(
+      `UPDATE activities
+        SET estimated_time = (
+          SELECT date_trunc('second', make_interval(secs => AVG(EXTRACT(EPOCH FROM time_spent))))
+            FROM checklists
+            WHERE activity_id = :activityId
+        )
+        WHERE activity_id = :activityId`,
+      {
+        replacements: { activityId },
+        type: QueryTypes.UPDATE,
+        transaction: options.transaction,
+      }
+    );
+    console.log('Update executed');
+
+  } catch (error) {
+    console.error('Error during update:', error);
+    throw error;
+  }
 });
 
 export default Checklist;

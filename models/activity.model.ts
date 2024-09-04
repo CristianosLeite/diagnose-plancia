@@ -2,20 +2,12 @@ import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../database/database-config';
 
 class Activity extends Model {
-  public id!: string;
-  public name!: string;
-  public description!: string;
-  public duration!: number;
-  public date!: Date;
-  public location!: string;
-
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  activity_id!: number;
 }
 
 Activity.init(
   {
-    activityId: {
+    activity_id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
@@ -28,7 +20,7 @@ Activity.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    activityType: {
+    activity_type: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -39,19 +31,22 @@ Activity.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    dayToCheck: {
+    day_to_check: {
+      type: DataTypes.STRING,
+    },
+    action_plan: {
       type: DataTypes.STRING,
     },
     date: {
       type: DataTypes.DATE,
     },
-    lastChecked: {
+    last_checked: {
       type: DataTypes.DATE,
     },
-    estimatedTime: {
+    estimated_time: {
       type: 'INTERVAL',
     },
-    createdBy: {
+    created_by: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -59,6 +54,7 @@ Activity.init(
   {
     sequelize,
     modelName: 'Activity',
+    tableName: 'activities',
     createdAt: true,
     updatedAt: true,
   },

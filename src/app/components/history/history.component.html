@@ -1,1 +1,41 @@
-<p>history works!</p>
+@if(ELEMENT_DATA.length > 0) {
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+    <!-- Id -->
+    <ng-container matColumnDef="checklist_id">
+      <th mat-header-cell *matHeaderCellDef> ID </th>
+      <td mat-cell *matCellDef="let element"> {{element.checklist_id}} </td>
+    </ng-container>
+
+    <!-- Responsável -->
+    <ng-container matColumnDef="username">
+      <th mat-header-cell *matHeaderCellDef> Responsável </th>
+      <td mat-cell *matCellDef="let element"> {{element.username}} </td>
+    </ng-container>
+
+    <!-- Atividade -->
+    <ng-container matColumnDef="activity">
+      <th mat-header-cell *matHeaderCellDef> Atividade </th>
+      <td mat-cell *matCellDef="let element"> {{element.activity}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    <!-- Tempo gasto -->
+    <ng-container matColumnDef="timeSpent">
+      <th mat-header-cell *matHeaderCellDef> Tempo gasto </th>
+      <td mat-cell *matCellDef="let element">{{
+        element.time_spent ?
+        element.time_spent.hours || element.time_spent.minutes || element.time_spent.seconds ?
+        timeDateService.formatTime(element.time_spent) :
+        '00:00:00' :
+        '00:00:00'
+        }} </td>
+    </ng-container>
+  </table>
+} @else {
+  <div class="no-activities">
+    <h1>Nenhuma atividade realizada.</h1>
+  </div>
+}

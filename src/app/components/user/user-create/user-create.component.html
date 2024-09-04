@@ -23,7 +23,7 @@
       <!-- RF004 - Campo para matrícula -->
       <mat-form-field class="form-field user-badge-number">
         <mat-label>Matrícula</mat-label>
-        <input type="text" matInput [(ngModel)]="user.badgeNumber" name="badgeNumber" placeholder="Nº Matrícula"
+        <input type="text" matInput [(ngModel)]="user.badge_number" name="badgeNumber" placeholder="Nº Matrícula"
           (keydown)="validateNumberInput($event)" (input)="validateNumberInput($event)" required="true" />
       </mat-form-field>
 

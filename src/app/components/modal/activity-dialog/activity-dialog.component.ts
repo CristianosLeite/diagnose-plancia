@@ -47,8 +47,8 @@ export class ActivityDialogComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    if (!this.activity.timeSpent)
-      this.activity.timeSpent = { hours: 0, minutes: 0, seconds: 0 };
+    if (!this.activity.time_spent)
+      this.activity.time_spent = { hours: 0, minutes: 0, seconds: 0 };
     this.timerStartCounting();
   }
 
@@ -79,7 +79,7 @@ export class ActivityDialogComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.toggleChecked = result.confirmed;
-        this.activity.actionPlan = result.actionPlan;
+        this.activity.action_plan = result.actionPlan;
       } else {
         this.toggleChecked = true;
       }
@@ -96,14 +96,14 @@ export class ActivityDialogComponent implements OnInit, OnDestroy {
 
   timerStartCounting() {
     this.activityTimer = setInterval(() => {
-      this.activity.timeSpent.seconds++;
-      if (this.activity.timeSpent.seconds === 60) {
-        this.activity.timeSpent.seconds = 0;
-        this.activity.timeSpent.minutes++;
+      this.activity.time_spent.seconds++;
+      if (this.activity.time_spent.seconds === 60) {
+        this.activity.time_spent.seconds = 0;
+        this.activity.time_spent.minutes++;
       }
-      if (this.activity.timeSpent.minutes === 60) {
-        this.activity.timeSpent.minutes = 0;
-        this.activity.timeSpent.hours++;
+      if (this.activity.time_spent.minutes === 60) {
+        this.activity.time_spent.minutes = 0;
+        this.activity.time_spent.hours++;
       }
     }, 1000);
   }

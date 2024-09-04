@@ -6,7 +6,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { NgIf } from '@angular/common';
 import { MatFormField } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ActivityDialogComponent } from '../modal/activity-dialog/activity-dialog.component';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { ActivityService } from '../../services/activity.service';
@@ -14,6 +14,7 @@ import { SopModalComponent } from '../modal/sop-modal/sop-modal.component';
 import { PopupConfirmationComponent } from '../modal/popup-confirmation/popup-confirmation.component';
 import { ChecklistService } from '../../services/checklist.service';
 import { TimeDateService } from '../../services/time-date.service';
+import { Interval } from '../../interfaces/activity.interface';
 
 @Component({
   selector: 'app-main',
@@ -57,7 +58,7 @@ export class MainComponent {
 
   openDialog(activity: Activity): boolean {
     this.dialog.open(ActivityDialogComponent, {
-      width: '800px',
+      width: '600px',
       data: activity
     });
 
@@ -73,28 +74,40 @@ export class MainComponent {
     return false;
   }
 
+  private createChecklist(activity: Activity, dialogRef: MatDialogRef<PopupConfirmationComponent, any>): void {
+    activity.last_checked = new Date().toISOString();
+    const formattedTimeSpent = this.timeDateService.formatISO8601(activity.time_spent);
+    this.checklistService.createChecklist({
+      activity_id: activity.activity_id,
+      time_spent: formattedTimeSpent,
+      user_id: "532d1758-0fb2-46b4-90c7-fdfc62adcbca"
+    }).subscribe((checklist) => {
+      checklist.time_spent = this.timeDateService.formatISO8601(checklist.time_spent as unknown as Interval);
+      this.activityService.updateActivity(activity).subscribe(() => {
+        this.checklistService.updateChecklist(checklist).subscribe(() => {
+          this.activityService.retrieveAllActivities();
+          dialogRef.close();
+        });
+      });
+    });
+  }
+
   openPopupConfirmation(activity: Activity): boolean {
     const dialogRef = this.dialog.open(PopupConfirmationComponent, {
       width: '400px',
       data: activity
     });
 
-    dialogRef.componentInstance.onCancel.subscribe(() => {
+    const onCancelSubscription = dialogRef.componentInstance.onCancel.subscribe(() => {
       this.openDialog(activity);
+      onCancelSubscription.unsubscribe();
     });
 
-    dialogRef.componentInstance.onConfirm.subscribe(() => {
-      activity.lastChecked = new Date().toDateString();
-      this.checklistService.createChecklist({
-        activityId: activity.activityId,
-        timeSpent: this.timeDateService.formatTime(activity.timeSpent),
-        userId: "532d1758-0fb2-46b4-90c7-fdfc62adcbca"
-      }).subscribe(() => {
-        this.activityService.updateActivity(activity).subscribe(() => {
-          this.activityService.retrieveAllActivities();
-        });
-      });
+    const onConfirmSubscription = dialogRef.componentInstance.onConfirm.subscribe(() => {
+      this.createChecklist(activity, dialogRef);
+      onConfirmSubscription.unsubscribe();
     });
+
     return false;
   }
 

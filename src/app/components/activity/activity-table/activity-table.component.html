@@ -4,7 +4,7 @@
     <!-- Id -->
     <ng-container matColumnDef="id">
       <th mat-header-cell *matHeaderCellDef> Nº. </th>
-      <td mat-cell *matCellDef="let element"> {{element.activityId}} </td>
+      <td mat-cell *matCellDef="let element"> {{element.activity_id}} </td>
     </ng-container>
 
     <!-- Pontos -->
@@ -36,9 +36,9 @@
     <ng-container matColumnDef="estimatedTime">
       <th mat-header-cell *matHeaderCellDef> Tempo estimado </th>
       <td mat-cell *matCellDef="let element">{{
-        element.estimatedtime ?
-        element.estimatedTime.hours || element.estimatedTime.minutes || element.estimatedTime.seconds ?
-        timeDateService.formatTime(element.estimatedTime) :
+        element.estimated_time ?
+        element.estimated_time.hours || element.estimated_time.minutes || element.estimated_time.seconds ?
+        timeDateService.formatTime(element.estimated_time) :
         '00:00:00' :
         '00:00:00'
         }} </td>
@@ -47,11 +47,11 @@
     <!-- Frequência -->
     <ng-container matColumnDef="frequency">
       <th mat-header-cell *matHeaderCellDef style="text-align: center;"> Frequência </th>
-      <td class="frequency" [class.dayly]="element.frequency === 'Diária'"
-        [class.weekly]="element.frequency === 'Semanal'" [class.monthly]="element.frequency === 'Mensal'"
-        [class.yearly]="element.frequency === 'Anual'" [class.other]="element.frequency === 'Outro'" mat-cell *matCellDef="let
+      <td class="frequency" [class.dayly]="element.frequency === 'Daily'"
+        [class.weekly]="element.frequency === 'Weekly'" [class.monthly]="element.frequency === 'Monthly'"
+        [class.yearly]="element.frequency === 'Yearly'" [class.other]="element.frequency === 'Other'" mat-cell *matCellDef="let
       element">
-        {{element.frequency}}
+        {{handleFrequency(element.frequency)}}
       </td>
     </ng-container>
 
@@ -89,10 +89,14 @@
       </td>
     </ng-container>
   </table>
-} @else {
+} @else if (dataLength === 0) {
   <div class="no-activities">
     <h1>Nenhuma atividade cadastrada</h1>
     <p>Clique no botão abaixo para adicionar uma nova atividade</p>
     <button mat-raised-button color="primary" routerLink="/activity">Adicionar atividade</button>
+  </div>
+} @else if (dataLength > 0 && ELEMENT_DATA.length === 0) {
+  <div class="no-activities">
+    <h1>Checklist concluído!</h1>
   </div>
 }
