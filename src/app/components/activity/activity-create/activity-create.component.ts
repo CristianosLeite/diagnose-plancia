@@ -109,6 +109,16 @@ export class ActivityCreateComponent implements OnInit {
     form.resetForm();
   }
 
+  handleCILR(character: string): string {
+    const cilr: { [key: string]: string } = {
+      'C': 'Ciclo Limpeza',
+      'I': 'Inspeção',
+      'L': 'Lubrifcação',
+      'R': 'Reaperto',
+    };
+    return cilr[character] || '';
+  }
+
   handleDayOfWeek(day: string): string {
     const days: { [key: string]: string } = {
       'Sunday': 'Domingo',

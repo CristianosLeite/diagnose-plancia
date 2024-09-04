@@ -8,35 +8,6 @@
 <div mat-dialog-content class="modal-content">
 
   <div class="field">
-    <mat-form-field>
-      <mat-label>Tipo da atividade</mat-label>
-      <input matInput [(ngModel)]="data.activity_type">
-    </mat-form-field>
-  </div>
-
-  <div class="field">
-    <mat-form-field>
-      <mat-label>Origem da atividade</mat-label>
-      <mat-select [(ngModel)]="data.origin">
-          <mat-option *ngFor="let origin of ['PM', 'QB', 'QX', 'EX']" [value]="origin">
-            {{origin}}
-          </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
-
-  <div class="field">
-    <mat-form-field>
-      <mat-label>Turno</mat-label>
-      <mat-select [(ngModel)]="data.period">
-        <mat-option *ngFor="let period of ['1º', '2º', '3º']" [value]="period">
-          {{period}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
-
-  <div class="field">
       <mat-label>Maquina ligada</mat-label>
       <mat-checkbox [checked]="true"></mat-checkbox>
   </div>

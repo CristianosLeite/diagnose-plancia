@@ -4,8 +4,12 @@
   <div class="content-container">
     <mat-form-field class="activity-type-create">
       <mat-label>Tipo da atividade</mat-label>
-      <input matInput [(ngModel)]="activity.activity_type" name="activityType"
-        placeholder="Informar tipo da atividade" required="true">
+      <mat-select [(ngModel)]="activity.activity_type" name="activityType" required="true">
+        <mat-option *ngFor="let activity of ['C', 'I', 'L', 'R']"
+          [value]="activity">
+          {{handleCILR(activity)}}
+        </mat-option>
+      </mat-select>
     </mat-form-field>
     <mat-form-field class="point-create">
       <mat-label>Ponto</mat-label>
