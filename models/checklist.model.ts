@@ -65,9 +65,9 @@ Checklist.afterCreate(async (checklist, options) => {
     await sequelize.query(
       `UPDATE activities
         SET estimated_time = (
-        SELECT AVG(time_spent)
-        FROM checklists
-        WHERE activity_id = :activityId
+          SELECT date_trunc('second', make_interval(secs => AVG(EXTRACT(EPOCH FROM time_spent))))
+            FROM checklists
+            WHERE activity_id = :activityId
         )
         WHERE activity_id = :activityId`,
       {

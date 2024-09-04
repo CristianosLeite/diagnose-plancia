@@ -20,6 +20,9 @@ export class TimeDateService {
     const minutes = interval.minutes || 0;
     const seconds = interval.seconds || 0;
 
+    // Round milliseconds to seconds
+    interval.milliseconds ? interval.seconds += Math.round(interval.milliseconds / 1000) : null;
+
     return `PT${hours}H${minutes}M${seconds}S`;
   }
 }
