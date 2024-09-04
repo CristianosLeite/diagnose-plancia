@@ -23,7 +23,7 @@ export class ActivityService {
   }
 
   retrieveActivity(id: string) {
-    return this.http.get<Activity>(`${this.baseUrl}/one?activityId=${id}`);
+    return this.http.get<Activity>(`${this.baseUrl}/one?activity_id=${id}`);
   }
 
   retrieveAllActivities() {
@@ -38,6 +38,6 @@ export class ActivityService {
   }
 
   deleteActivity(id: string) {
-    return this.http.delete<Activity>(`${this.baseUrl}/delete?activityId=${id}`);
+    return this.http.delete<Activity>(`${this.baseUrl}/delete?activity_id=${id}`);
   }
 }

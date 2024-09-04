@@ -4,7 +4,7 @@
   <div class="content-container">
     <mat-form-field class="activity-type-create">
       <mat-label>Tipo da atividade</mat-label>
-      <input matInput [(ngModel)]="activity.activityType" name="activityType"
+      <input matInput [(ngModel)]="activity.activity_type" name="activityType"
         placeholder="Informar tipo da atividade" required="true">
     </mat-form-field>
     <mat-form-field class="point-create">
@@ -26,7 +26,7 @@
     </mat-form-field>
     <mat-form-field *ngIf="activity.frequency === 'Weekly'">
       <mat-label>Dia da semana</mat-label>
-      <mat-select [(ngModel)]="activity.dayToCheck" name="day" required="true">
+      <mat-select [(ngModel)]="activity.day_to_check" name="day" required="true">
         <mat-option *ngFor="let day of ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']"
           [value]="day">
           {{handleDayOfWeek(day)}}

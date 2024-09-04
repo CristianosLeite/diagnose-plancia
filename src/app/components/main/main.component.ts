@@ -84,17 +84,20 @@ export class MainComponent {
     });
 
     dialogRef.componentInstance.onConfirm.subscribe(() => {
-      activity.lastChecked = new Date().toDateString();
+      activity.last_checked = new Date().toISOString();
       this.checklistService.createChecklist({
-        activityId: activity.activityId,
-        timeSpent: this.timeDateService.formatTime(activity.timeSpent),
-        userId: "532d1758-0fb2-46b4-90c7-fdfc62adcbca"
-      }).subscribe(() => {
+        activity_id: activity.activity_id,
+        time_spent: this.timeDateService.formatISO8601(activity.time_spent),
+        user_id: "532d1758-0fb2-46b4-90c7-fdfc62adcbca"
+      }).subscribe((checklist) => {
         this.activityService.updateActivity(activity).subscribe(() => {
-          this.activityService.retrieveAllActivities();
+          this.checklistService.updateChecklist(checklist).subscribe(() => {
+            this.activityService.retrieveAllActivities();
+          });
         });
       });
     });
+
     return false;
   }
 

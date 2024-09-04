@@ -15,6 +15,8 @@ import { ActivatedRoute } from '@angular/router';
 import { ActivityService } from '../../../services/activity.service';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { SnackbarComponent } from '../../modal/snackbar/snackbar.component';
+import { TimeDateService } from '../../../services/time-date.service';
+import { Interval } from '../../../interfaces/activity.interface';
 
 @Component({
   selector: 'app-activity-create',
@@ -51,8 +53,9 @@ export class ActivityCreateComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private route: ActivatedRoute,
     private activityService: ActivityService,
-    private snackBar: MatSnackBar
-  ) {}
+    private snackBar: MatSnackBar,
+    private timeDateService: TimeDateService
+  ) { }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
@@ -90,10 +93,18 @@ export class ActivityCreateComponent implements OnInit {
       return;
     }
 
-    this.activity.createdBy = "532d1758-0fb2-46b4-90c7-fdfc62adcbca";
-    this.activityService.createActivity(this.activity).subscribe(() => {
-      this.activityService.retrieveAllActivities();
-    });
+    this.activity.created_by = "532d1758-0fb2-46b4-90c7-fdfc62adcbca";
+    this.activity.estimated_time = this.timeDateService
+      .formatISO8601(this.activity.estimated_time) as unknown as Interval;
+    if (this.activity.context === 'create') {
+      this.activityService.createActivity(this.activity).subscribe(() => {
+        this.activityService.retrieveAllActivities();
+      });
+    } else {
+      this.activityService.updateActivity(this.activity).subscribe(() => {
+        this.activityService.retrieveAllActivities();
+      });
+    }
 
     form.resetForm();
   }

@@ -48,7 +48,7 @@ export class ActivityTableComponent implements OnInit {
       const todayWeekday = today.toLocaleString('en-US', { weekday: 'long' });
 
       // Filter activities that have already been checked today
-      data = data.filter((activity: Activity) => new Date(activity.lastChecked).getDate() !== todayDay);
+      data = data.filter((activity: Activity) => new Date(activity.last_checked).getDate() !== todayDay);
 
       //Filter activities based on frequency
       data = data.filter((activity: Activity) => {
@@ -56,11 +56,11 @@ export class ActivityTableComponent implements OnInit {
           case 'Daily':
             return true;
           case 'Weekly':
-            return activity.dayToCheck === todayWeekday;
+            return activity.day_to_check === todayWeekday;
           case 'Monthly':
             return new Date(activity.date).getDate() === todayDay;
           case 'Yearly':
-            const activityDate = new Date(activity.dayToCheck);
+            const activityDate = new Date(activity.day_to_check);
             return activityDate.getDate() === todayDay && activityDate.getMonth() === todayMonth;
           default:
             return false;
@@ -96,7 +96,7 @@ export class ActivityTableComponent implements OnInit {
     if (!row) {
       return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
     }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.activityId + 1}`;
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.activity_id + 1}`;
   }
 
   onCheckboxChange(event: any, row: Activity) {

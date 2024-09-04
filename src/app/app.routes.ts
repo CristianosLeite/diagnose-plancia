@@ -1,9 +1,10 @@
 import { Routes } from '@angular/router';
 import { MainComponent } from './components/main/main.component';
-import { ActivityTableComponent } from './components/activity-table/activity-table.component';
-import { ActivityCreateComponent } from './components/activity-create/activity-create.component';
+import { ActivityTableComponent } from './components/activity/activity-table/activity-table.component';
+import { ActivityCreateComponent } from './components/activity/activity-create/activity-create.component';
 import { UserCreateComponent } from './components/user/user-create/user-create.component';
 import { UserEditComponent } from './components/user/user-edit/user-edit.component';
+import { HistoryComponent } from './components/history/history.component';
 
 export const routes: Routes = [
   {
@@ -21,6 +22,9 @@ export const routes: Routes = [
       },
       {
         path: 'users/edit', component: UserEditComponent
+      },
+      {
+        path: 'history', component: HistoryComponent
       },
       // Users api routes
       {

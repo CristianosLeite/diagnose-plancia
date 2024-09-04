@@ -37,27 +37,27 @@ export class ChecklistController {
   }
 
   public async retrieve(req: Request, res: Response) {
-    const id = req.query['checklistId'];
+    const id = req.query['checklist_id'];
 
     if (!id)
-      res.status(400).send('Missing checklistId');
+      res.status(400).send('Missing checklist id');
 
-    await Checklist.findOne({ where: { checklistId: id } }).then((checklist) => {
+    await Checklist.findOne({ where: { checklist_id: id } }).then((checklist) => {
       res.json(checklist);
     });
   }
 
   public async update(req: Request, res: Response) {
-    const id = req.body['checklistId'];
+    const id = req.body['checklist_id'];
     const checklistToUpdate = req.body;
 
     if (!id)
-      res.status(400).send('Missing checklistId');
+      res.status(400).send('Missing checklist id');
 
     if (!checklistToUpdate)
       res.status(400).send('Missing checklist');
 
-    await Checklist.findOne({ where: { checklistId: id } }).then((checklist) => {
+    await Checklist.findOne({ where: { checklist_id: id } }).then((checklist) => {
       if (!checklist) {
         res.status(400).send('Checklist not found');
       } else {
@@ -69,12 +69,12 @@ export class ChecklistController {
   }
 
   public async delete(req: Request, res: Response) {
-    const id = req.query['checklistId'];
+    const id = req.query['checklist_id'];
 
     if (!id)
-      res.status(400).send('Missing checklistId');
+      res.status(400).send('Missing checklist_id');
 
-    await Checklist.destroy({ where: { checklistId: id } }).then(() => {
+    await Checklist.destroy({ where: { checklist_id: id } }).then(() => {
       res.json({ message: 'Checklist deleted' });
     });
   }

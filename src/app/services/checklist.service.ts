@@ -15,7 +15,7 @@ export class ChecklistService {
   }
 
   retrieveChecklist(id: number) {
-    return this.http.get<Checklist>(`${this.baseUrl}/one?checklistId=${id}`);
+    return this.http.get<Checklist>(`${this.baseUrl}/one?checklist_id=${id}`);
   }
 
   retrieveAllChecklists() {
@@ -27,6 +27,6 @@ export class ChecklistService {
   }
 
   deleteChecklist(id: number) {
-    return this.http.delete<Checklist>(`${this.baseUrl}/delete?checklistId=${id}`);
+    return this.http.delete<Checklist>(`${this.baseUrl}/delete?checklist_id=${id}`);
   }
 }

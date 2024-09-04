@@ -3,11 +3,11 @@ export type Skills = 'Talha' | 'Paleteira' | 'Empilhadeira' | 'NR12' | 'NR33'| '
 export type context = 'create' | 'edit';
 
 export interface User {
-  id: string;
+  user_id: string;
   name: string;
   origin: string;
   company: string;
-  badgeNumber: number;
+  badge_number: number;
   plant: string;
   skills: Skills[];
   createdAt: Date;

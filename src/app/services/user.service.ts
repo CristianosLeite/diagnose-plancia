@@ -15,7 +15,7 @@ export class UserService {
   }
 
   retrieveUser(id: string) {
-    return this.http.get<User>(`${this.baseUrl}/one?userId=${id}`);
+    return this.http.get<User>(`${this.baseUrl}/one?user_id=${id}`);
   }
 
   retrieveAllUsers() {
@@ -27,6 +27,6 @@ export class UserService {
   }
 
   deleteUser(id: string) {
-    return this.http.delete<User>(`${this.baseUrl}/delete?userId=${id}`);
+    return this.http.delete<User>(`${this.baseUrl}/delete?user_id=${id}`);
   }
 }

@@ -14,4 +14,12 @@ export class TimeDateService {
     return `${hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes}` : minutes
       }:${seconds < 10 ? `0${seconds}` : seconds}`;
   }
+
+  public formatISO8601(interval: Interval): string {
+    const hours = interval.hours || 0;
+    const minutes = interval.minutes || 0;
+    const seconds = interval.seconds || 0;
+
+    return `PT${hours}H${minutes}M${seconds}S`;
+  }
 }

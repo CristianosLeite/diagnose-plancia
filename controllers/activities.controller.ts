@@ -37,27 +37,27 @@ export class ActivityController {
   }
 
   public async retrieve(req: Request, res: Response) {
-    const id = req.query['activityId'];
+    const id = req.query['activity_id'];
 
     if (!id)
-      res.status(400).send('Missing activityId');
+      res.status(400).send('Missing activity id');
 
-    await Activity.findOne({ where: { activityId: id } }).then((activity) => {
+    await Activity.findOne({ where: { activity_id: id } }).then((activity) => {
       res.json(activity);
     });
   }
 
   public async update(req: Request, res: Response) {
-    const id = req.body['activityId'];
+    const id = req.body['activity_id'];
     const activityToUpdate = req.body;
 
     if (!id)
-      res.status(400).send('Missing activityId');
+      res.status(400).send('Missing activity id');
 
     if (!activityToUpdate)
       res.status(400).send('Missing activity');
 
-    await Activity.findOne({ where: { activityId: id } }).then((activity) => {
+    await Activity.findOne({ where: { activity_id: id } }).then((activity) => {
       if (!activity) {
         res.status(404).send('Activity not found');
       } else {
@@ -69,12 +69,12 @@ export class ActivityController {
   }
 
   public async delete(req: Request, res: Response) {
-    const id = req.query['activityId'];
+    const id = req.query['activity_id'];
 
     if (!id)
-      res.status(400).send('Missing activityId');
+      res.status(400).send('Missing activity id');
 
-    await Activity.destroy({ where: { activityId: id } }).then(() => {
+    await Activity.destroy({ where: { activity_id: id } }).then(() => {
       res.status(200).send('Activity deleted');
     });
   }
