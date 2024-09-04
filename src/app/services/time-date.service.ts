@@ -18,14 +18,16 @@ export class TimeDateService {
   }
 
   public formatISO8601(interval: Interval): string {
-    if (!interval) return '00:00:00';
+    if (!interval) return 'PT0H0M0S';
 
     const hours = interval.hours || 0;
     const minutes = interval.minutes || 0;
     const seconds = interval.seconds || 0;
 
     // Round milliseconds to seconds
-    interval.milliseconds ? interval.seconds += Math.round(interval.milliseconds / 1000) : null;
+    if (interval.milliseconds) {
+      interval.seconds += Math.round(interval.milliseconds / 1000);
+    }
 
     return `PT${hours}H${minutes}M${seconds}S`;
   }

@@ -1,6 +1,8 @@
 import { Injectable, Output, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Activity } from '../interfaces/activity.interface';
+import { TimeDateService } from './time-date.service';
+import { Interval } from '../interfaces/activity.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -16,9 +18,13 @@ export class ActivityService {
   @Output() activitySaved = new EventEmitter<Activity>();
   @Output() sopSolicitation = new EventEmitter<Activity>();
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private timeDateService: TimeDateService
+  ) { }
 
   createActivity(activity: Activity) {
+    activity.estimated_time = this.timeDateService.formatISO8601(activity.estimated_time) as unknown as Interval;
     return this.http.post<Activity>(`${this.baseUrl}/create`, activity);
   }
 
@@ -34,6 +40,7 @@ export class ActivityService {
   }
 
   updateActivity(activity: Activity) {
+    activity.estimated_time = this.timeDateService.formatISO8601(activity.estimated_time) as unknown as Interval;
     return this.http.put<Activity>(`${this.baseUrl}/update`, activity);
   }
 

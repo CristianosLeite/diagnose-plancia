@@ -74,7 +74,7 @@ export class MainComponent {
     return false;
   }
 
-  private createChecklist(activity: Activity, dialorRef: MatDialogRef<PopupConfirmationComponent, any>): void {
+  private createChecklist(activity: Activity, dialogRef: MatDialogRef<PopupConfirmationComponent, any>): void {
     activity.last_checked = new Date().toISOString();
     const formattedTimeSpent = this.timeDateService.formatISO8601(activity.time_spent);
     this.checklistService.createChecklist({
@@ -86,7 +86,7 @@ export class MainComponent {
       this.activityService.updateActivity(activity).subscribe(() => {
         this.checklistService.updateChecklist(checklist).subscribe(() => {
           this.activityService.retrieveAllActivities();
-          dialorRef.close();
+          dialogRef.close();
         });
       });
     });
