@@ -18,8 +18,7 @@ export const MY_DATE_FORMATS = {
     monthYearLabel: 'MMMM YYYY',
     dateA11yLabel: 'DD/MM/YYYY',
     monthYearA11yLabel: 'MMMM YYYY',
-  },
-  location: 'it-IT',
+  }
 };
 
 export const appConfig: ApplicationConfig = {
