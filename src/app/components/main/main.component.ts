@@ -75,7 +75,7 @@ export class MainComponent {
   }
 
   private createChecklist(activity: Activity, dialogRef: MatDialogRef<PopupConfirmationComponent, any>): void {
-    activity.last_checked = new Date().toISOString();
+    activity.last_checked = this.timeDateService.getLocaleIsoString();
     const formattedTimeSpent = this.timeDateService.formatISO8601(activity.time_spent);
     this.checklistService.createChecklist({
       activity_id: activity.activity_id,

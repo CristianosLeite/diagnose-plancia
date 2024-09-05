@@ -31,4 +31,28 @@ export class TimeDateService {
 
     return `PT${hours}H${minutes}M${seconds}S`;
   }
+
+  getLocaleIsoString(date?: Date): string {
+    const now = date || new Date();
+    const localDateTime =
+      `${now.getFullYear()}-${String(now.getMonth() + 1)
+        .padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}T${String(now.getHours())
+          .padStart(2, '0')}:${String(now.getMinutes())
+            .padStart(2, '0')}:${String(now.getSeconds())
+              .padStart(2, '0')}.${String(now.getMilliseconds())
+                .padStart(3, '0')
+      }Z`;
+    return localDateTime;
+  }
+
+  getTimeLocaleString(date?: Date): string {
+    const now = date || new Date();
+    const localDateTime =
+      `${String(now.getHours())
+        .padStart(2, '0')}:${String(now.getMinutes())
+          .padStart(2, '0')}:${String(now.getSeconds())
+            .padStart(2, '0')
+      }`;
+    return localDateTime;
+  }
 }
