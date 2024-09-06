@@ -1,0 +1,43 @@
+<form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
+  <h1 mat-dialog-title>Login</h1>
+  <div mat-dialog-content>
+    <!-- Campo de matrícula (RF001) -->
+    <mat-form-field appearance="fill">
+      <mat-label>Matrícula</mat-label>
+      <input
+        matInput
+        (keydown)="validateNumberInput($event)"
+        (input)="validateNumberInput($event)"
+        type="password"
+        [(ngModel)]="user.user_id"
+        name="user_id"
+        required
+      />
+    </mat-form-field>
+
+    <!-- Campo de turno (RF002) -->
+    <mat-form-field appearance="fill">
+      <mat-label>Turno</mat-label>
+      <mat-select [(ngModel)]="user.shift" name="shift" placeholder="Turno">
+        <mat-option
+          *ngFor="let shift of ['1°', '2°', '3°', '4°']"
+          [value]="shift"
+        >
+          {{ shift }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div mat-dialog-actions>
+    <button mat-button (click)="onCancel()">Cancelar</button>
+    <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      [disabled]="!loginForm.valid"
+    >
+      Login
+    </button>
+  </div>
+</form>
