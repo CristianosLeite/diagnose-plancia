@@ -63,6 +63,7 @@ export class ActivityDialogComponent implements OnInit, OnDestroy {
   }
 
   onConfirm(activity: Activity): void {
+    activity.status = this.toggleChecked ? 'OK' : 'KO';
     this.activityService.activityConfirmed.emit(activity);
   }
 

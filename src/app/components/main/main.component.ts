@@ -15,6 +15,7 @@ import { PopupConfirmationComponent } from '../modal/popup-confirmation/popup-co
 import { ChecklistService } from '../../services/checklist.service';
 import { TimeDateService } from '../../services/time-date.service';
 import { Interval } from '../../interfaces/activity.interface';
+import { Checklist } from '../../interfaces/checklist.interface';
 
 @Component({
   selector: 'app-main',
@@ -74,22 +75,34 @@ export class MainComponent {
     return false;
   }
 
-  private createChecklist(activity: Activity, dialogRef: MatDialogRef<PopupConfirmationComponent, any>): void {
-    activity.last_checked = this.timeDateService.getLocaleIsoString();
-    const formattedTimeSpent = this.timeDateService.formatISO8601(activity.time_spent);
-    this.checklistService.createChecklist({
+  private setChecklist(activity: Activity): Partial<Checklist> {
+    return {
       activity_id: activity.activity_id,
-      time_spent: formattedTimeSpent,
+      time_spent: this.timeDateService.formatISO8601(activity.time_spent),
+      status: activity.status,
+      action_plan: activity.action_plan,
       user_id: "532d1758-0fb2-46b4-90c7-fdfc62adcbca"
-    }).subscribe((checklist) => {
-      checklist.time_spent = this.timeDateService.formatISO8601(checklist.time_spent as unknown as Interval);
-      this.activityService.updateActivity(activity).subscribe(() => {
-        this.checklistService.updateChecklist(checklist).subscribe(() => {
-          this.activityService.retrieveAllActivities();
-          dialogRef.close();
+    };
+  }
+
+  private submit(
+    activity: Activity,
+    dialogRef: MatDialogRef<PopupConfirmationComponent, any>
+  ): void {
+    activity.last_checked = this.timeDateService
+      .getLocaleIsoString();
+    const checklist = this.setChecklist(activity);
+    this.checklistService.createChecklist(checklist)
+      .subscribe((checklist) => {
+        checklist.time_spent = this.timeDateService
+          .formatISO8601(checklist.time_spent as unknown as Interval);
+        this.activityService.updateActivity(activity).subscribe(() => {
+          this.checklistService.updateChecklist(checklist).subscribe(() => {
+            this.activityService.retrieveAllActivities();
+            dialogRef.close();
+          });
         });
       });
-    });
   }
 
   openPopupConfirmation(activity: Activity): boolean {
@@ -104,7 +117,7 @@ export class MainComponent {
     });
 
     const onConfirmSubscription = dialogRef.componentInstance.onConfirm.subscribe(() => {
-      this.createChecklist(activity, dialogRef);
+      this.submit(activity, dialogRef);
       onConfirmSubscription.unsubscribe();
     });
 

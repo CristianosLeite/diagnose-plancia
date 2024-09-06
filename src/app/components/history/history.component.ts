@@ -16,6 +16,7 @@ export type HistoryData = {
   activity: string;
   estimated_time: Interval;
   time_spent: string;
+  status: string;
   createdAt: string;
   activityTime: string;
 };
@@ -32,7 +33,7 @@ export type HistoryData = {
 })
 export class HistoryComponent {
   @Input() ELEMENT_DATA = [] as HistoryData[];
-  displayedColumns: string[] = ['checklist_id', 'username', 'activity', 'estimatedTime', 'timeSpent', 'createdAt', 'activityTime'];
+  displayedColumns: string[] = ['checklist_id', 'username', 'activity', 'status', 'estimatedTime', 'timeSpent', 'createdAt', 'activityTime'];
   dataSource = new MatTableDataSource<HistoryData>(this.ELEMENT_DATA);
 
   constructor(
@@ -54,6 +55,7 @@ export class HistoryComponent {
               activity: activity.description,
               estimated_time: activity.estimated_time,
               time_spent: checklist.time_spent,
+              status: checklist.status,
               createdAt: checklist.createdAt,
               activityTime: this.timeDateService.getTimeLocaleString(new Date(checklist.createdAt))
             }))
