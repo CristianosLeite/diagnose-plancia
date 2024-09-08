@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-not-authenticated',
@@ -10,9 +11,10 @@ import { AuthService } from '../../services/auth.service';
 })
 export class NotAuthenticatedComponent {
 
-  constructor(private auth: AuthService) { }
+  constructor(private auth: AuthService, private router: Router) { }
 
   openLoginDialog(): void {
     this.auth.openLoginDialog();
+    this.router.navigate(['/']);
   }
 }
