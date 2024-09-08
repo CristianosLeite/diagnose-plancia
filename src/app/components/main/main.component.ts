@@ -16,6 +16,8 @@ import { ChecklistService } from '../../services/checklist.service';
 import { TimeDateService } from '../../services/time-date.service';
 import { Interval } from '../../interfaces/activity.interface';
 import { Checklist } from '../../interfaces/checklist.interface';
+import { AuthService } from '../../services/auth.service';
+import { User } from '../../interfaces/user.interface';
 
 @Component({
   selector: 'app-main',
@@ -35,6 +37,7 @@ import { Checklist } from '../../interfaces/checklist.interface';
   styleUrl: './main.component.scss'
 })
 export class MainComponent {
+  authenticatedUser = {} as User;
   expandedUser = false;
   expandedActivity = false;
   expandedHistory = false;
@@ -44,7 +47,8 @@ export class MainComponent {
     public dialog: MatDialog,
     private activityService: ActivityService,
     private checklistService: ChecklistService,
-    private timeDateService: TimeDateService
+    private timeDateService: TimeDateService,
+    private auth: AuthService,
   ) {
     this.activityService.selectionChanged.subscribe(activity => {
       this.openDialog(activity);
@@ -54,6 +58,9 @@ export class MainComponent {
     });
     this.activityService.activityConfirmed.subscribe(activity => {
       this.openPopupConfirmation(activity);
+    });
+    this.auth.userChanged.subscribe(user => {
+      this.authenticatedUser = user;
     });
   }
 
@@ -163,5 +170,9 @@ export class MainComponent {
 
   notImplemented() {
     alert('função não implementada');
+  }
+
+  checkPermissionFor(action: string): boolean {
+    return this.authenticatedUser.permissions.some(permission => permission.includes(action));
   }
 }

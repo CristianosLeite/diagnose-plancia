@@ -16,7 +16,9 @@ export const routes: Routes = [
         path: 'not-authenticated', component: NotAuthenticatedComponent
       },
       {
-        path: 'checklist', component: ActivityTableComponent
+        path: 'checklist', component: ActivityTableComponent,
+        canActivate: [AuthService],
+        data: { permission: 'view_checklist' },
       },
       {
         path: 'activity', component: ActivityCreateComponent,
@@ -25,13 +27,19 @@ export const routes: Routes = [
       },
       // Users routes
       {
-        path: 'users/create', component: UserCreateComponent
+        path: 'users/create', component: UserCreateComponent,
+        canActivate: [AuthService],
+        data: { permission: 'create_user' },
       },
       {
-        path: 'users/edit', component: UserEditComponent
+        path: 'users/edit', component: UserEditComponent,
+        canActivate: [AuthService],
+        data: { permission: 'edit_user' },
       },
       {
-        path: 'history', component: HistoryComponent
+        path: 'history', component: HistoryComponent,
+        canActivate: [AuthService],
+        data: { permission: 'view_history' },
       },
       // Users api routes
       {

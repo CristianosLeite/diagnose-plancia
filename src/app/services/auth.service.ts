@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Output, EventEmitter } from '@angular/core';
 import { UserService } from './user.service';
-import { ShiftWork } from '../interfaces/user.interface';
+import { ShiftWork, User } from '../interfaces/user.interface';
 import { Observable, of } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
 import { ActivatedRouteSnapshot } from '@angular/router';
@@ -12,8 +12,9 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class AuthService {
-  authenticated = false;
   authnticatedUser = '';
+  @Output() authChanged: EventEmitter<boolean> = new EventEmitter();
+  @Output() userChanged: EventEmitter<User> = new EventEmitter();
 
   constructor(
     private userService: UserService,
@@ -32,11 +33,16 @@ export class AuthService {
     return this.userService.getUserByBadgeNumber(badgeNumber).pipe(
       switchMap(user => {
         if (!user) {
+          this.authnticatedUser = '';
+          this.authChanged.emit(false);
+          this.userChanged.emit({} as User);
           return of(false);
         }
 
         user.shift_work = shiftWork;
         this.authnticatedUser = user.user_id;
+        this.authChanged.emit(true);
+        this.userChanged.emit(user);
         return of(true);
       }),
       catchError(error => {
@@ -62,9 +68,12 @@ export class AuthService {
           return of(false);
         }
 
-        console.log('Checking permission:', requiredPermission);
-        console.log('User permissions:', user.permissions);
-        return of(this.checkPermission(user.permissions, requiredPermission));
+        const hasPermission = of(this.checkPermission(user.permissions, requiredPermission));
+        if (!hasPermission) {
+          this.router.navigate(['/not-authenticated']);
+        }
+
+        return hasPermission;
       }),
       catchError(error => {
         console.error('Error during permission check:', error);

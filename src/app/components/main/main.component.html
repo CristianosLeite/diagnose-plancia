@@ -15,55 +15,63 @@
     <p>Opções</p>
 
     <!--Atividades-->
-    <a class="option" [class.active]="expandedActivity" (click)="toggleActivity()" mat-raised-button>
+    <a class="option" [class.active]="expandedActivity" (click)="toggleActivity()" mat-raised-button
+      *ngIf="authenticatedUser.permissions && (checkPermissionFor('activity') || checkPermissionFor('checklist'))">
       <i class="material-icons option-icon">assignment</i>
       Atividades
     </a>
 
     <!--Cadastro de atividades-->
-    <a class="sub-option" *ngIf="expandedActivity" routerLink="activity" routerLinkActive="active">
+    <a class="sub-option" *ngIf="expandedActivity && authenticatedUser.permissions.includes('create_activity')"
+      routerLink="activity" routerLinkActive="active">
       <i class="material-icons option-icon">add</i>
       Cadastrar atividade
     </a>
 
     <!--Checklist-->
-    <a class="sub-option" *ngIf="expandedActivity" routerLink="checklist" routerLinkActive="active">
+    <a class="sub-option" *ngIf="expandedActivity && authenticatedUser.permissions.includes('view_checklist')"
+      routerLink="checklist" routerLinkActive="active">
       <i class="material-icons option-icon">assignment</i>
-      Checklist
+      Realizar Checklist
     </a>
 
     <!--Usuários-->
-    <a class="option" [class.active]="expandedUser" (click)="toggleUser()" mat-raised-button>
+    <a class="option" [class.active]="expandedUser" (click)="toggleUser()" mat-raised-button
+      *ngIf="authenticatedUser.permissions && checkPermissionFor('users')">
       <i class="material-icons option-icon">people</i>
       Usuários
     </a>
 
     <!--Cadastro de usuários-->
-    <a class="sub-option" *ngIf="expandedUser" routerLink="users/create" routerLinkActive="active">
+    <a class="sub-option" *ngIf="expandedUser && authenticatedUser.permissions.includes('create_users')"
+      routerLink="users/create" routerLinkActive="active">
       <i class="material-icons option-icon">person_add</i>
       Cadastrar usuário
     </a>
 
     <!--Listar usuários-->
-    <a class="sub-option" *ngIf="expandedUser" (click)="notImplemented()" routerLinkActive="active">
+    <a class="sub-option" *ngIf="expandedUser && authenticatedUser.permissions.includes('view_users')"
+      (click)="notImplemented()" routerLinkActive="active">
       <i class="material-icons option-icon">people</i>
       Listar usuários
     </a>
 
     <!--Histórico de verificações-->
-    <a class="option" [class.active]="expandedHistory" (click)="toggleHistory()" mat-raised-button>
+    <a class="option" [class.active]="expandedHistory" (click)="toggleHistory()" mat-raised-button
+      *ngIf="authenticatedUser.permissions && checkPermissionFor('history')">
       <i class="material-icons option-icon">history</i>
       Histórico de verificações
     </a>
 
     <!--Listar histórico de verificações-->
-    <a class="sub-option" *ngIf="expandedHistory" routerLink="history" routerLinkActive="active">
+    <a class="sub-option" *ngIf="expandedHistory && authenticatedUser.permissions.includes('view_history')" routerLink="history" routerLinkActive="active">
       <i class="material-icons option-icon">assignment</i>
       Listar histórico de verificações
     </a>
 
     <!--Relatórios-->
-    <a class="option" [class.active]="isReportActive" mat-raised-button (click)="activeReport()">
+    <a class="option" [class.active]="isReportActive" mat-raised-button (click)="activeReport()"
+      *ngIf="authenticatedUser.permissions && checkPermissionFor('reports')">
       <i class="material-icons option-icon">description</i>
       Relatórios
     </a>
