@@ -7,11 +7,9 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
   providedIn: 'root'
 })
 export class PdfService {
-  private pdfUrl: SafeResourceUrl;
+  private pdfUrl: SafeResourceUrl = '';
 
-  constructor(private http: HttpClient, private sanitizer: DomSanitizer) {
-    this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl('https://dl.dropboxusercontent.com/scl/fi/adsjqeuaqjyd1pv3r32ds/Orgulho-e-Preconceito-autor-Jane-Austen.pdf?rlkey=y08d9atr5qv2q2mzbk3sp5ul7&dl=0'); // Replace with your PDF URL
-  }
+  constructor(private http: HttpClient, private sanitizer: DomSanitizer) { }
 
   async getPDF(): Promise<Blob> {
     const url = this.pdfUrl as string;

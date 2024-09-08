@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { LoginComponent } from './components/modal/login/login.component';
 import { MatDialog } from '@angular/material/dialog';
 import { FooterComponent } from './components/footer/footer.component';
+import { AuthComponent } from './components/auth/auth.component';
 
 @Component({
   selector: 'app-root',
@@ -18,17 +18,9 @@ export class AppComponent {
   }
 
   openLoginDialog(): void {
-    const dialogRef = this.dialog.open(LoginComponent, {
-      width: '300px',
-      disableClose: true  // Modal permanece ativo até login
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        console.log('Login realizado com sucesso');
-      } else {
-        console.log('Login cancelado');
-      }
+    this.dialog.open(AuthComponent, {
+      width: '400px',
+      disableClose: true
     });
   }
 }

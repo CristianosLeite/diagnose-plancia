@@ -2,7 +2,7 @@ export type Skills = 'Talha' | 'Paleteira' | 'Empilhadeira' | 'NR12' | 'NR33'| '
 
 export type Context = 'create' | 'edit';
 
-export type Shift = '1°' | '2°' | '3°' | '4°';
+export type ShiftWork = '1°' | '2°' | '3°' | '4°';
 
 export interface User {
   user_id: string;
@@ -15,5 +15,6 @@ export interface User {
   createdAt: Date;
   updatedAt: Date;
   context: Context;
-  shift: Shift;
+  shift_work: ShiftWork;
+  permissions: string[];
 }
