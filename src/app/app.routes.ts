@@ -18,7 +18,7 @@ export const routes: Routes = [
       {
         path: 'checklist', component: ActivityTableComponent,
         canActivate: [AuthService],
-        data: { permission: 'view_checklist' },
+        data: { permission: 'create_checklist' },
       },
       {
         path: 'activity', component: ActivityCreateComponent,
@@ -29,12 +29,12 @@ export const routes: Routes = [
       {
         path: 'users/create', component: UserCreateComponent,
         canActivate: [AuthService],
-        data: { permission: 'create_user' },
+        data: { permission: 'create_users' },
       },
       {
         path: 'users/edit', component: UserEditComponent,
         canActivate: [AuthService],
-        data: { permission: 'edit_user' },
+        data: { permission: 'edit_users' },
       },
       {
         path: 'history', component: HistoryComponent,

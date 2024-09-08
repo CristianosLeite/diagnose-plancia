@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { Activity } from '../../interfaces/activity.interface';
 import { MatIconButton } from '@angular/material/button';
@@ -49,6 +49,7 @@ export class MainComponent {
     private checklistService: ChecklistService,
     private timeDateService: TimeDateService,
     private auth: AuthService,
+    private cdr: ChangeDetectorRef
   ) {
     this.activityService.selectionChanged.subscribe(activity => {
       this.openDialog(activity);
@@ -61,6 +62,7 @@ export class MainComponent {
     });
     this.auth.userChanged.subscribe(user => {
       this.authenticatedUser = user;
+      this.cdr.detectChanges();
     });
   }
 
@@ -88,7 +90,7 @@ export class MainComponent {
       time_spent: this.timeDateService.formatISO8601(activity.time_spent),
       status: activity.status,
       action_plan: activity.action_plan,
-      user_id: "532d1758-0fb2-46b4-90c7-fdfc62adcbca"
+      user_id: this.authenticatedUser.user_id
     };
   }
 
@@ -174,5 +176,9 @@ export class MainComponent {
 
   checkPermissionFor(action: string): boolean {
     return this.authenticatedUser.permissions.some(permission => permission.includes(action));
+  }
+
+  logout() {
+    this.auth.logout();
   }
 }

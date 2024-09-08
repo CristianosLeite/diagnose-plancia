@@ -81,4 +81,12 @@ export class AuthService {
       })
     );
   }
+
+  logout(): void {
+    this.authnticatedUser = '';
+    this.authChanged.emit(false);
+    this.userChanged.emit({} as User);
+    this.router.navigate(['/']);
+    this.openLoginDialog();
+  }
 }
