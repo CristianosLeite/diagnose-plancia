@@ -5,16 +5,23 @@ import { ActivityCreateComponent } from './components/activity/activity-create/a
 import { UserCreateComponent } from './components/user/user-create/user-create.component';
 import { UserEditComponent } from './components/user/user-edit/user-edit.component';
 import { HistoryComponent } from './components/history/history.component';
+import { AuthService } from './services/auth.service';
+import { NotAuthenticatedComponent } from './components/not-authenticated/not-authenticated.component';
 
 export const routes: Routes = [
   {
     path: '', component: MainComponent,
     children: [
       {
+        path: 'not-authenticated', component: NotAuthenticatedComponent
+      },
+      {
         path: 'checklist', component: ActivityTableComponent
       },
       {
-        path: 'activity', component: ActivityCreateComponent
+        path: 'activity', component: ActivityCreateComponent,
+        canActivate: [AuthService],
+        data: { permission: 'create_activity' },
       },
       // Users routes
       {

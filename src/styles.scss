@@ -61,3 +61,13 @@ button {
   width: 200px;
   height: 60px;
 }
+
+.display-content-center{
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  font-size: 20px;
+  font-weight: 500;
+}

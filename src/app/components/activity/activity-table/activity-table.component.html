@@ -90,13 +90,13 @@
     </ng-container>
   </table>
 } @else if (dataLength === 0) {
-  <div class="no-activities">
+  <div class="display-content-center">
     <h1>Nenhuma atividade cadastrada</h1>
     <p>Clique no botão abaixo para adicionar uma nova atividade</p>
     <button mat-raised-button color="primary" routerLink="/activity">Adicionar atividade</button>
   </div>
 } @else if (dataLength > 0 && ELEMENT_DATA.length === 0) {
-  <div class="no-activities">
+  <div class="display-content-center">
     <h1>Checklist concluído!</h1>
   </div>
 }
