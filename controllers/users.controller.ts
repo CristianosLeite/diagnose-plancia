@@ -9,6 +9,7 @@ export class UsersController {
     this.router.post('/create', this.create).bind(this);
     this.router.get('/all', this.all.bind(this));
     this.router.get('/one', this.retrieve.bind(this));
+    this.router.get('/badge', this.retrieveByBadgeNumber.bind(this));
     this.router.put('/update', this.update.bind(this));
     this.router.delete('/delete', this.delete.bind(this));
   }
@@ -43,6 +44,17 @@ export class UsersController {
       res.status(400).send('Missing user_id');
 
     await User.findOne({ where: { user_id: id } }).then((user) => {
+      res.json(user);
+    });
+  }
+
+  public async retrieveByBadgeNumber(req: Request, res: Response) {
+    const badgeNumber = req.query['badge_number'];
+
+    if (!badgeNumber)
+      res.status(400).send('Missing badge_number');
+
+    await User.findOne({ where: { badge_number: badgeNumber } }).then((user) => {
       res.json(user);
     });
   }

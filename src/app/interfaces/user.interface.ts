@@ -1,6 +1,8 @@
 export type Skills = 'Talha' | 'Paleteira' | 'Empilhadeira' | 'NR12' | 'NR33'| 'Rebocador' | 'NR13' | 'NR35' | 'NR10' | 'NR20';
 
-export type context = 'create' | 'edit';
+export type Context = 'create' | 'edit';
+
+export type ShiftWork = '1°' | '2°' | '3°' | '4°';
 
 export interface User {
   user_id: string;
@@ -12,5 +14,7 @@ export interface User {
   skills: Skills[];
   createdAt: Date;
   updatedAt: Date;
-  context: context;
+  context: Context;
+  shift_work: ShiftWork;
+  permissions: string[];
 }
