@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { Activity } from '../../interfaces/activity.interface';
 import { MatIconButton } from '@angular/material/button';
@@ -15,6 +15,9 @@ import { PopupConfirmationComponent } from '../modal/popup-confirmation/popup-co
 import { ChecklistService } from '../../services/checklist.service';
 import { TimeDateService } from '../../services/time-date.service';
 import { Interval } from '../../interfaces/activity.interface';
+import { Checklist } from '../../interfaces/checklist.interface';
+import { AuthService } from '../../services/auth.service';
+import { User } from '../../interfaces/user.interface';
 
 @Component({
   selector: 'app-main',
@@ -34,6 +37,7 @@ import { Interval } from '../../interfaces/activity.interface';
   styleUrl: './main.component.scss'
 })
 export class MainComponent {
+  authenticatedUser = {} as User;
   expandedUser = false;
   expandedActivity = false;
   expandedHistory = false;
@@ -43,7 +47,9 @@ export class MainComponent {
     public dialog: MatDialog,
     private activityService: ActivityService,
     private checklistService: ChecklistService,
-    private timeDateService: TimeDateService
+    private timeDateService: TimeDateService,
+    private auth: AuthService,
+    private cdr: ChangeDetectorRef
   ) {
     this.activityService.selectionChanged.subscribe(activity => {
       this.openDialog(activity);
@@ -53,6 +59,10 @@ export class MainComponent {
     });
     this.activityService.activityConfirmed.subscribe(activity => {
       this.openPopupConfirmation(activity);
+    });
+    this.auth.userChanged.subscribe(user => {
+      this.authenticatedUser = user;
+      this.cdr.detectChanges();
     });
   }
 
@@ -74,22 +84,34 @@ export class MainComponent {
     return false;
   }
 
-  private createChecklist(activity: Activity, dialogRef: MatDialogRef<PopupConfirmationComponent, any>): void {
-    activity.last_checked = new Date().toISOString();
-    const formattedTimeSpent = this.timeDateService.formatISO8601(activity.time_spent);
-    this.checklistService.createChecklist({
+  private setChecklist(activity: Activity): Partial<Checklist> {
+    return {
       activity_id: activity.activity_id,
-      time_spent: formattedTimeSpent,
-      user_id: "532d1758-0fb2-46b4-90c7-fdfc62adcbca"
-    }).subscribe((checklist) => {
-      checklist.time_spent = this.timeDateService.formatISO8601(checklist.time_spent as unknown as Interval);
-      this.activityService.updateActivity(activity).subscribe(() => {
-        this.checklistService.updateChecklist(checklist).subscribe(() => {
-          this.activityService.retrieveAllActivities();
-          dialogRef.close();
+      time_spent: this.timeDateService.formatISO8601(activity.time_spent),
+      status: activity.status,
+      action_plan: activity.action_plan,
+      user_id: this.authenticatedUser.user_id
+    };
+  }
+
+  private submit(
+    activity: Activity,
+    dialogRef: MatDialogRef<PopupConfirmationComponent, any>
+  ): void {
+    activity.last_checked = this.timeDateService
+      .getLocaleIsoString();
+    const checklist = this.setChecklist(activity);
+    this.checklistService.createChecklist(checklist)
+      .subscribe((checklist) => {
+        checklist.time_spent = this.timeDateService
+          .formatISO8601(checklist.time_spent as unknown as Interval);
+        this.activityService.updateActivity(activity).subscribe(() => {
+          this.checklistService.updateChecklist(checklist).subscribe(() => {
+            this.activityService.retrieveAllActivities();
+            dialogRef.close();
+          });
         });
       });
-    });
   }
 
   openPopupConfirmation(activity: Activity): boolean {
@@ -104,7 +126,7 @@ export class MainComponent {
     });
 
     const onConfirmSubscription = dialogRef.componentInstance.onConfirm.subscribe(() => {
-      this.createChecklist(activity, dialogRef);
+      this.submit(activity, dialogRef);
       onConfirmSubscription.unsubscribe();
     });
 
@@ -150,5 +172,13 @@ export class MainComponent {
 
   notImplemented() {
     alert('função não implementada');
+  }
+
+  checkPermissionFor(action: string): boolean {
+    return this.authenticatedUser.permissions.some(permission => permission.includes(action));
+  }
+
+  logout() {
+    this.auth.logout();
   }
 }

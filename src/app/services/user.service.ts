@@ -22,6 +22,10 @@ export class UserService {
     return this.http.get<User[]>(`${this.baseUrl}/all`);
   }
 
+  getUserByBadgeNumber(badgeNumber: number) {
+    return this.http.get<User>(`${this.baseUrl}/badge?badge_number=${badgeNumber}`);
+  }
+
   updateUser(user: User) {
     return this.http.put<User>(`${this.baseUrl}/update`, user);
   }

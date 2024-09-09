@@ -31,7 +31,9 @@ export class ChecklistController {
   }
 
   public async all(req: Request, res: Response) {
-    await Checklist.findAll().then((checklists) => {
+    await Checklist.findAll({
+      limit: 100,
+    }).then((checklists) => {
       res.json(checklists);
     });
   }

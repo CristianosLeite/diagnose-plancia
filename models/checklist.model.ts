@@ -22,6 +22,15 @@ Checklist.init(
       type: DataTypes.UUID,
       allowNull: false,
     },
+    status:{
+      type: DataTypes.CHAR(2),
+      allowNull: false,
+      defaultValue: 'KO',
+    },
+    action_plan: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
     time_spent: {
       type: 'INTERVAL',
       allowNull: false,

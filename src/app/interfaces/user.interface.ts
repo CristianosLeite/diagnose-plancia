@@ -1,6 +1,8 @@
-export type Skills = 'Talha' | 'Paleteira' | 'Empilhadeira' | 'NR12' | 'NR33'| 'Rebocador' | 'NR13' | 'NR35' | 'NR10' | 'NR20';
+export type Permissions = 'create_users' | 'view_users' | 'edit_users' | 'view_history' | 'create_checklist' | 'create_activity' | 'reports';
 
-export type context = 'create' | 'edit';
+export type Context = 'create' | 'edit';
+
+export type ShiftWork = '1°' | '2°' | '3°' | '4°';
 
 export interface User {
   user_id: string;
@@ -9,8 +11,9 @@ export interface User {
   company: string;
   badge_number: number;
   plant: string;
-  skills: Skills[];
   createdAt: Date;
   updatedAt: Date;
-  context: context;
+  context: Context;
+  shift_work: ShiftWork;
+  permissions: string[];
 }
