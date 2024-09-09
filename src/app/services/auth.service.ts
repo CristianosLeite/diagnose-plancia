@@ -61,6 +61,12 @@ export class AuthService {
     if (!requiredPermission) {
       return of(false);
     }
+
+    if(!this.authnticatedUser) {
+      this.openLoginDialog();
+      return of(false);
+    }
+
     return this.userService.retrieveUser(this.authnticatedUser).pipe(
       switchMap(user => {
         if (!user.permissions) {
