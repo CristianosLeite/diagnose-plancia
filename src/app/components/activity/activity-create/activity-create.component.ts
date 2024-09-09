@@ -21,6 +21,7 @@ import { ActivityService } from '../../../services/activity.service';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { TimeDateService } from '../../../services/time-date.service';
 import { Interval } from '../../../interfaces/activity.interface';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-activity-create',
@@ -44,6 +45,7 @@ import { Interval } from '../../../interfaces/activity.interface';
   styleUrls: ['./activity-create.component.scss'],
 })
 export class ActivityCreateComponent implements OnInit {
+  authenticatedUser = this.authService.authenticatedUser;
   @Input() activity: Activity = {
     ...({} as Activity),
     context: 'create',
@@ -58,8 +60,13 @@ export class ActivityCreateComponent implements OnInit {
     private route: ActivatedRoute,
     private activityService: ActivityService,
     private timeDateService: TimeDateService,
-    private snackbarService: SnackbarService
-  ) { }
+    private snackbarService: SnackbarService,
+    private authService: AuthService
+  ) {
+    this.authService.authChanged.subscribe((authenticated) => {
+      this.authenticatedUser = authenticated ? this.authService.authenticatedUser : '';
+    });
+  }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
@@ -118,7 +125,7 @@ export class ActivityCreateComponent implements OnInit {
   }
 
   private prepareActivityForSubmission(): void {
-    this.activity.created_by = "532d1758-0fb2-46b4-90c7-fdfc62adcbca";
+    this.activity.created_by = this.authenticatedUser;
     this.activity.estimated_time = this.timeDateService
       .formatISO8601(this.activity.estimated_time) as unknown as Interval;
   }

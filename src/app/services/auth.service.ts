@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class AuthService {
-  authnticatedUser = '';
+  authenticatedUser = '';
   @Output() authChanged: EventEmitter<boolean> = new EventEmitter();
   @Output() userChanged: EventEmitter<User> = new EventEmitter();
 
@@ -33,14 +33,14 @@ export class AuthService {
     return this.userService.getUserByBadgeNumber(badgeNumber).pipe(
       switchMap(user => {
         if (!user) {
-          this.authnticatedUser = '';
+          this.authenticatedUser = '';
           this.authChanged.emit(false);
           this.userChanged.emit({} as User);
           return of(false);
         }
 
         user.shift_work = shiftWork;
-        this.authnticatedUser = user.user_id;
+        this.authenticatedUser = user.user_id;
         this.authChanged.emit(true);
         this.userChanged.emit(user);
         return of(true);
@@ -62,12 +62,12 @@ export class AuthService {
       return of(false);
     }
 
-    if(!this.authnticatedUser) {
+    if(!this.authenticatedUser) {
       this.openLoginDialog();
       return of(false);
     }
 
-    return this.userService.retrieveUser(this.authnticatedUser).pipe(
+    return this.userService.retrieveUser(this.authenticatedUser).pipe(
       switchMap(user => {
         if (!user.permissions) {
           this.router.navigate(['/not-authenticated']);
@@ -89,7 +89,7 @@ export class AuthService {
   }
 
   logout(): void {
-    this.authnticatedUser = '';
+    this.authenticatedUser = '';
     this.authChanged.emit(false);
     this.userChanged.emit({} as User);
     this.router.navigate(['/']);
