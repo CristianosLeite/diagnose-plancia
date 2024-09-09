@@ -73,7 +73,7 @@ export class ActivityDialogComponent implements OnInit, OnDestroy {
       return false;
     }
     const dialogRef = this.dialog.open(ActionDialogComponent, {
-      width: '400px',
+      width: '500px',
       data: activity
     });
 
