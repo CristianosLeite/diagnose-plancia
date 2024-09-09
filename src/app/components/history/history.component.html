@@ -1,71 +1,75 @@
 @if(ELEMENT_DATA.length > 0) {
-  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
-    <!-- Id -->
-    <ng-container matColumnDef="checklist_id">
-      <th mat-header-cell *matHeaderCellDef> ID </th>
-      <td mat-cell *matCellDef="let element"> {{element.checklist_id}} </td>
-    </ng-container>
+  <!-- Id -->
+  <ng-container matColumnDef="checklist_id">
+    <th mat-header-cell *matHeaderCellDef> ID </th>
+    <td mat-cell *matCellDef="let element"> {{element.checklist_id}} </td>
+  </ng-container>
 
-    <!-- Responsável -->
-    <ng-container matColumnDef="username">
-      <th mat-header-cell *matHeaderCellDef> Responsável </th>
-      <td mat-cell *matCellDef="let element"> {{element.username}} </td>
-    </ng-container>
+  <!-- Responsável -->
+  <ng-container matColumnDef="username">
+    <th mat-header-cell *matHeaderCellDef> Responsável </th>
+    <td mat-cell *matCellDef="let element"> {{element.username}} </td>
+  </ng-container>
 
-    <!-- Atividade -->
-    <ng-container matColumnDef="activity">
-      <th mat-header-cell *matHeaderCellDef> Atividade </th>
-      <td mat-cell *matCellDef="let element"> {{element.activity}} </td>
-    </ng-container>
+  <!-- Atividade -->
+  <ng-container matColumnDef="activity">
+    <th mat-header-cell *matHeaderCellDef> Atividade </th>
+    <td mat-cell *matCellDef="let element"> {{element.activity}} </td>
+  </ng-container>
 
-    <!-- Status -->
-    <ng-container matColumnDef="status">
-      <th mat-header-cell *matHeaderCellDef> Status </th>
-      <td mat-cell *matCellDef="let element"> {{element.status}} </td>
-    </ng-container>
+  <!-- Status -->
+  <ng-container matColumnDef="status">
+    <th mat-header-cell *matHeaderCellDef> Status </th>
+    <td [class.ok]="element.status === 'OK'" [class.ko]="element.status === 'KO'"
+      [attr.disabled]="element.status === 'OK' ? true : null" mat-cell *matCellDef="let element"
+      (click)="element.status !== 'OK' && openActionPlan(element.actionPlan, element.activity)">
+      {{element.status}}
+    </td>
+  </ng-container>
 
-    <!-- Data -->
-    <ng-container matColumnDef="createdAt">
-      <th mat-header-cell *matHeaderCellDef> Data </th>
-      <td mat-cell *matCellDef="let element"> {{element.createdAt | date: 'dd/MM/yyyy'}} </td>
-    </ng-container>
+  <!-- Data -->
+  <ng-container matColumnDef="createdAt">
+    <th mat-header-cell *matHeaderCellDef> Data </th>
+    <td mat-cell *matCellDef="let element"> {{element.createdAt | date: 'dd/MM/yyyy'}} </td>
+  </ng-container>
 
-    <!-- Horário -->
-    <ng-container matColumnDef="activityTime">
-      <th mat-header-cell *matHeaderCellDef> Horário </th>
-      <td mat-cell *matCellDef="let element"> {{element.activityTime}} </td>
-    </ng-container>
+  <!-- Horário -->
+  <ng-container matColumnDef="activityTime">
+    <th mat-header-cell *matHeaderCellDef> Horário </th>
+    <td mat-cell *matCellDef="let element"> {{element.activityTime}} </td>
+  </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
-    <!-- Tempo estimado -->
-    <ng-container matColumnDef="estimatedTime">
-      <th mat-header-cell *matHeaderCellDef> Tempo estimado </th>
-      <td mat-cell *matCellDef="let element">{{
-        element.estimated_time ?
-        element.estimated_time.hours || element.estimated_time.minutes || element.estimated_time.seconds ?
-        timeDateService.formatTime(element.estimated_time) :
-        '00:00:00' :
-        '00:00:00'
-        }} </td>
-    </ng-container>
+  <!-- Tempo estimado -->
+  <ng-container matColumnDef="estimatedTime">
+    <th mat-header-cell *matHeaderCellDef> Tempo estimado </th>
+    <td mat-cell *matCellDef="let element">{{
+      element.estimatedTime ?
+      element.estimatedTime.hours || element.estimatedTime.minutes || element.estimatedTime.seconds ?
+      timeDateService.formatTime(element.estimatedTime) :
+      '00:00:00' :
+      '00:00:00'
+      }} </td>
+  </ng-container>
 
-    <!-- Tempo gasto -->
-    <ng-container matColumnDef="timeSpent">
-      <th mat-header-cell *matHeaderCellDef> Tempo gasto </th>
-      <td mat-cell *matCellDef="let element">{{
-        element.time_spent ?
-        element.time_spent.hours || element.time_spent.minutes || element.time_spent.seconds ?
-        timeDateService.formatTime(element.time_spent) :
-        '00:00:00' :
-        '00:00:00'
-        }} </td>
-    </ng-container>
-  </table>
+  <!-- Tempo gasto -->
+  <ng-container matColumnDef="timeSpent">
+    <th mat-header-cell *matHeaderCellDef> Tempo gasto </th>
+    <td mat-cell *matCellDef="let element">{{
+      element.timeSpent ?
+      element.timeSpent.hours || element.timeSpent.minutes || element.timeSpent.seconds ?
+      timeDateService.formatTime(element.timeSpent) :
+      '00:00:00' :
+      '00:00:00'
+      }} </td>
+  </ng-container>
+</table>
 } @else {
-  <div class="display-content-center">
-    <h1>Nenhuma atividade realizada.</h1>
-  </div>
+<div class="display-content-center">
+  <h1>Nenhuma atividade realizada.</h1>
+</div>
 }

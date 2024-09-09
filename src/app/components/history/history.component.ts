@@ -9,16 +9,20 @@ import { forkJoin } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import { DatePipe } from '@angular/common';
 import { Interval } from '../../interfaces/activity.interface';
+import { MatDialog } from '@angular/material/dialog';
+import { ActionDialogComponent } from '../modal/action-dialog/action-dialog.component';
+import { Activity } from '../../interfaces/activity.interface';
 
 export type HistoryData = {
   checklist_id: number;
   username: string;
   activity: string;
-  estimated_time: Interval;
-  time_spent: string;
+  estimatedTime: Interval;
+  timeSpent: string;
   status: string;
   createdAt: string;
   activityTime: string;
+  actionPlan: string;
 };
 
 @Component({
@@ -40,7 +44,8 @@ export class HistoryComponent {
     private checklistService: ChecklistService,
     private activityService: ActivityService,
     private userService: UserService,
-    public timeDateService: TimeDateService
+    public timeDateService: TimeDateService,
+    public dialog: MatDialog
   ) {
     this.checklistService.retrieveAllChecklists().pipe(
       mergeMap((data: Checklist[]) => {
@@ -53,11 +58,12 @@ export class HistoryComponent {
               checklist_id: checklist.checklist_id,
               username: user.name,
               activity: activity.description,
-              estimated_time: activity.estimated_time,
-              time_spent: checklist.time_spent,
+              estimatedTime: activity.estimated_time,
+              timeSpent: checklist.time_spent,
               status: checklist.status,
               createdAt: checklist.createdAt,
-              activityTime: this.timeDateService.getTimeLocaleString(new Date(checklist.createdAt))
+              activityTime: this.timeDateService.getTimeLocaleString(new Date(checklist.createdAt)),
+              actionPlan: checklist.action_plan
             }))
           )
         );
@@ -73,6 +79,18 @@ export class HistoryComponent {
       error: (error) => {
         console.error(error);
       }
+    });
+  }
+
+  openActionPlan(actionPlan: string, activityDescription: string): void {
+    const activity = {} as Activity;
+    activity.description = activityDescription;
+    activity.action_plan = actionPlan;
+    activity.context = 'history';
+
+    this.dialog.open(ActionDialogComponent, {
+      width: '500px',
+      data: activity
     });
   }
 }

@@ -22,13 +22,13 @@ import { ActivityDialogComponent } from '../activity-dialog/activity-dialog.comp
   styleUrl: './action-dialog.component.scss'
 })
 export class ActionDialogComponent {
-  activity = {} as Activity;
   @Output() onConfirm = new EventEmitter<void>();
   @Output() onCancel = new EventEmitter<void>();
 
   constructor(
     public dialogRef: MatDialogRef<ActivityDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: Activity) {}
+    @Inject(MAT_DIALOG_DATA) public data: Activity
+  ) {}
 
   onCancelClick(): void {
     this.data.action_plan = '';

@@ -1,11 +1,21 @@
-<h1 mat-dialog-title>Informar plano de ação</h1>
+<h1 mat-dialog-title>KO para {{data.description}}</h1>
 
-    <mat-form-field style="min-height: 200px;">
-      <mat-label>Ação tomada</mat-label>
-      <input matInput [(ngModel)]="data.action_plan">
-    </mat-form-field>
+<mat-form-field style="min-height: 200px;">
+  @if(data.context === 'history') {
+    <mat-label>{{data.action_plan ? 'Ação tomada' : 'Nenhuma ação informada'}}</mat-label>
+  } @else {
+    <mat-label>Informar ação tomada</mat-label>
+  }
+  <input [disabled]="data.context === 'history'" matInput [(ngModel)]="data.action_plan">
+</mat-form-field>
 
 <div class="buttons" mat-dialog-actions>
-  <button mat-button (click)="onCancelClick()">Cancelar</button>
-  <button mat-button (click)="onConfirmClick()" [mat-dialog-close]="data.action_plan" cdkFocusInitial>Confirmar</button>
+  @if(data.context === 'history') {
+    <button mat-button (click)="onCancelClick()">Fechar</button>
+  } @else {
+    <button mat-button (click)="onCancelClick()">Cancelar</button>
+    <button mat-button (click)="onConfirmClick()" [mat-dialog-close]="data.action_plan" cdkFocusInitial>
+      Confirmar
+    </button>
+  }
 </div>

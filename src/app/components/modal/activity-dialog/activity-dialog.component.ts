@@ -67,7 +67,7 @@ export class ActivityDialogComponent implements OnInit, OnDestroy {
     this.activityService.activityConfirmed.emit(activity);
   }
 
-  openDialog(event: MatSlideToggleChange, activity: Activity): boolean {
+  openActionDialog(event: MatSlideToggleChange, activity: Activity): boolean {
     if (event.checked) {
       activity.status = 'OK';
       return false;
