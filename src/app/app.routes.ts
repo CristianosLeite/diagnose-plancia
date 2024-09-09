@@ -5,26 +5,41 @@ import { ActivityCreateComponent } from './components/activity/activity-create/a
 import { UserCreateComponent } from './components/user/user-create/user-create.component';
 import { UserEditComponent } from './components/user/user-edit/user-edit.component';
 import { HistoryComponent } from './components/history/history.component';
+import { AuthService } from './services/auth.service';
+import { NotAuthenticatedComponent } from './components/not-authenticated/not-authenticated.component';
 
 export const routes: Routes = [
   {
     path: '', component: MainComponent,
     children: [
       {
-        path: 'checklist', component: ActivityTableComponent
+        path: 'not-authenticated', component: NotAuthenticatedComponent
       },
       {
-        path: 'activity', component: ActivityCreateComponent
+        path: 'checklist', component: ActivityTableComponent,
+        canActivate: [AuthService],
+        data: { permission: 'create_checklist' },
+      },
+      {
+        path: 'activity', component: ActivityCreateComponent,
+        canActivate: [AuthService],
+        data: { permission: 'create_activity' },
       },
       // Users routes
       {
-        path: 'users/create', component: UserCreateComponent
+        path: 'users/create', component: UserCreateComponent,
+        canActivate: [AuthService],
+        data: { permission: 'create_users' },
       },
       {
-        path: 'users/edit', component: UserEditComponent
+        path: 'users/edit', component: UserEditComponent,
+        canActivate: [AuthService],
+        data: { permission: 'edit_users' },
       },
       {
-        path: 'history', component: HistoryComponent
+        path: 'history', component: HistoryComponent,
+        canActivate: [AuthService],
+        data: { permission: 'view_history' },
       },
       // Users api routes
       {

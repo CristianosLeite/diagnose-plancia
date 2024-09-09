@@ -35,6 +35,9 @@ User.init(
     skills: {
       type: DataTypes.ARRAY(DataTypes.STRING),
     },
+    permissions: {
+      type: DataTypes.ARRAY(DataTypes.STRING),
+    },
   },
   {
     sequelize,

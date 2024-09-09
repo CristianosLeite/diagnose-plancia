@@ -39,24 +39,24 @@
         <input matInput [(ngModel)]="user.plant" name="plant" placeholder="Ex.: Sete Lagoas" required="true" />
       </mat-form-field>
 
-      <!-- Compentências -->
-      <mat-form-field class="form-field user-skills">
-        <mat-label>Atribuir Competências</mat-label>
-        <mat-select (selectionChange)="addSkill($event.value)"
-          [value]="user.skills.length > 0 ? user.skills[user.skills.length -1] : ''">
-          <mat-option *ngFor="let skill of availableSkills" [value]="skill">
-            {{ skill }}
+      <!-- Permissões -->
+      <mat-form-field class="form-field user-permition">
+        <mat-label>Atribuir Permissões</mat-label>
+        <mat-select (selectionChange)="addPermission($event.value)"
+          [value]="user.permissions.length > 0 ? user.permissions[user.permissions.length -1] : ''">
+          <mat-option *ngFor="let permition of permissions" [value]="permition">
+            {{ handlePermissions(permition) }}
           </mat-option>
         </mat-select>
       </mat-form-field>
     </div>
 
-    <!-- Exibição das habilidades do usuário -->
-    <div class="skills-field">
-      <ul class="skills-list">
-        <li *ngFor="let skill of user.skills; let i = index">
-          {{ skill }}
-          <button mat-icon-button color="warn" (click)="removeSkill(i)">
+    <!-- Exibição das permissões do usuário -->
+    <div class="permition-field">
+      <ul class="permition-list">
+        <li *ngFor="let permition of user.permissions; let i = index">
+          {{ handlePermissions(permition) }}
+          <button mat-icon-button color="warn" (click)="removePermition(i)">
             <mat-icon>delete</mat-icon>
           </button>
         </li>

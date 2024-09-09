@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { Activity } from '../../interfaces/activity.interface';
 import { MatIconButton } from '@angular/material/button';
@@ -16,6 +16,8 @@ import { ChecklistService } from '../../services/checklist.service';
 import { TimeDateService } from '../../services/time-date.service';
 import { Interval } from '../../interfaces/activity.interface';
 import { Checklist } from '../../interfaces/checklist.interface';
+import { AuthService } from '../../services/auth.service';
+import { User } from '../../interfaces/user.interface';
 
 @Component({
   selector: 'app-main',
@@ -35,6 +37,7 @@ import { Checklist } from '../../interfaces/checklist.interface';
   styleUrl: './main.component.scss'
 })
 export class MainComponent {
+  authenticatedUser = {} as User;
   expandedUser = false;
   expandedActivity = false;
   expandedHistory = false;
@@ -44,7 +47,9 @@ export class MainComponent {
     public dialog: MatDialog,
     private activityService: ActivityService,
     private checklistService: ChecklistService,
-    private timeDateService: TimeDateService
+    private timeDateService: TimeDateService,
+    private auth: AuthService,
+    private cdr: ChangeDetectorRef
   ) {
     this.activityService.selectionChanged.subscribe(activity => {
       this.openDialog(activity);
@@ -54,6 +59,10 @@ export class MainComponent {
     });
     this.activityService.activityConfirmed.subscribe(activity => {
       this.openPopupConfirmation(activity);
+    });
+    this.auth.userChanged.subscribe(user => {
+      this.authenticatedUser = user;
+      this.cdr.detectChanges();
     });
   }
 
@@ -81,7 +90,7 @@ export class MainComponent {
       time_spent: this.timeDateService.formatISO8601(activity.time_spent),
       status: activity.status,
       action_plan: activity.action_plan,
-      user_id: "532d1758-0fb2-46b4-90c7-fdfc62adcbca"
+      user_id: this.authenticatedUser.user_id
     };
   }
 
@@ -163,5 +172,13 @@ export class MainComponent {
 
   notImplemented() {
     alert('função não implementada');
+  }
+
+  checkPermissionFor(action: string): boolean {
+    return this.authenticatedUser.permissions.some(permission => permission.includes(action));
+  }
+
+  logout() {
+    this.auth.logout();
   }
 }
