@@ -12,6 +12,7 @@ import { Interval } from '../../interfaces/activity.interface';
 import { MatDialog } from '@angular/material/dialog';
 import { ActionDialogComponent } from '../modal/action-dialog/action-dialog.component';
 import { Activity } from '../../interfaces/activity.interface';
+import { Observable } from 'rxjs';
 
 export type HistoryData = {
   checklist_id: number;
@@ -47,7 +48,25 @@ export class HistoryComponent {
     public timeDateService: TimeDateService,
     public dialog: MatDialog
   ) {
-    this.checklistService.retrieveAllChecklists().pipe(
+    this.loadHistoryData();
+  }
+
+  loadHistoryData(): void {
+    this.retriveAllChecklists().subscribe({
+      next: (historyData) => {
+        this.ELEMENT_DATA = historyData.sort(
+          (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+        this.dataSource.data = this.ELEMENT_DATA;
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    });
+  }
+
+  private retriveAllChecklists(): Observable<HistoryData[]> {
+    return this.checklistService.retrieveAllChecklists().pipe(
       mergeMap((data: Checklist[]) => {
         const requests = data.map(checklist =>
           forkJoin({
@@ -69,17 +88,7 @@ export class HistoryComponent {
         );
         return forkJoin(requests);
       })
-    ).subscribe({
-      next: (historyData) => {
-        this.ELEMENT_DATA = historyData.sort(
-          (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-        );
-        this.dataSource.data = this.ELEMENT_DATA;
-      },
-      error: (error) => {
-        console.error(error);
-      }
-    });
+    )
   }
 
   openActionPlan(actionPlan: string, activityDescription: string): void {
