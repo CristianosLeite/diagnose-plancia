@@ -22,6 +22,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { TimeDateService } from '../../../services/time-date.service';
 import { Interval } from '../../../interfaces/activity.interface';
 import { AuthService } from '../../../services/auth.service';
+import { User } from '../../../interfaces/user.interface';
 
 @Component({
   selector: 'app-activity-create',
@@ -45,7 +46,7 @@ import { AuthService } from '../../../services/auth.service';
   styleUrls: ['./activity-create.component.scss'],
 })
 export class ActivityCreateComponent implements OnInit {
-  authenticatedUser = this.authService.authenticatedUser;
+  user = this.authService.loggedUser;
   @Input() activity: Activity = {
     ...({} as Activity),
     context: 'create',
@@ -64,7 +65,7 @@ export class ActivityCreateComponent implements OnInit {
     private authService: AuthService
   ) {
     this.authService.authChanged.subscribe((authenticated) => {
-      this.authenticatedUser = authenticated ? this.authService.authenticatedUser : '';
+      this.user = authenticated ? this.authService.loggedUser : {} as User;
     });
   }
 
@@ -125,7 +126,7 @@ export class ActivityCreateComponent implements OnInit {
   }
 
   private prepareActivityForSubmission(): void {
-    this.activity.created_by = this.authenticatedUser;
+    this.activity.created_by = this.user.user_id;
     this.activity.estimated_time = this.timeDateService
       .formatISO8601(this.activity.estimated_time) as unknown as Interval;
   }

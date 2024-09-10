@@ -1,12 +1,14 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Output, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Checklist } from '../interfaces/checklist.interface';
+import { Activity } from '../interfaces/activity.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChecklistService {
   baseUrl = 'http://localhost:4000/api/checklists';
+  @Output() checklistChanged = new EventEmitter<Activity[]>();
 
   constructor(private http: HttpClient) { }
 
@@ -14,8 +16,11 @@ export class ChecklistService {
     return this.http.post<Checklist>(`${this.baseUrl}/create`, checklist);
   }
 
-  retrieveChecklist(id: number) {
-    return this.http.get<Checklist>(`${this.baseUrl}/one?checklist_id=${id}`);
+  retrievePendingChecklist(shiftWork: number) {
+    return this.http.get<Activity[]>(`${this.baseUrl}/pending?shift_work=${shiftWork}`)
+      .subscribe((data: Activity[]) => {
+        this.checklistChanged.emit(data);
+      });
   }
 
   retrieveAllChecklists() {

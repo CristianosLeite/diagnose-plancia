@@ -31,7 +31,7 @@
 
       <!--Checklist-->
       <a class="sub-option" *ngIf="expandedActivity && authenticatedUser.permissions.includes('create_checklist')"
-        routerLink="checklist" routerLinkActive="active">
+        [routerLink] ="['activity-table', 'checklist']" routerLinkActive="active">
         <i class="material-icons option-icon">assignment</i>
         Realizar Checklist
       </a>
