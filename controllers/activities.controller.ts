@@ -72,10 +72,10 @@ export class ActivityController {
     const id = req.query['activity_id'];
 
     if (!id)
-      res.status(400).send('Missing activity id');
+      res.status(400).send({ message: 'Missing activity id' });
 
     await Activity.destroy({ where: { activity_id: id } }).then(() => {
-      res.status(200).send('Activity deleted');
+      res.status(200).send({ message: 'Activity deleted' });
     });
   }
 }
