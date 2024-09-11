@@ -35,7 +35,16 @@
     <!-- Permissões -->
     <ng-container matColumnDef="permissions">
       <th mat-header-cell *matHeaderCellDef> Permissões </th>
-      <td mat-cell *matCellDef="let element"> {{element.permissions.join(', ')}} </td>
+      <td mat-cell *matCellDef="let element">
+        <ng-container *ngFor="let perm of element.permissions">
+          <ng-container *ngIf="permissionColors[perm]">
+            <span class="dot" [ngStyle]="{ 'background-color': permissionColors[perm] }"></span>
+          </ng-container>
+          <ng-container *ngIf="!permissionColors[perm]">
+            {{ perm }}
+          </ng-container>
+        </ng-container>
+      </td>
     </ng-container>
 
     <!-- Ações (Editar/Excluir) -->
@@ -66,8 +75,8 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
   <div class="legend">
-    <div appLegend></div>
-  </div>
+  <div appLegend></div>
+</div>
 } @else {
   <div class="display-content-center">
     <h1>Nenhum usuário cadastrado</h1>

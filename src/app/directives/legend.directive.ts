@@ -9,7 +9,7 @@ export class LegendDirective implements OnInit {
   constructor(
     private el: ElementRef,
     private renderer: Renderer2,
-    private viewContainerRef: ViewContainerRef // Usado para criar dinamicamente componentes
+    private viewContainerRef: ViewContainerRef
   ) {}
 
   ngOnInit() {

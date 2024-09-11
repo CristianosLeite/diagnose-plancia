@@ -13,11 +13,13 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatMenuModule } from '@angular/material/menu';
 import { LegendModule } from '../../legend/legend/legend.module';
 import { ClockComponent } from '../../clock/clock.component';
+import { NgFor, NgIf, CommonModule} from '@angular/common';
 
 @Component({
   selector: 'app-user-list',
   standalone: true,
   imports: [
+    NgIf, NgFor, CommonModule,
     ClockComponent,
     LegendModule,
     MatTableModule,
@@ -53,4 +55,16 @@ export class UserListComponent implements OnInit {
       });
     }
   }
+
+  // Objeto de mapeamento de cores para permissões
+  permissionColors: { [key: string]: string } = {
+    'create_users': 'red',
+    'view_users': 'green',
+    'edit_users': 'blue',
+    'view_history': 'yellow',
+    'create_checklist': 'white',
+    'create_activity': 'orange',
+    'reports': 'purple'
+  };
+
 }
