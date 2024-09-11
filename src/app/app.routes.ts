@@ -7,6 +7,7 @@ import { UserEditComponent } from './components/user/user-edit/user-edit.compone
 import { HistoryComponent } from './components/history/history.component';
 import { AuthService } from './services/auth.service';
 import { NotAuthenticatedComponent } from './components/not-authenticated/not-authenticated.component';
+import { UserListComponent } from './components/user/user-list/user-list.component';
 
 export const routes: Routes = [
   {
@@ -26,6 +27,11 @@ export const routes: Routes = [
         data: { permission: 'create_activity' },
       },
       // Users routes
+      {
+        path: 'users', component: UserListComponent,
+        canActivate: [AuthService],
+        data: { permission: 'view_users' },
+      },
       {
         path: 'users/create', component: UserCreateComponent,
         canActivate: [AuthService],
