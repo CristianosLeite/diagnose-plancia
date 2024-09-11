@@ -49,24 +49,26 @@ export class ActivityTableComponent implements OnInit {
     this.auth.userChanged.subscribe((user) => {
       this.loggedUser = user;
     });
+    this.activityService.activitiesChanged.subscribe((data: Activity[]) => {
+      this.dataSource = new MatTableDataSource<Partial<Activity>>(data);
+      this.ELEMENT_DATA = data;
+      this.cdr.detectChanges();
+    });
+    this.checklistService.checklistChanged.subscribe((data: Activity[]) => {
+      this.ELEMENT_DATA = data;
+      this.filterActivities(data);
+    });
     this.ActivatedRoute.params.subscribe((params) => {
       this.context = params['context'];
+      this.fetchDataSource();
     });
-
-    if (this.context === 'activity') {
-      this.activityService.activitiesChanged.subscribe((data: Activity[]) => {
-        this.ELEMENT_DATA = data;
-        this.cdr.detectChanges();
-      });
-    } else if (this.context === 'checklist') {
-      this.checklistService.checklistChanged.subscribe((data: Activity[]) => {
-        this.ELEMENT_DATA = data;
-        this.filterActivities(data);
-      });
-    }
   }
 
   ngOnInit(): void {
+    this.fetchDataSource();
+  }
+
+  private fetchDataSource() {
     if (this.context === 'activity') {
       this.activityService.retrieveAllActivities();
     } else if (this.context === 'checklist') {

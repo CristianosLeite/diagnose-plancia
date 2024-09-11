@@ -29,10 +29,17 @@
         Cadastrar atividade
       </a>
 
+      <!--Listar atividades-->
+      <a class="sub-option" *ngIf="expandedActivity && authenticatedUser.permissions.includes('view_activity')"
+        [routerLink]="['activity-table', 'activity']" routerLinkActive="active">
+        <i class="material-icons option-icon">list</i>
+        Listar atividades
+      </a>
+
       <!--Checklist-->
       <a class="sub-option" *ngIf="expandedActivity && authenticatedUser.permissions.includes('create_checklist')"
-        [routerLink] ="['activity-table', 'checklist']" routerLinkActive="active">
-        <i class="material-icons option-icon">assignment</i>
+        [routerLink]="['activity-table', 'checklist']" routerLinkActive="active">
+        <i class="material-icons option-icon">checklist</i>
         Realizar Checklist
       </a>
 

@@ -72,6 +72,7 @@ export class ChecklistController {
           [Op.notIn]: checklists.map((checklist) => checklist.activity_id),
         },
       },
+      order: [['activity_id', 'ASC']],
     });
   }
 

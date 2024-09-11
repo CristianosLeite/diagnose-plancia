@@ -31,7 +31,7 @@ export class ActivityController {
   }
 
   public async all(req: Request, res: Response) {
-    await Activity.findAll().then((activities) => {
+    await Activity.findAll({order: [['activity_id', 'ASC']]}).then((activities) => {
       res.json(activities);
     });
   }
