@@ -9,14 +9,14 @@ import { FormsModule } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ActivityDialogComponent } from '../modal/activity-dialog/activity-dialog.component';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { ActivityService } from '../../services/activity.service';
+import { ActivityService } from '../../services/activity/activity.service';
 import { SopModalComponent } from '../modal/sop-modal/sop-modal.component';
 import { PopupConfirmationComponent } from '../modal/popup-confirmation/popup-confirmation.component';
-import { ChecklistService } from '../../services/checklist.service';
-import { TimeDateService } from '../../services/time-date.service';
+import { ChecklistService } from '../../services/checklist/checklist.service';
+import { TimeDateService } from '../../services/time-date/time-date.service';
 import { Interval } from '../../interfaces/activity.interface';
 import { Checklist } from '../../interfaces/checklist.interface';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../services/auth/auth.service';
 import { User } from '../../interfaces/user.interface';
 
 @Component({

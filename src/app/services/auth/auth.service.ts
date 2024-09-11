@@ -1,11 +1,11 @@
 import { Injectable, Output, EventEmitter } from '@angular/core';
-import { UserService } from './user.service';
-import { ShiftWork, User } from '../interfaces/user.interface';
+import { UserService } from '../user/user.service';
+import { ShiftWork, User } from '../../interfaces/user.interface';
 import { Observable, of } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
 import { ActivatedRouteSnapshot } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { AuthComponent } from '../components/auth/auth.component';
+import { AuthComponent } from '../../components/auth/auth.component';
 import { Router } from '@angular/router';
 
 @Injectable({

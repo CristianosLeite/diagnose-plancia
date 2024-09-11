@@ -13,8 +13,8 @@ import { User, Permissions } from '../../../interfaces/user.interface';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
-import { UserService } from '../../../services/user.service';
-import { SnackbarService } from './../../../services/snack-bar.service';
+import { UserService } from '../../../services/user/user.service';
+import { SnackbarService } from './../../../services/snack-bar/snack-bar.service';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({

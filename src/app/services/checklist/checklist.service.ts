@@ -1,7 +1,7 @@
 import { Injectable, Output, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Checklist } from '../interfaces/checklist.interface';
-import { Activity } from '../interfaces/activity.interface';
+import { Checklist } from '../../interfaces/checklist.interface';
+import { Activity } from '../../interfaces/activity.interface';
 
 @Injectable({
   providedIn: 'root'

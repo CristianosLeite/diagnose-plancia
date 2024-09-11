@@ -3,13 +3,13 @@ import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Activity } from '../../../interfaces/activity.interface';
-import { ActivityService } from '../../../services/activity.service';
+import { ActivityService } from '../../../services/activity/activity.service';
 import { MatIconButton } from '@angular/material/button';
 import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
-import { TimeDateService } from '../../../services/time-date.service';
-import { ChecklistService } from '../../../services/checklist.service';
-import { AuthService } from '../../../services/auth.service';
+import { TimeDateService } from '../../../services/time-date/time-date.service';
+import { ChecklistService } from '../../../services/checklist/checklist.service';
+import { AuthService } from '../../../services/auth/auth.service';
 
 @Component({
   selector: 'app-activity-table',

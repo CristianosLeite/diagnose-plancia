@@ -10,8 +10,8 @@ import { MatSelect } from '@angular/material/select';
 import { MatOption } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
-import { AuthService } from '../../services/auth.service';
-import { SnackbarService } from '../../services/snack-bar.service';
+import { AuthService } from '../../services/auth/auth.service';
+import { SnackbarService } from '../../services/snack-bar/snack-bar.service';
 
 @Component({
   selector: 'app-auth',

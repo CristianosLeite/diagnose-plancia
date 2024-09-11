@@ -1,4 +1,4 @@
-import { SnackbarService } from '../../../services/snack-bar.service';
+import { SnackbarService } from '../../../services/snack-bar/snack-bar.service';
 import { Component, ChangeDetectorRef, Input, OnInit } from '@angular/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import {
@@ -15,13 +15,13 @@ import { NgFor, NgIf } from '@angular/common';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { UploadService } from '../../../services/upload.service';
+import { UploadService } from '../../../services/upload/upload.service';
 import { ActivatedRoute } from '@angular/router';
-import { ActivityService } from '../../../services/activity.service';
+import { ActivityService } from '../../../services/activity/activity.service';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { TimeDateService } from '../../../services/time-date.service';
+import { TimeDateService } from '../../../services/time-date/time-date.service';
 import { Interval } from '../../../interfaces/activity.interface';
-import { AuthService } from '../../../services/auth.service';
+import { AuthService } from '../../../services/auth/auth.service';
 import { User } from '../../../interfaces/user.interface';
 
 @Component({
