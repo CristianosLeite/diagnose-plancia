@@ -90,7 +90,8 @@ export class MainComponent {
       time_spent: this.timeDateService.formatISO8601(activity.time_spent),
       status: activity.status,
       action_plan: activity.action_plan,
-      user_id: this.authenticatedUser.user_id
+      user_id: this.authenticatedUser.user_id,
+      shift_work: this.authenticatedUser.shift_work
     };
   }
 
@@ -107,7 +108,7 @@ export class MainComponent {
           .formatISO8601(checklist.time_spent as unknown as Interval);
         this.activityService.updateActivity(activity).subscribe(() => {
           this.checklistService.updateChecklist(checklist).subscribe(() => {
-            this.activityService.retrieveAllActivities();
+            this.checklistService.retrievePendingChecklist(this.authenticatedUser.shift_work);
             dialogRef.close();
           });
         });
@@ -117,7 +118,11 @@ export class MainComponent {
   openPopupConfirmation(activity: Activity): boolean {
     const dialogRef = this.dialog.open(PopupConfirmationComponent, {
       width: '400px',
-      data: activity
+      data: {
+        activity: activity,
+        title: 'Confirmar atividade',
+        message: 'Deseja confirmar a atividade?'
+      }
     });
 
     const onCancelSubscription = dialogRef.componentInstance.onCancel.subscribe(() => {
