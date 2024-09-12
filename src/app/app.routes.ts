@@ -3,7 +3,6 @@ import { MainComponent } from './components/main/main.component';
 import { ActivityTableComponent } from './components/activity/activity-table/activity-table.component';
 import { ActivityCreateComponent } from './components/activity/activity-create/activity-create.component';
 import { UserCreateComponent } from './components/user/user-create/user-create.component';
-import { UserEditComponent } from './components/user/user-edit/user-edit.component';
 import { HistoryComponent } from './components/history/history.component';
 import { AuthService } from './services/auth/auth.service';
 import { NotAuthenticatedComponent } from './components/not-authenticated/not-authenticated.component';
@@ -36,11 +35,6 @@ export const routes: Routes = [
         path: 'users-create', component: UserCreateComponent,
         canActivate: [AuthService],
         data: { permission: 'create_users' },
-      },
-      {
-        path: 'users/edit', component: UserEditComponent,
-        canActivate: [AuthService],
-        data: { permission: 'edit_users' },
       },
       {
         path: 'history', component: HistoryComponent,
