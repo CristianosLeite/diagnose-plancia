@@ -1,10 +1,10 @@
 import { Component, Input } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Checklist } from '../../interfaces/checklist.interface';
-import { ChecklistService } from '../../services/checklist.service';
-import { ActivityService } from '../../services/activity.service';
-import { UserService } from '../../services/user.service';
-import { TimeDateService } from '../../services/time-date.service';
+import { ChecklistService } from '../../services/checklist/checklist.service';
+import { ActivityService } from '../../services/activity/activity.service';
+import { UserService } from '../../services/user/user.service';
+import { TimeDateService } from '../../services/time-date/time-date.service';
 import { forkJoin } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import { DatePipe } from '@angular/common';

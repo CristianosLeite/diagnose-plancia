@@ -9,14 +9,14 @@ import { FormsModule } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ActivityDialogComponent } from '../modal/activity-dialog/activity-dialog.component';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { ActivityService } from '../../services/activity.service';
+import { ActivityService } from '../../services/activity/activity.service';
 import { SopModalComponent } from '../modal/sop-modal/sop-modal.component';
 import { PopupConfirmationComponent } from '../modal/popup-confirmation/popup-confirmation.component';
-import { ChecklistService } from '../../services/checklist.service';
-import { TimeDateService } from '../../services/time-date.service';
+import { ChecklistService } from '../../services/checklist/checklist.service';
+import { TimeDateService } from '../../services/time-date/time-date.service';
 import { Interval } from '../../interfaces/activity.interface';
 import { Checklist } from '../../interfaces/checklist.interface';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../services/auth/auth.service';
 import { User } from '../../interfaces/user.interface';
 import { ClockComponent } from '../clock/clock.component';
 
@@ -92,7 +92,8 @@ export class MainComponent {
       time_spent: this.timeDateService.formatISO8601(activity.time_spent),
       status: activity.status,
       action_plan: activity.action_plan,
-      user_id: this.authenticatedUser.user_id
+      user_id: this.authenticatedUser.user_id,
+      shift_work: this.authenticatedUser.shift_work
     };
   }
 
@@ -109,7 +110,7 @@ export class MainComponent {
           .formatISO8601(checklist.time_spent as unknown as Interval);
         this.activityService.updateActivity(activity).subscribe(() => {
           this.checklistService.updateChecklist(checklist).subscribe(() => {
-            this.activityService.retrieveAllActivities();
+            this.checklistService.retrievePendingChecklist(this.authenticatedUser.shift_work);
             dialogRef.close();
           });
         });
@@ -119,7 +120,11 @@ export class MainComponent {
   openPopupConfirmation(activity: Activity): boolean {
     const dialogRef = this.dialog.open(PopupConfirmationComponent, {
       width: '400px',
-      data: activity
+      data: {
+        activity: activity,
+        title: 'Confirmar atividade',
+        message: 'Deseja confirmar a atividade?'
+      }
     });
 
     const onCancelSubscription = dialogRef.componentInstance.onCancel.subscribe(() => {

@@ -5,7 +5,7 @@ import { ActivityCreateComponent } from './components/activity/activity-create/a
 import { UserCreateComponent } from './components/user/user-create/user-create.component';
 import { UserEditComponent } from './components/user/user-edit/user-edit.component';
 import { HistoryComponent } from './components/history/history.component';
-import { AuthService } from './services/auth.service';
+import { AuthService } from './services/auth/auth.service';
 import { NotAuthenticatedComponent } from './components/not-authenticated/not-authenticated.component';
 import { UserListComponent } from './components/user/user-list/user-list.component';
 
@@ -17,7 +17,7 @@ export const routes: Routes = [
         path: 'not-authenticated', component: NotAuthenticatedComponent
       },
       {
-        path: 'checklist', component: ActivityTableComponent,
+        path: 'activity-table/:context', component: ActivityTableComponent,
         canActivate: [AuthService],
         data: { permission: 'create_checklist' },
       },
@@ -81,19 +81,19 @@ export const routes: Routes = [
       },
       // Checklists api routes
       {
-        path: 'api/cheklists/create', redirectTo: 'checklist'
+        path: 'api/cheklists/create', redirectTo: 'activity-table'
       },
       {
-        path: 'api/cheklists/one', redirectTo: 'checklist'
+        path: 'api/cheklists/one', redirectTo: 'activity-table'
       },
       {
-        path: 'api/cheklists/all', redirectTo: 'checklist'
+        path: 'api/cheklists/all', redirectTo: 'activity-table'
       },
       {
-        path: 'api/cheklists/update', redirectTo: 'checklist'
+        path: 'api/cheklists/update', redirectTo: 'activity-table'
       },
       {
-        path: 'api/cheklists/delete', redirectTo: 'checklist'
+        path: 'api/cheklists/delete', redirectTo: 'activity-table'
       }
     ]
   }

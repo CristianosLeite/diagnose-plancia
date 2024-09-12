@@ -22,6 +22,11 @@ Checklist.init(
       type: DataTypes.UUID,
       allowNull: false,
     },
+    shift_work:{
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
+    },
     status:{
       type: DataTypes.CHAR(2),
       allowNull: false,

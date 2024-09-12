@@ -23,10 +23,10 @@
       <mat-label>Turno</mat-label>
       <mat-select [(ngModel)]="user.shift_work" name="shift" placeholder="Turno" required="true">
         <mat-option
-          *ngFor="let shift of ['1°', '2°', '3°']"
+          *ngFor="let shift of [1, 2, 3]"
           [value]="shift"
         >
-          {{ shift }}
+          {{ shift === 1 ? '1º Turno' : shift === 2 ? '2º Turno' : '3º Turno' }}
         </mat-option>
       </mat-select>
     </mat-form-field>

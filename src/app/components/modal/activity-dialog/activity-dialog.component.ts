@@ -12,7 +12,7 @@ import { MainComponent } from '../../main/main.component';
 import { MatDialog } from '@angular/material/dialog';
 import { NgFor } from '@angular/common';
 import { ActionDialogComponent } from '../action-dialog/action-dialog.component';
-import { ActivityService } from '../../../services/activity.service';
+import { ActivityService } from '../../../services/activity/activity.service';
 
 @Component({
   selector: 'app-activity-dialog',
