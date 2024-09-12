@@ -4,17 +4,17 @@ import { Directive, ElementRef, Input, OnInit, Renderer2 } from '@angular/core';
   selector: '[appCaption]'
 })
 export class CaptionDirective implements OnInit {
-  @Input('appCaption') permission: string = '';
+  @Input('appCaption') item: string = '';
   @Input() showText: boolean = true;
   private static generatedColors: { [key: string]: string } = {};
 
   constructor(private el: ElementRef, private renderer: Renderer2) {}
 
   ngOnInit() {
-    if (!CaptionDirective.generatedColors[this.permission]) {
-      CaptionDirective.generatedColors[this.permission] = this.generateLightColor();
+    if (!CaptionDirective.generatedColors[this.item]) {
+      CaptionDirective.generatedColors[this.item] = this.generateLightColor();
     }
-    const color = CaptionDirective.generatedColors[this.permission];
+    const color = CaptionDirective.generatedColors[this.item];
 
     // Create a circle with the color
     const circle = this.renderer.createElement('span');
