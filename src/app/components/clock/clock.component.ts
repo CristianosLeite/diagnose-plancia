@@ -1,24 +1,46 @@
-import { Component, OnInit } from '@angular/core';
+import { DatePipe, isPlatformBrowser } from '@angular/common';
+import { Component, OnDestroy, AfterViewInit, signal } from '@angular/core';
+import { Subscription, timer } from 'rxjs';
+import { map, share } from 'rxjs/operators';
+import { Inject, PLATFORM_ID } from '@angular/core';
 
 @Component({
   selector: 'app-clock',
   standalone: true,
-  imports: [],
+  imports: [DatePipe],
   templateUrl: './clock.component.html',
   styleUrl: './clock.component.scss'
 })
-export class ClockComponent implements OnInit {
-  currentTime: string = '';
+export class ClockComponent implements AfterViewInit, OnDestroy {
+  date = new Date();
+  localeDateString = this.date.toLocaleDateString();
+  localeTimeString = this.date.toLocaleTimeString();
   intervalId: any;
+  subscription: Subscription | undefined;
+  isBrowser = signal(false);
 
-  ngOnInit(): void {
-    this.updateTime();
-    // Atualiza a cada segundo
-    this.intervalId = setInterval(() => this.updateTime(), 1000);
+  constructor(@Inject(PLATFORM_ID) platformId: object) {
+    this.isBrowser.set(isPlatformBrowser(platformId));
   }
 
-  updateTime(): void {
-    const now = new Date();
-    this.currentTime = now.toLocaleTimeString(); // Formata a hora de acordo com a localidade
+  ngAfterViewInit() {
+    if (this.isBrowser()) {
+      this.subscription = timer(0, 1000)
+        .pipe(
+          map(() => new Date()),
+          share()
+        )
+        .subscribe(time => {
+          this.date = time;
+          this.localeDateString = this.date.toLocaleDateString();
+          this.localeTimeString = this.date.toLocaleTimeString();
+        });
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 }

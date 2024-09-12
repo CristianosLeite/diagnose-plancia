@@ -1,8 +1,7 @@
-// user-list.component.ts
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { UserService } from '../../../services/user.service';
-import { User } from '../../../interfaces/user.interface';
+import { User, Permissions } from '../../../interfaces/user.interface';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -11,24 +10,26 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatMenuModule } from '@angular/material/menu';
-import { LegendModule } from '../../legend/legend/legend.module';
-import { ClockComponent } from '../../clock/clock.component';
-import { NgFor, NgIf, CommonModule} from '@angular/common';
+import { CaptionModule } from '../../../directives/caption/caption.module';
+import { NgFor, NgIf, NgStyle } from '@angular/common';
+import { TooltipModule } from '../../tooltip/tooltip.module';
 
 @Component({
   selector: 'app-user-list',
   standalone: true,
   imports: [
-    NgIf, NgFor, CommonModule,
-    ClockComponent,
-    LegendModule,
+    NgIf,
+    NgFor,
+    NgStyle,
+    TooltipModule,
+    CaptionModule,
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
     MatButtonModule,
     MatIconModule,
     MatSnackBarModule,
-    MatMenuModule,
+    MatMenuModule
   ],
   templateUrl: './user-list.component.html',
   styleUrls: ['./user-list.component.scss']
@@ -37,7 +38,7 @@ export class UserListComponent implements OnInit {
   displayedColumns: string[] = ['badge_number', 'name', 'origin', 'company', 'plant', 'permissions', 'options'];
   dataSource = new MatTableDataSource<User>();
 
-  constructor(private userService: UserService, private snackBar: MatSnackBar) {}
+  constructor(private userService: UserService, private snackBar: MatSnackBar) { }
 
   ngOnInit() {
     this.userService.retrieveAllUsers().subscribe((users: User[]) => {
@@ -56,15 +57,33 @@ export class UserListComponent implements OnInit {
     }
   }
 
-  // Objeto de mapeamento de cores para permissões
-  permissionColors: { [key: string]: string } = {
-    'create_users': 'red',
-    'view_users': 'green',
-    'edit_users': 'blue',
-    'view_history': 'yellow',
-    'create_checklist': 'white',
-    'create_activity': 'orange',
-    'reports': 'purple'
-  };
+  getALLPermissions() {
+    if (!this.dataSource.data) return [];
+    let permissions: Permissions[] = [];
+    this.dataSource.data.forEach(user => {
+      if (user.permissions) {
+        permissions = [
+          ...permissions,
+          ...user.permissions
+            .map(permission => permission as Permissions)
+        ];
+      }
+    });
+    return [...new Set(permissions)];
+  }
 
+  handlePermissions(permission: string) {
+    const value: { [key: string]: string } = {
+      'create_users': 'Cadastrar usuários',
+      'view_users': 'Visualizar usuários cadastrados',
+      'edit_users': 'Editar usuários',
+      'view_history': 'Visualizar histórico de atividades',
+      'create_checklist': 'Realizar checklist',
+      'create_activity': 'Cadastrar nova atividade',
+      'view_activity': 'Visualizar atividades cadastradas',
+      'reports': 'Exportar Relatórios'
+    };
+
+    return value[permission];
+  }
 }
