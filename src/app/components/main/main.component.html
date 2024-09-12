@@ -52,7 +52,7 @@
 
       <!--Listar usuários-->
       <a class="sub-option" *ngIf="expandedUser && authenticatedUser.permissions.includes('view_users')"
-        (click)="notImplemented()" routerLinkActive="active">
+        routerLink="users" routerLinkActive="active">
         <i class="material-icons option-icon">people</i>
         Listar usuários
       </a>
@@ -87,5 +87,6 @@
 
   <div class="child-container">
     <router-outlet></router-outlet>
+    <app-clock></app-clock>
   </div>
 </mat-drawer-container>

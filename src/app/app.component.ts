@@ -12,6 +12,7 @@ import { AuthService } from './services/auth.service';
 })
 export class AppComponent {
   title = 'diagnose-plancia';
+
   constructor(private auth: AuthService) {
     this.openLoginDialog();
   }

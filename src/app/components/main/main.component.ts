@@ -18,6 +18,7 @@ import { Interval } from '../../interfaces/activity.interface';
 import { Checklist } from '../../interfaces/checklist.interface';
 import { AuthService } from '../../services/auth.service';
 import { User } from '../../interfaces/user.interface';
+import { ClockComponent } from '../clock/clock.component';
 
 @Component({
   selector: 'app-main',
@@ -31,6 +32,7 @@ import { User } from '../../interfaces/user.interface';
     MatSidenavModule,
     MatFormField,
     FormsModule,
+    ClockComponent,
     NgIf,
   ],
   templateUrl: './main.component.html',
