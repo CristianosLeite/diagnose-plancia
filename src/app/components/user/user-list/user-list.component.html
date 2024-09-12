@@ -54,7 +54,7 @@
               <i class="material-icons">edit</i>
             </div>
           </button>
-          <button class="option" mat-menu-item>
+          <button (click)="openModalConfirmation($event, element)" class="option" mat-menu-item>
             <div class="option-content delete">
               <span class="delete">Excluir</span>
               <i class="material-icons">delete</i>
@@ -74,6 +74,17 @@
       <span [appCaption]="permission"> {{ handlePermissions(permission) }}</span>
     </div>
   </div>
+  <!-- Modal de Confirmação -->
+   <div *ngIf="showModal" class="modal">
+    <div class="modal-content">
+      <h2>Excluir usuário</h2>
+      <p>Tem certeza que deseja excluir o usuário <strong>{{ selectedElement?.name }}</strong>?</p>
+      <div class="modal-buttons">
+        <button mat-raised-button color="warn" (click)="confirmDeletion()">Sim</button>
+        <button mat-raised-button (click)="closeModal()">Não</button>
+      </div>
+    </div>
+   </div>
 } @else {
   <div class="display-content-center">
     <h1>Nenhum usuário cadastrado</h1>
