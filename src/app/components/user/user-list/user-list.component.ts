@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { UserService } from '../../../services/user.service';
+import { UserService } from '../../../services/user/user.service';
 import { User, Permissions } from '../../../interfaces/user.interface';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
