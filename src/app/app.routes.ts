@@ -33,7 +33,7 @@ export const routes: Routes = [
         data: { permission: 'view_users' },
       },
       {
-        path: 'users/create', component: UserCreateComponent,
+        path: 'users-create', component: UserCreateComponent,
         canActivate: [AuthService],
         data: { permission: 'create_users' },
       },
@@ -49,7 +49,7 @@ export const routes: Routes = [
       },
       // Users api routes
       {
-        path: 'api/users/create', redirectTo: 'user'
+        path: 'api/users-create', redirectTo: 'user'
       },
       {
         path: 'api/users/one', redirectTo: 'user'
