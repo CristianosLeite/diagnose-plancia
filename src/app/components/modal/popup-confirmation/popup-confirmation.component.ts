@@ -17,16 +17,22 @@ import { ActivityDialogComponent } from '../activity-dialog/activity-dialog.comp
 })
 export class PopupConfirmationComponent {
   @Input() activity = {} as Activity;
-  @Input() title = 'Confirmar atividade';
-  @Input() message = 'Deseja confirmar a atividade?';
+  @Input() title = 'Confirmar ação';
+  @Input() message = 'Deseja confirmar a ação?';
   @Output() onConfirm = new EventEmitter<Activity>();
   @Output() onCancel = new EventEmitter<void>();
 
   constructor(
     public dialogRef: MatDialogRef<ActivityDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: Activity,
+    @Inject(MAT_DIALOG_DATA) public data: {
+      activity: Activity,
+      title: string,
+      message: string
+    },
   ) {
-    this.activity = data;
+    this.activity = data.activity
+    this.title = data.title
+    this.message = data.message
   }
 
   onConfirmClick(): void {

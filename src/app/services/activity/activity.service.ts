@@ -1,8 +1,8 @@
 import { Injectable, Output, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Activity } from '../interfaces/activity.interface';
-import { TimeDateService } from './time-date.service';
-import { Interval } from '../interfaces/activity.interface';
+import { Activity } from '../../interfaces/activity.interface';
+import { TimeDateService } from '../time-date/time-date.service';
+import { Interval } from '../../interfaces/activity.interface';
 
 @Injectable({
   providedIn: 'root'

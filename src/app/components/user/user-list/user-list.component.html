@@ -1,0 +1,83 @@
+@if (dataSource.data.length > 0) {
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+    <!-- Nº de matrícula -->
+    <ng-container matColumnDef="badge_number">
+      <th mat-header-cell *matHeaderCellDef> Matrícula </th>
+      <td mat-cell *matCellDef="let element"> {{element.badge_number}} </td>
+    </ng-container>
+    <!-- Nome -->
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> Nome </th>
+      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+    </ng-container>
+
+    <!-- Origem -->
+    <ng-container matColumnDef="origin">
+      <th mat-header-cell *matHeaderCellDef> Origem </th>
+      <td mat-cell *matCellDef="let element"> {{element.origin}} </td>
+    </ng-container>
+
+    <!-- Empresa -->
+    <ng-container matColumnDef="company">
+      <th mat-header-cell *matHeaderCellDef> Empresa </th>
+      <td mat-cell *matCellDef="let element"> {{element.company}} </td>
+    </ng-container>
+
+    <!-- Planta -->
+    <ng-container matColumnDef="plant">
+      <th mat-header-cell *matHeaderCellDef> Planta </th>
+      <td mat-cell *matCellDef="let element"> {{element.plant}} </td>
+    </ng-container>
+
+    <!-- Permissões -->
+    <ng-container matColumnDef="permissions">
+      <th mat-header-cell *matHeaderCellDef> Permissões </th>
+      <td mat-cell *matCellDef="let user">
+        <div class="permissions">
+          <div *ngFor="let permission of user.permissions">
+            <span [appCaption]="permission" [showText]="false" [tooltip]="handlePermissions(permission)">{{ permission }}</span>
+          </div>
+        </div>
+      </td>
+    </ng-container>
+
+    <!-- Ações (Editar/Excluir) -->
+     <ng-container matColumnDef="options">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let element">
+        <mat-menu #menu="matMenu">
+          <button class="option" mat-menu-item>
+            <div class="option-content edit">
+              <span class="edit">Editar</span>
+              <i class="material-icons">edit</i>
+            </div>
+          </button>
+          <button class="option" mat-menu-item>
+            <div class="option-content delete">
+              <span class="delete">Excluir</span>
+              <i class="material-icons">delete</i>
+            </div>
+          </button>
+        </mat-menu>
+        <button mat-icon-button [matMenuTriggerFor]="menu" (click)="$event.stopPropagation()">
+          <i class="material-icons">more_vert</i>
+        </button>
+      </td>
+     </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  <div class="permissions fixed">
+    <div *ngFor="let permission of getALLPermissions()">
+      <span [appCaption]="permission"> {{ handlePermissions(permission) }}</span>
+    </div>
+  </div>
+} @else {
+  <div class="display-content-center">
+    <h1>Nenhum usuário cadastrado</h1>
+    <p>Clique no botão abaixo para adicionar um novo usuário</p>
+    <button mat-raised-button color="primary" routerLink="/create-user">Adicionar usuário</button>
+  </div>
+}

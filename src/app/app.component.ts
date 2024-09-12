@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { FooterComponent } from './components/footer/footer.component';
-import { AuthService } from './services/auth.service';
+import { AuthService } from './services/auth/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -12,6 +12,7 @@ import { AuthService } from './services/auth.service';
 })
 export class AppComponent {
   title = 'diagnose-plancia';
+
   constructor(private auth: AuthService) {
     this.openLoginDialog();
   }

@@ -1,0 +1,20 @@
+.permissions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  max-width: 900px;
+  gap: 10px;
+  z-index: 1000;
+}
+
+.permissions span {
+  align-items: center;
+}
+
+.fixed {
+  position: fixed;
+  bottom: 0;
+  margin-bottom: 8vh;
+  left: 2;
+  width: 100%;
+}

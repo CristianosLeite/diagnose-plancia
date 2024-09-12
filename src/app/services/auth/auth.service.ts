@@ -1,18 +1,18 @@
 import { Injectable, Output, EventEmitter } from '@angular/core';
-import { UserService } from './user.service';
-import { ShiftWork, User } from '../interfaces/user.interface';
+import { UserService } from '../user/user.service';
+import { ShiftWork, User } from '../../interfaces/user.interface';
 import { Observable, of } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
 import { ActivatedRouteSnapshot } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { AuthComponent } from '../components/auth/auth.component';
+import { AuthComponent } from '../../components/auth/auth.component';
 import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  authenticatedUser = '';
+  loggedUser = {} as User;
   @Output() authChanged: EventEmitter<boolean> = new EventEmitter();
   @Output() userChanged: EventEmitter<User> = new EventEmitter();
 
@@ -33,14 +33,14 @@ export class AuthService {
     return this.userService.getUserByBadgeNumber(badgeNumber).pipe(
       switchMap(user => {
         if (!user) {
-          this.authenticatedUser = '';
+          this.loggedUser = {} as User;
           this.authChanged.emit(false);
           this.userChanged.emit({} as User);
           return of(false);
         }
 
         user.shift_work = shiftWork;
-        this.authenticatedUser = user.user_id;
+        this.loggedUser = user;
         this.authChanged.emit(true);
         this.userChanged.emit(user);
         return of(true);
@@ -62,12 +62,12 @@ export class AuthService {
       return of(false);
     }
 
-    if(!this.authenticatedUser) {
+    if(!this.loggedUser.user_id) {
       this.openLoginDialog();
       return of(false);
     }
 
-    return this.userService.retrieveUser(this.authenticatedUser).pipe(
+    return this.userService.retrieveUser(this.loggedUser.user_id).pipe(
       switchMap(user => {
         if (!user.permissions) {
           this.router.navigate(['/not-authenticated']);
@@ -89,7 +89,7 @@ export class AuthService {
   }
 
   logout(): void {
-    this.authenticatedUser = '';
+    this.loggedUser = {} as User;
     this.authChanged.emit(false);
     this.userChanged.emit({} as User);
     this.router.navigate(['/']);

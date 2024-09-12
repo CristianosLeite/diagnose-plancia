@@ -29,10 +29,17 @@
         Cadastrar atividade
       </a>
 
+      <!--Listar atividades-->
+      <a class="sub-option" *ngIf="expandedActivity && authenticatedUser.permissions.includes('view_activity')"
+        [routerLink]="['activity-table', 'activity']" routerLinkActive="active">
+        <i class="material-icons option-icon">list</i>
+        Listar atividades
+      </a>
+
       <!--Checklist-->
       <a class="sub-option" *ngIf="expandedActivity && authenticatedUser.permissions.includes('create_checklist')"
-        routerLink="checklist" routerLinkActive="active">
-        <i class="material-icons option-icon">assignment</i>
+        [routerLink]="['activity-table', 'checklist']" routerLinkActive="active">
+        <i class="material-icons option-icon">checklist</i>
         Realizar Checklist
       </a>
 
@@ -45,14 +52,14 @@
 
       <!--Cadastro de usuários-->
       <a class="sub-option" *ngIf="expandedUser && authenticatedUser.permissions.includes('create_users')"
-        routerLink="users/create" routerLinkActive="active">
+        routerLink="users-create" routerLinkActive="active">
         <i class="material-icons option-icon">person_add</i>
         Cadastrar usuário
       </a>
 
       <!--Listar usuários-->
       <a class="sub-option" *ngIf="expandedUser && authenticatedUser.permissions.includes('view_users')"
-        (click)="notImplemented()" routerLinkActive="active">
+        routerLink="users" routerLinkActive="active">
         <i class="material-icons option-icon">people</i>
         Listar usuários
       </a>
@@ -87,5 +94,6 @@
 
   <div class="child-container">
     <router-outlet></router-outlet>
+    <app-clock></app-clock>
   </div>
 </mat-drawer-container>

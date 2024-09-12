@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Interval } from '../interfaces/activity.interface';
+import { Interval } from '../../interfaces/activity.interface';
 
 @Injectable({
   providedIn: 'root'

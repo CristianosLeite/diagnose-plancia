@@ -2,7 +2,7 @@ export type Permissions = 'create_users' | 'view_users' | 'edit_users' | 'view_h
 
 export type Context = 'create' | 'edit';
 
-export type ShiftWork = '1°' | '2°' | '3°' | '4°';
+export type ShiftWork = 1 | 2 | 3;
 
 export interface User {
   user_id: string;

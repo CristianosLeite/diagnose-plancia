@@ -1,5 +1,7 @@
 import { Router, Request, Response } from 'express';
 import Checklist from '../models/checklist.model';
+import Activity from '../models/activity.model';
+import { Op } from 'sequelize';
 
 export class ChecklistController {
   private router: Router;
@@ -8,7 +10,7 @@ export class ChecklistController {
     this.router = Router();
     this.router.post('/create', this.create).bind(this);
     this.router.get('/all', this.all.bind(this));
-    this.router.get('/one', this.retrieve.bind(this));
+    this.router.get('/pending', this.retrievePendingChecklist.bind(this));
     this.router.put('/update', this.update.bind(this));
     this.router.delete('/delete', this.delete.bind(this));
   }
@@ -38,14 +40,39 @@ export class ChecklistController {
     });
   }
 
-  public async retrieve(req: Request, res: Response) {
-    const id = req.query['checklist_id'];
+  public async retrievePendingChecklist(req: Request, res: Response) {
+    const shiftWork = req.query['shift_work'];
 
-    if (!id)
-      res.status(400).send('Missing checklist id');
+    if (!shiftWork)
+      return res.status(400).send('Missing shift work');
 
-    await Checklist.findOne({ where: { checklist_id: id } }).then((checklist) => {
-      res.json(checklist);
+    const todayChecklists = await this.getTodaysChecklists(shiftWork.toString());
+    const activities = await this.getPendingActivities(todayChecklists);
+
+    res.json(activities);
+    return;
+  }
+
+  private async getTodaysChecklists(shiftWork: string) {
+    return await Checklist.findAll({
+      where: {
+        shift_work: shiftWork,
+        createdAt: {
+          [Op.gte]: new Date().setHours(0, 0, 0, 0),
+          [Op.lt]: new Date().setHours(23, 59, 59, 999),
+        },
+      },
+    });
+  }
+
+  private async getPendingActivities(checklists: Checklist[]) {
+    return await Activity.findAll({
+      where: {
+        activity_id: {
+          [Op.notIn]: checklists.map((checklist) => checklist.activity_id),
+        },
+      },
+      order: [['activity_id', 'ASC']],
     });
   }
 

@@ -3,11 +3,15 @@ import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Activity } from '../../../interfaces/activity.interface';
-import { ActivityService } from '../../../services/activity.service';
+import { ActivityService } from '../../../services/activity/activity.service';
 import { MatIconButton } from '@angular/material/button';
 import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
-import { Router, RouterLink } from '@angular/router';
-import { TimeDateService } from '../../../services/time-date.service';
+import { Router, RouterLink, ActivatedRoute } from '@angular/router';
+import { TimeDateService } from '../../../services/time-date/time-date.service';
+import { ChecklistService } from '../../../services/checklist/checklist.service';
+import { AuthService } from '../../../services/auth/auth.service';
+import { MatDialog } from '@angular/material/dialog';
+import { PopupConfirmationComponent } from '../../modal/popup-confirmation/popup-confirmation.component';
 
 @Component({
   selector: 'app-activity-table',
@@ -24,57 +28,80 @@ import { TimeDateService } from '../../../services/time-date.service';
   styleUrl: './activity-table.component.scss'
 })
 export class ActivityTableComponent implements OnInit {
-  dataLength = 0;
+  loggedUser = this.auth.loggedUser;
   ELEMENT_DATA = this.activityService.ELEMENT_DATA;
-  displayedColumns: string[] = ['id', 'point', 'description', 'sop', 'estimatedTime', 'frequency', 'select', 'options'];
+  displayedColumns: string[] = ['id', 'point', 'description', 'sop', 'estimatedTime', 'frequency'];
   @Input() dataSource = new MatTableDataSource<Partial<Activity>>(this.ELEMENT_DATA);
   @Input() selection = new SelectionModel<Partial<Activity>>(true, []);
-  @Input() activity = {} as Activity;
+  @Input() context = 'activity';
 
   constructor(
-    private activityService: ActivityService,
-    private router: Router,
     public timeDateService: TimeDateService,
+    public dialog: MatDialog,
+    private activityService: ActivityService,
+    private checklistService: ChecklistService,
+    private auth: AuthService,
+    private router: Router,
+    private ActivatedRoute: ActivatedRoute,
     private cdr: ChangeDetectorRef
   ) {
     this.activityService.activityCanceled.subscribe((activity: Partial<Activity>) => {
       this.selection.deselect(activity);
     });
+    this.auth.userChanged.subscribe((user) => {
+      this.loggedUser = user;
+    });
     this.activityService.activitiesChanged.subscribe((data: Activity[]) => {
-      this.dataLength = data.length;
-      const today = new Date();
-      const todayDay = today.getDate();
-      const todayMonth = today.getMonth();
-      const todayWeekday = today.toLocaleString('en-US', { weekday: 'long' });
-
-      // Filter activities that have already been checked today
-      data = data.filter((activity: Activity) => new Date(activity.last_checked).getDate() !== todayDay);
-
-      //Filter activities based on frequency
-      data = data.filter((activity: Activity) => {
-        switch (activity.frequency) {
-          case 'Daily':
-            return true;
-          case 'Weekly':
-            return activity.day_to_check === todayWeekday;
-          case 'Monthly':
-            return new Date(activity.date).getDate() === todayDay;
-          case 'Yearly':
-            const activityDate = new Date(activity.day_to_check);
-            return activityDate.getDate() === todayDay && activityDate.getMonth() === todayMonth;
-          default:
-            return false;
-        }
-      });
-
       this.dataSource = new MatTableDataSource<Partial<Activity>>(data);
       this.ELEMENT_DATA = data;
+    });
+    this.checklistService.checklistChanged.subscribe((data: Activity[]) => {
+      this.ELEMENT_DATA = data;
+      this.filterActivities(data);
       this.cdr.detectChanges();
+    });
+    this.ActivatedRoute.params.subscribe((params) => {
+      this.context = params['context'];
+      this.fetchDataSource();
     });
   }
 
   ngOnInit(): void {
-    this.activityService.retrieveAllActivities();
+    this.fetchDataSource();
+  }
+
+  private fetchDataSource() {
+    if (this.context === 'activity') {
+      this.displayedColumns = ['id', 'point', 'description', 'sop', 'options'];
+      this.activityService.retrieveAllActivities();
+    } else if (this.context === 'checklist') {
+      this.displayedColumns = ['id', 'point', 'description', 'sop', 'estimatedTime', 'frequency', 'select'];
+      this.checklistService.retrievePendingChecklist(this.loggedUser.shift_work);
+    }
+  }
+
+  private filterActivities(data: Activity[]) {
+    const today = new Date();
+    const todayDay = today.getDate();
+    const todayMonth = today.getMonth();
+    const todayWeekday = today.toLocaleString('en-US', { weekday: 'long' });
+    this.ELEMENT_DATA = data.filter((activity: Activity) => {
+      switch (activity.frequency) {
+        case 'Daily':
+          return true;
+        case 'Weekly':
+          return activity.day_to_check === todayWeekday;
+        case 'Monthly':
+          return new Date(activity.date).getDate() === todayDay;
+        case 'Yearly':
+          const activityDate = new Date(activity.day_to_check);
+          return activityDate.getDate() === todayDay && activityDate.getMonth() === todayMonth;
+        default:
+          return false;
+      }
+    });
+    this.dataSource = new MatTableDataSource<Partial<Activity>>(this.ELEMENT_DATA);
+    this.cdr.detectChanges();
   }
 
   /** Whether the number of selected elements matches the total number of rows. */
@@ -118,9 +145,34 @@ export class ActivityTableComponent implements OnInit {
     ]);
   }
 
-  deleteActivity(event: any, row: Activity) {
+  private deleteActivity(activity: Activity) {
+    this.activityService.deleteActivity(activity.activity_id.toString()).subscribe(() => {
+      this.activityService.retrieveAllActivities();
+    });
+  }
+
+  openPopupConfirmation(event: any, activity: Activity): boolean {
     event.stopPropagation();
-    alert('Delete');
+    const dialogRef = this.dialog.open(PopupConfirmationComponent, {
+      width: '400px',
+      data: {
+        activity,
+        title: 'Confirmar exclusão',
+        message: 'Deseja excluir a atividade?'
+      }
+    });
+
+    const onCancelSubscription = dialogRef.componentInstance.onCancel.subscribe(() => {
+      dialogRef.close();
+      onCancelSubscription.unsubscribe();
+    });
+
+    const onConfirmSubscription = dialogRef.componentInstance.onConfirm.subscribe(() => {
+      this.deleteActivity(activity);
+      onConfirmSubscription.unsubscribe();
+    });
+
+    return false;
   }
 
   handleFrequency(frequency: string): string {
