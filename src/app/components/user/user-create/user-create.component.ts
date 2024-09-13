@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { MatOption } from '@angular/material/core';
 import {
@@ -16,6 +16,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { UserService } from '../../../services/user/user.service';
 import { SnackbarService } from './../../../services/snack-bar/snack-bar.service';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-create',
@@ -38,7 +39,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
   templateUrl: './user-create.component.html',
   styleUrl: './user-create.component.scss',
 })
-export class UserCreateComponent {
+export class UserCreateComponent implements OnInit {
   @Input() user: User = {
     ...({} as User),
     context: 'create',
@@ -57,8 +58,20 @@ export class UserCreateComponent {
 
   constructor(
     private userService: UserService,
-    private SnackbarService: SnackbarService
+    private SnackbarService: SnackbarService,
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
+
+  ngOnInit(): void {
+    this.route.paramMap.subscribe((params) => {
+      this.user = {
+        ...this.user,
+        ...JSON.parse(params.get('element') || '{}'),
+        context: params.get('context') as 'create' | 'edit',
+      };
+    });
+  }
 
   addPermission(permition: Permissions) {
     if (this.user.permissions && !this.user.permissions.includes(permition)) {
@@ -107,6 +120,30 @@ export class UserCreateComponent {
     }
   }
 
+  private updateUser(): void {
+    this.userService.updateUser(this.user).subscribe({
+      next: () => {
+        this.SnackbarService.openSnackBar('register_success');
+        this.userService.retrieveAllUsers()
+      },
+      error: () => {
+        this.SnackbarService.openSnackBar('register_error');
+      },
+    });
+  }
+
+  private createUser(): void {
+    this.userService.createUser(this.user).subscribe({
+      next: () => {
+        this.SnackbarService.openSnackBar('register_success');
+        this.userService.retrieveAllUsers();
+      },
+      error: () => {
+        this.SnackbarService.openSnackBar('register_error');
+      }
+    });
+  }
+
   onSubmit(form: NgForm) {
     if (form.invalid) {
       Object.keys(form.controls).forEach(field => {
@@ -116,7 +153,11 @@ export class UserCreateComponent {
       this.SnackbarService.openSnackBar('register_error');
       return;
     }
-    this.SnackbarService.openSnackBar('register_success');
-    this.userService.createUser(this.user).subscribe();
+    if (this.user.context === 'edit') {
+      this.updateUser();
+    } else {
+      this.createUser();
+    }
+    this.router.navigate(['/users']);
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { UserService } from '../../../services/user/user.service';
 import { User, Permissions } from '../../../interfaces/user.interface';
@@ -13,11 +13,16 @@ import { CaptionModule } from '../../../directives/caption/caption.module';
 import { SnackbarService } from './../../../services/snack-bar/snack-bar.service';
 import { NgFor, NgIf, NgStyle } from '@angular/common';
 import { TooltipModule } from '../../tooltip/tooltip.module';
+import { PopupConfirmationComponent } from '../../modal/popup-confirmation/popup-confirmation.component';
+import { MatDialog } from '@angular/material/dialog';
+import { Router, RouterLink, ActivatedRoute } from '@angular/router';
+import { AuthService } from '../../../services/auth/auth.service';
 
 @Component({
   selector: 'app-user-list',
   standalone: true,
   imports: [
+    RouterLink,
     NgIf,
     NgFor,
     NgStyle,
@@ -47,11 +52,22 @@ export class UserListComponent implements OnInit {
   dataSource = new MatTableDataSource<User>();
   showModal = false;
   selectedElement: any = null;
+  loggedUser = this.authService.loggedUser;
+  @Input() context = 'user';
 
   constructor(
     private userService: UserService,
-    private snackBar: SnackbarService
-  ) {}
+    private snackBar: SnackbarService,
+    public dialog: MatDialog,
+    private router: Router,
+    private ActivatedRoute: ActivatedRoute,
+    private authService: AuthService
+  ) {
+    this.ActivatedRoute.params.subscribe((params) => {
+      this.context = params['context'];
+      this.userService.retrieveAllUsers();
+    });
+  }
 
   ngOnInit() {
     this.userService.retrieveAllUsers().subscribe((users: User[]) => {
@@ -59,28 +75,53 @@ export class UserListComponent implements OnInit {
     });
   }
 
-  openModalConfirmation(event: Event, element: any) {
+  openPopupConfirmation(event: any, user: User): boolean {
     event.stopPropagation();
-    this.showModal = true;
-    this.selectedElement = element.user_id;
-  }
+    const dialogRef = this.dialog.open(PopupConfirmationComponent, {
+      width: '400px',
+      data: {
+        user,
+        title: 'Confirmar exclusão',
+        message: 'Deseja excluir o usuario?',
+      },
+    });
 
-  closeModal() {
-    this.showModal = false;
-  }
+    const onCancelSubscription = dialogRef.componentInstance.onCancel.subscribe(
+      () => {
+        dialogRef.close();
+        onCancelSubscription.unsubscribe();
+      }
+    );
 
-  confirmDeletion(): void {
-    this.deleteUser(this.selectedElement);
-    this.closeModal();
+    const onConfirmSubscription =
+      dialogRef.componentInstance.onConfirm.subscribe(() => {
+        this.deleteUser(user.user_id);
+        onConfirmSubscription.unsubscribe();
+      });
+
+    return false;
   }
 
   deleteUser(userId: string) {
-    this.userService.deleteUser(userId).subscribe(() => {
-      this.snackBar.openSnackBar('user_delete_success');
-      this.userService.retrieveAllUsers().subscribe((users: User[]) => {
-        this.dataSource.data = users;
+    if (userId === this.loggedUser.user_id) {
+      this.snackBar.openSnackBar('user_delete_error');
+      return;
+    } else {
+      this.userService.deleteUser(userId).subscribe(() => {
+        this.snackBar.openSnackBar('user_delete_success');
+        this.userService.retrieveAllUsers().subscribe((users: User[]) => {
+          this.dataSource.data = users;
+        });
       });
-    });
+    }
+  }
+
+  userEdit(event: Event, user: User) {
+    event.stopPropagation();
+    this.router.navigate([
+      '/users-create',
+      { element: JSON.stringify(user), context: 'edit' },
+    ]);
   }
 
   getALLPermissions() {

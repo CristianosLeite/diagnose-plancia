@@ -34,36 +34,16 @@
   justify-content: space-between;
 }
 
-/* Estilo do modal */
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.delete:hover {
+  color: red;
+  i {
+    color: red;
+  }
 }
 
-.modal-content {
-  background-color: rgb(65, 65, 65);
-  padding: 40px;
-  border-radius: 8px;
-  text-align: center;
-  width: 300px;
-}
-
-.modal-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  margin-top: 13px;
-}
-
-.modal-actions {
-  display: flex;
-  justify-content: space-around;
-  margin-top: 20px;
+.edit:hover {
+  color: blue;
+  i {
+    color: blue;
+  }
 }
