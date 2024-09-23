@@ -48,13 +48,13 @@
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let element">
         <mat-menu #menu="matMenu">
-          <button class="option" mat-menu-item>
+          <button class="option" (click)="userEdit($event, element)" mat-menu-item>
             <div class="option-content edit">
               <span class="edit">Editar</span>
               <i class="material-icons">edit</i>
             </div>
           </button>
-          <button class="option" mat-menu-item>
+          <button (click)="openPopupConfirmation($event, element)" class="option" mat-menu-item>
             <div class="option-content delete">
               <span class="delete">Excluir</span>
               <i class="material-icons">delete</i>
