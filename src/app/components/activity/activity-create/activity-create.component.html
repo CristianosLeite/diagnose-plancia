@@ -49,7 +49,7 @@
     <div class="display-content-center">
       <label>Carregar SOP</label>
       <label class="upload-button" for="fileUpload">Selecionar Arquivo</label>
-      <input type="file" id="fileUpload" (change)="onFileSelected($event)" accept=".png,.jpeg,.webp,.pdf">
+      <input type="file" id="fileUpload" #fileInput (change)="onFileSelected($event)" accept=".png,.jpeg,.webp,.pdf">
       <span class="file-name">{{fileName || 'Nenhum arquivo selecionado'}}</span>
     </div>
     <object *ngIf="filePath" [data]="filePath" type="application/pdf" style="width: 40%;"></object>
