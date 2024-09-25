@@ -1,5 +1,5 @@
 import { SnackbarService } from '../../../services/snack-bar/snack-bar.service';
-import { Component, ChangeDetectorRef, Input, OnInit } from '@angular/core';
+import { Component, ChangeDetectorRef, Input, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import {
   MatFormField,
@@ -52,6 +52,7 @@ export class ActivityCreateComponent implements OnInit {
     context: 'create',
   };
   @Input() filePath: SafeResourceUrl | undefined;
+  @ViewChild('fileInput') fileInput!: ElementRef;
   fileName = '';
 
   constructor(
@@ -116,6 +117,9 @@ export class ActivityCreateComponent implements OnInit {
     }
 
     form.resetForm();
+    this.fileInput.nativeElement.value = '';
+    this.fileName = '';
+    this.filePath = undefined;
   }
 
   private markFormFieldsAsTouched(form: NgForm): void {
