@@ -1,27 +1,53 @@
-# DiagnosePlancia
+# Diagnose Plancia
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.8.
+## Overview
+Diagnose Plancia is a project developed for our client IVECO, which allows, through the registration of activities, to perform a complete checklist of the plant, whether it is a daily, weekly, monthly, or shift-based activity. The system includes user registration and permission levels that can be granted according to the client’s needs, as well as reports on the estimated time and time spent on activity execution and failures.
 
-## Development server
+## Features
+- User registration
+- Permission levels
+- Activity registration
+- Checklist
+- Reports
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## Installation
+Ypu can use the package manager [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/) to install the project.
+```bash
+npm install
 
-## Code scaffolding
+# or
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+yarn install
+```
 
-## Build
+## Usage
+Before running the project, you need to setup your database, for this project we are using [PostgreSQL](https://www.postgresql.org/). You can use the following environment variables to setup your database connection:
+```env
+USERNAME_DASTABASE = your_username
+PASSWORD_DATABASE = your_password
+DIALECT_DATABASE = postgres
+HOST_DATABASE = your_host
+PORT_DATABASE = your_port
+DATABASE_NAME = your_database_name
+```
+Or you can just replace the values in the [database-config.ts](database/database-config.ts) file.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Now we can run the project.
 
-## Running unit tests
+First we need to build the project.
+```bash
+npm dist
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+# or
 
-## Running end-to-end tests
+yarn dist
+```
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+Then we can run the project.
+```bash
+npm electron
 
-## Further help
+# or
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+yarn electron
+```
