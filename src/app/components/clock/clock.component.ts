@@ -15,7 +15,6 @@ export class ClockComponent implements AfterViewInit, OnDestroy {
   date = new Date();
   localeDateString = this.date.toLocaleDateString();
   localeTimeString = this.date.toLocaleTimeString();
-  intervalId: any;
   subscription: Subscription | undefined;
   isBrowser = signal(false);
 

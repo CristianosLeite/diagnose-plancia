@@ -43,7 +43,7 @@
       <mat-form-field class="form-field user-permition">
         <mat-label>Atribuir Permissões</mat-label>
         <mat-select (selectionChange)="addPermission($event.value)"
-          [value]="user.permissions.length > 0 ? user.permissions[user.permissions.length -1] : ''">
+          [value]="user.permissions && user.permissions.length > 0 ? user.permissions[user.permissions.length -1] : ''">
           <mat-option *ngFor="let permition of permissions" [value]="permition">
             {{ handlePermissions(permition) }}
           </mat-option>
