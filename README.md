@@ -3,6 +3,8 @@
 ## Overview
 Diagnose Plancia is a project developed for our client IVECO, which allows, through the registration of activities, to perform a complete checklist of the plant, whether it is a daily, weekly, monthly, or shift-based activity. The system includes user registration and permission levels that can be granted according to the client’s needs, as well as reports on the estimated time and time spent on activity execution and failures.
 
+![Imagem 1](https://github.com/CristianosLeite/diagnose-plancia/blob/master/src/assets/Captura%20de%20tela%202024-09-25%20092512.png)
+
 ## Features
 - User registration
 - Permission levels
