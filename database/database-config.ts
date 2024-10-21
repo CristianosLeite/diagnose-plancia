@@ -18,11 +18,11 @@ type DbConfig = {
 };
 
 export const dbConfig: DbConfig = {
-  host: String(process.env['HOST_DATABASE']),
-  user: String(process.env['USERNAME_DASTABASE']),
-  password: String(process.env['PASSWORD_DATABASE']),
-  db: String(process.env['DATABASE_NAME']),
-  dialect: String(process.env['DIALECT_DATABASE']) as Dialect,
+  host: String(process.env['HOST_DATABASE']) || 'localhost',
+  user: String(process.env['USERNAME_DASTABASE']) || 'postgres',
+  password: String(process.env['PASSWORD_DATABASE']) || 'postgres',
+  db: String(process.env['DATABASE_NAME']) || 'postgres',
+  dialect: String(process.env['DIALECT_DATABASE']) as Dialect || 'postgres',
   pool: {
     max: 5,
     min: 0,
