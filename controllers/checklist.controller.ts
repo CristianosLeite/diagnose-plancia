@@ -33,11 +33,23 @@ export class ChecklistController {
   }
 
   public async all(req: Request, res: Response) {
+    const startDate = req.query['start_date'];
+    const endDate = req.query['end_date'];
+
+    if (!startDate || !endDate)
+      return res.status(400).send('Missing start_date or end_date');
+
     await Checklist.findAll({
-      limit: 100,
+      where: {
+        createdAt: {
+          [Op.gte]: startDate,
+          [Op.lt]: endDate,
+        },
+      },
     }).then((checklists) => {
       res.json(checklists);
     });
+    return;
   }
 
   public async retrievePendingChecklist(req: Request, res: Response) {

@@ -1,3 +1,5 @@
+<app-filter (startDateChange)="setStartDate($event)" (endDateChange)="setEndDate($event)"></app-filter>
+
 @if(ELEMENT_DATA.length > 0) {
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 

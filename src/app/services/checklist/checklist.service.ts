@@ -23,8 +23,8 @@ export class ChecklistService {
       });
   }
 
-  retrieveAllChecklists() {
-    return this.http.get<Checklist[]>(`${this.baseUrl}/all`);
+  retrieveAllChecklists(startDate: string, endDate: string) {
+    return this.http.get<Checklist[]>(`${this.baseUrl}/all?start_date=${startDate}&end_date=${endDate}`);
   }
 
   updateChecklist(checklist: Checklist) {
