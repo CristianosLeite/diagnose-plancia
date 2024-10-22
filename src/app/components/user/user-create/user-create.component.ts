@@ -53,6 +53,7 @@ export class UserCreateComponent implements OnInit {
     'view_history',
     'create_checklist',
     'create_activity',
+    'list_activity',
     'reports',
   ];
 
@@ -93,6 +94,7 @@ export class UserCreateComponent implements OnInit {
       'view_history': 'Visualizar histórico de atividades',
       'create_checklist': 'Realizar checklist',
       'create_activity': 'Cadastrar atividade',
+      'list_activity': 'Listar atividades',
       'reports': 'Exportar Relatórios',
     };
 

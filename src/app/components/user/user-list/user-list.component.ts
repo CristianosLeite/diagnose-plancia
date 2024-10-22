@@ -146,7 +146,7 @@ export class UserListComponent implements OnInit {
       view_history: 'Visualizar histórico de atividades',
       create_checklist: 'Realizar checklist',
       create_activity: 'Cadastrar nova atividade',
-      view_activity: 'Visualizar atividades cadastradas',
+      list_activity: 'Visualizar atividades cadastradas',
       reports: 'Exportar Relatórios',
     };
 
