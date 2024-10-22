@@ -34,4 +34,8 @@ export class FilterComponent {
   onEndDateChange(date: Date) {
     this.endDateChange.emit(new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1));
   }
+
+  exportReport() {
+    this.reportService.exportExcel();
+  }
 }

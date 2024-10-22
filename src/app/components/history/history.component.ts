@@ -9,7 +9,7 @@ import { from } from 'rxjs';
 import { DatePipe } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { ActionDialogComponent } from '../modal/action-dialog/action-dialog.component';
-import { Activity } from '../../interfaces/activity.interface';
+import { Activity, Interval } from '../../interfaces/activity.interface';
 import { Observable } from 'rxjs';
 import { FilterComponent } from '../filter/filter.component';
 import { HistoryData } from '../../interfaces/history.interface';
@@ -31,7 +31,7 @@ export class HistoryComponent {
   displayedColumns: string[] = ['checklist_id', 'username', 'activity', 'status', 'estimatedTime', 'timeSpent', 'createdAt', 'activityTime'];
   dataSource = new MatTableDataSource<HistoryData>(this.ELEMENT_DATA);
   startDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() - 7);
-  endDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+  endDate = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 1);
 
   constructor(
     private checklistService: ChecklistService,
@@ -43,6 +43,7 @@ export class HistoryComponent {
   ) { }
 
   ngOnInit(): void {
+    this.loadHistoryData();
     this.retriveAllChecklists().subscribe({
       next: (data: HistoryData[]) => {
         this.ELEMENT_DATA = data;
@@ -86,8 +87,8 @@ export class HistoryComponent {
               checklist_id: checklist.checklist_id,
               username: user.name,
               activity: activity.description,
-              estimatedTime: activity.estimated_time,
-              timeSpent: checklist.time_spent,
+              estimatedTime: this.timeDateService.formatTime(activity.estimated_time as unknown as Interval) || '00:00:00',
+              timeSpent: this.timeDateService.formatTime(checklist.time_spent as unknown as Interval) || '00:00:00',
               status: checklist.status,
               createdAt: checklist.createdAt,
               activityTime: this.timeDateService.getTimeLocaleString(new Date(checklist.createdAt)),

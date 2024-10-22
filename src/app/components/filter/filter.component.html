@@ -13,7 +13,7 @@
     <mat-datepicker #picker2 startView="year" [startAt]="endDate"></mat-datepicker>
   </mat-form-field>
 
-  <a class="btn" mat-raised-button color="primary" tooltip="Exportar relatório">
+  <a class="btn" mat-raised-button color="primary" tooltip="Exportar relatório" (click)="exportReport()">
     <mat-icon>download</mat-icon>
   </a>
 </div>

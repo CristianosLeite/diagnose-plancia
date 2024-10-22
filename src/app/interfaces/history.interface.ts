@@ -4,7 +4,7 @@ export type HistoryData = {
   checklist_id: number;
   username: string;
   activity: string;
-  estimatedTime: Interval;
+  estimatedTime: string;
   timeSpent: string;
   status: string;
   createdAt: string;
