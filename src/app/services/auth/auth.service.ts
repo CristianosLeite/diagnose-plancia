@@ -53,6 +53,19 @@ export class AuthService {
     );
   }
 
+  checkPermissionFor(permission: string): boolean {
+    if (!this.loggedUser.user_id) {
+      this.openLoginDialog();
+      return false;
+    }
+
+    if (!this.loggedUser.permissions) {
+      return false;
+    }
+
+    return this.checkPermission(this.loggedUser.permissions, permission);
+  }
+
   checkPermission(permissions: string[], requestedPermission: string): boolean {
     return permissions.includes(requestedPermission);
   }
