@@ -30,7 +30,7 @@
       </a>
 
       <!--Listar atividades-->
-      <a class="sub-option" *ngIf="expandedActivity && authenticatedUser.permissions.includes('view_activity')"
+      <a class="sub-option" *ngIf="expandedActivity && authenticatedUser.permissions.includes('list_activity')"
         [routerLink]="['activity-table', 'activity']" routerLinkActive="active">
         <i class="material-icons option-icon">list</i>
         Listar atividades
