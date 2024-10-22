@@ -1,0 +1,13 @@
+.content {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 20px;
+  padding: 20px 20px 0 0;
+}
+
+.btn:hover {
+  color: #f0f0f0;
+  cursor: pointer;
+}

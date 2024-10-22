@@ -1,3 +1,4 @@
+import { lastValueFrom } from 'rxjs';
 import { Injectable, Output, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Checklist } from '../../interfaces/checklist.interface';
@@ -23,8 +24,8 @@ export class ChecklistService {
       });
   }
 
-  retrieveAllChecklists() {
-    return this.http.get<Checklist[]>(`${this.baseUrl}/all`);
+  public async retrieveAllChecklists(startDate: string, endDate: string): Promise<Checklist[]> {
+    return await lastValueFrom(this.http.get<Checklist[]>(`${this.baseUrl}/all?start_date=${startDate}&end_date=${endDate}`));
   }
 
   updateChecklist(checklist: Checklist) {

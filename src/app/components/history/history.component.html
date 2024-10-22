@@ -1,3 +1,5 @@
+<app-filter (startDateChange)="setStartDate($event)" (endDateChange)="setEndDate($event)"></app-filter>
+
 @if(ELEMENT_DATA.length > 0) {
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
@@ -47,25 +49,13 @@
   <!-- Tempo estimado -->
   <ng-container matColumnDef="estimatedTime">
     <th mat-header-cell *matHeaderCellDef> Tempo estimado </th>
-    <td mat-cell *matCellDef="let element">{{
-      element.estimatedTime ?
-      element.estimatedTime.hours || element.estimatedTime.minutes || element.estimatedTime.seconds ?
-      timeDateService.formatTime(element.estimatedTime) :
-      '00:00:00' :
-      '00:00:00'
-      }} </td>
+    <td mat-cell *matCellDef="let element">{{ element.estimatedTime }} </td>
   </ng-container>
 
   <!-- Tempo gasto -->
   <ng-container matColumnDef="timeSpent">
     <th mat-header-cell *matHeaderCellDef> Tempo gasto </th>
-    <td mat-cell *matCellDef="let element">{{
-      element.timeSpent ?
-      element.timeSpent.hours || element.timeSpent.minutes || element.timeSpent.seconds ?
-      timeDateService.formatTime(element.timeSpent) :
-      '00:00:00' :
-      '00:00:00'
-      }} </td>
+    <td mat-cell *matCellDef="let element">{{ element.timeSpent }} </td>
   </ng-container>
 </table>
 } @else {
