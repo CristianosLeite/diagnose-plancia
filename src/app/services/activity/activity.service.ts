@@ -1,3 +1,4 @@
+import { lastValueFrom } from 'rxjs';
 import { Injectable, Output, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Activity } from '../../interfaces/activity.interface';
@@ -28,8 +29,8 @@ export class ActivityService {
     return this.http.post<Activity>(`${this.baseUrl}/create`, activity);
   }
 
-  retrieveActivity(id: string) {
-    return this.http.get<Activity>(`${this.baseUrl}/one?activity_id=${id}`);
+  async retrieveActivity(id: string): Promise<Activity> {
+    return await lastValueFrom(this.http.get<Activity>(`${this.baseUrl}/one?activity_id=${id}`));
   }
 
   retrieveAllActivities() {

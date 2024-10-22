@@ -1,0 +1,19 @@
+<div class="content">
+  <mat-form-field>
+    <input matInput [matDatepicker]="picker1" placeholder="Choose a date" [value]="startDate"
+      (dateChange)="onStartDateChange($event.value)">
+    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+    <mat-datepicker #picker1 startView="year" [startAt]="startDate"></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput [matDatepicker]="picker2" placeholder="Choose a date" [value]="endDate"
+      (dateChange)="onEndDateChange($event.value)">
+    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+    <mat-datepicker #picker2 startView="year" [startAt]="endDate"></mat-datepicker>
+  </mat-form-field>
+
+  <a class="btn" mat-raised-button color="primary" tooltip="Exportar relatório" (click)="exportReport()">
+    <mat-icon>download</mat-icon>
+  </a>
+</div>

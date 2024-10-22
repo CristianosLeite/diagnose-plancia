@@ -1,3 +1,4 @@
+import { lastValueFrom } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { User } from '../../interfaces/user.interface';
@@ -14,8 +15,8 @@ export class UserService {
     return this.http.post<User>(`${this.baseUrl}/create`, user);
   }
 
-  retrieveUser(id: string) {
-    return this.http.get<User>(`${this.baseUrl}/one?user_id=${id}`);
+  async retrieveUser(id: string): Promise<User> {
+    return await lastValueFrom(this.http.get<User>(`${this.baseUrl}/one?user_id=${id}`));
   }
 
   retrieveAllUsers() {
