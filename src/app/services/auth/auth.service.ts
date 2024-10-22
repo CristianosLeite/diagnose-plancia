@@ -7,6 +7,7 @@ import { ActivatedRouteSnapshot } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthComponent } from '../../components/auth/auth.component';
 import { Router } from '@angular/router';
+import { from } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -67,7 +68,7 @@ export class AuthService {
       return of(false);
     }
 
-    return this.userService.retrieveUser(this.loggedUser.user_id).pipe(
+    return from(this.userService.retrieveUser(this.loggedUser.user_id)).pipe(
       switchMap(user => {
         if (!user.permissions) {
           this.router.navigate(['/not-authenticated']);

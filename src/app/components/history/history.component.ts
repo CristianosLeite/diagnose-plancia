@@ -5,8 +5,7 @@ import { ChecklistService } from '../../services/checklist/checklist.service';
 import { ActivityService } from '../../services/activity/activity.service';
 import { UserService } from '../../services/user/user.service';
 import { TimeDateService } from '../../services/time-date/time-date.service';
-import { forkJoin } from 'rxjs';
-import { map, mergeMap } from 'rxjs/operators';
+import { from } from 'rxjs';
 import { DatePipe } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { ActionDialogComponent } from '../modal/action-dialog/action-dialog.component';
@@ -41,8 +40,18 @@ export class HistoryComponent {
     private reportService: ReportService,
     public timeDateService: TimeDateService,
     public dialog: MatDialog,
-  ) {
-    this.loadHistoryData();
+  ) { }
+
+  ngOnInit(): void {
+    this.retriveAllChecklists().subscribe({
+      next: (data: HistoryData[]) => {
+        this.ELEMENT_DATA = data;
+        this.reportService.setHistoryData(this.ELEMENT_DATA);
+      },
+      error: (error) => {
+        console.error(error);
+      }
+    });
   }
 
   loadHistoryData(): void {
@@ -64,14 +73,16 @@ export class HistoryComponent {
   }
 
   private retriveAllChecklists(): Observable<HistoryData[]> {
-    return this.checklistService.retrieveAllChecklists(this.startDate.toISOString(), this.endDate.toISOString()).pipe(
-      mergeMap((data: Checklist[]) => {
-        const requests = data.map(checklist =>
-          forkJoin({
-            user: this.userService.retrieveUser(checklist.user_id),
-            activity: this.activityService.retrieveActivity(checklist.activity_id.toString())
-          }).pipe(
-            map(({ user, activity }) => ({
+    if (!this.startDate || !this.endDate) return new Observable<HistoryData[]>();
+
+    const data = async (): Promise<HistoryData[]> => {
+      const checklists = await this.checklistService.retrieveAllChecklists(this.startDate.toISOString(), this.endDate.toISOString()).then(
+        (checklists: Checklist[]) => {
+          const requests = checklists.map(async (checklist) => {
+            const user = await this.userService.retrieveUser(checklist.user_id);
+            if (!user) return {} as HistoryData;
+            const activity = await this.activityService.retrieveActivity(checklist.activity_id.toString());
+            return {
               checklist_id: checklist.checklist_id,
               username: user.name,
               activity: activity.description,
@@ -81,12 +92,15 @@ export class HistoryComponent {
               createdAt: checklist.createdAt,
               activityTime: this.timeDateService.getTimeLocaleString(new Date(checklist.createdAt)),
               actionPlan: checklist.action_plan
-            }))
-          )
-        );
-        return forkJoin(requests);
-      })
-    )
+            };
+          });
+          return Promise.all(requests);
+        }
+      );
+      return checklists;
+    };
+
+    return from(data());
   }
 
   openActionPlan(actionPlan: string, activityDescription: string): void {
